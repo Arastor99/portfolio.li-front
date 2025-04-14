@@ -1,31 +1,43 @@
 {
-    "auth": {
-      "backToHome": "Back to home",
-      "signInTitle": "Sign in to your account",
-      "registerTitle": "Create your account"
-    },
-    "login": {
-        "title": "Inicia sesión en tu cuenta",
-        "email": "Correo electrónico",
-        "password": "Contraseña",
-        "remember": "Recuérdame",
-        "forgot_password": "¿Olvidaste tu contraseña?",
-        "submit": "Iniciar sesión",
-        "submitting": "Iniciando sesión...",
-        "google": "O continúa con",
-        "no_account": "¿No tienes una cuenta?",
-        "register": "Regístrate"
-      },
-      "register": {
-        "title": "Crea tu cuenta",
-        "name": "Nombre completo",
-        "email": "Correo electrónico",
-        "password": "Contraseña",
-        "submit": "Registrarse",
-        "submitting": "Registrando...",
-        "google": "O regístrate con",
-        "have_account": "¿Ya tienes una cuenta?",
-        "login": "Inicia sesión"
-      }
-    
+  "auth": {
+    "backToHome": "Back to home",
+    "signInTitle": "Sign in to your account",
+    "registerTitle": "Create your account"
+  },
+  "login": {
+    "title": "Sign in to your account",
+    "email": "Email",
+    "password": "Password",
+    "remember": "Remember me",
+    "forgot_password": "Forgot your password?",
+    "submit": "Sign in",
+    "submitting": "Signing in...",
+    "google": "Or continue with",
+    "no_account": "Don't have an account?",
+    "register": "Register"
+  },
+  "register": {
+    "title": "Create your account",
+    "name": "Full name",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Register",
+    "submitting": "Registering...",
+    "google": "Or sign up with",
+    "have_account": "Already have an account?",
+    "login": "Sign in"
+  },
+  "forgotPassword": {
+    "backToLogin": "Back to login",
+    "title": "Reset your password",
+    "description": "Enter your email address and we'll send you a link to reset your password",
+    "invalidEmail": "Please enter a valid email address",
+    "checkEmail": "Check your email",
+    "emailSent": "We've sent a password reset link to {{email}}",
+    "checkSpam": "If you don't see it, please check your spam folder",
+    "resetAnother": "Reset another password",
+    "emailPlaceholder": "Email address",
+    "sending": "Sending reset link...",
+    "send": "Send reset link"
   }
+}

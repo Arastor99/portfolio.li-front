@@ -3,5 +3,41 @@
       "backToHome": "Volver al inicio",
       "signInTitle": "Inicia sesión en tu cuenta",
       "registerTitle": "Crea tu cuenta"
-    }
+    },
+    "login": {
+        "title": "Inicia sesión en tu cuenta",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "remember": "Recuérdame",
+        "forgot_password": "¿Olvidaste tu contraseña?",
+        "submit": "Iniciar sesión",
+        "submitting": "Iniciando sesión...",
+        "google": "O continúa con",
+        "no_account": "¿No tienes una cuenta?",
+        "register": "Regístrate"
+      },
+      "register": {
+        "title": "Crea tu cuenta",
+        "name": "Nombre completo",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "submit": "Registrarse",
+        "submitting": "Registrando...",
+        "google": "O regístrate con",
+        "have_account": "¿Ya tienes una cuenta?",
+        "login": "Inicia sesión"
+      },
+      "forgotPassword": {
+        "backToLogin": "Volver al inicio de sesión",
+        "title": "Restablece tu contraseña",
+        "description": "Introduce tu dirección de correo electrónico y te enviaremos un enlace para restablecer tu contraseña",
+        "invalidEmail": "Por favor, introduce una dirección de correo válida",
+        "checkEmail": "Revisa tu correo",
+        "emailSent": "Hemos enviado un enlace para restablecer la contraseña a {{email}}",
+        "checkSpam": "Si no lo ves, por favor revisa tu carpeta de spam",
+        "resetAnother": "Restablecer otra contraseña",
+        "emailPlaceholder": "Dirección de correo electrónico",
+        "sending": "Enviando enlace...",
+        "send": "Enviar enlace"
+      }
   }
