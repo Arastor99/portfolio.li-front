@@ -4,6 +4,8 @@ import { motion } from "framer-motion"
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import GoogleAuthButton from "./GoogleAuthButton"
+import toast from "react-hot-toast"
+import { register } from "@lib/services/auth.service"
 
 export default function RegisterForm() {
   const { t } = useTranslation()
@@ -16,9 +18,16 @@ export default function RegisterForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    console.log("Register attempt:", { name, email, password })
+    await toast.promise(
+      register({ fullName:name, email, password }),
+      {
+        loading: "Registering...",
+        success: "Registered successfully!",
+        error: "Registration failed. Please check your details.",
+      },
+    )
     setIsLoading(false)
+
   }
 
   return (

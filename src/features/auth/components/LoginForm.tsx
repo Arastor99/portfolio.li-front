@@ -4,6 +4,8 @@ import { motion } from "framer-motion"
 import { Eye, EyeOff, Mail, Lock } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import GoogleAuthButton from "./GoogleAuthButton"
+import { login } from "@lib/services/auth.service"
+import toast from "react-hot-toast"
 
 export default function LoginForm() {
   const { t } = useTranslation()
@@ -13,10 +15,16 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    console.log("Login attempt:", { email, password })
+   e.preventDefault()
+   setIsLoading(true)
+   await toast.promise(
+     login({ email, password }),
+      {
+        loading: "Logging in...",
+        success: "Logged in successfully!",
+        error: "Login failed. Please check your credentials.",
+      },
+    )
     setIsLoading(false)
   }
 
