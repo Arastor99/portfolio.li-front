@@ -26,6 +26,23 @@ export const register = async (data: {
 	return await http.post("/auth/register", data)
 }
 
+export const verifyEmail = async (token: string) => {
+	const response = await http.post("/auth/verify-email", { token })
+
+	const accessToken = response.data.token
+	if (accessToken) {
+		Cookies.set("accessToken", accessToken, {
+			expires: 7, // caduca en 7 días
+			secure: true, // solo sobre HTTPS
+			sameSite: "Lax",
+		})
+	}
+
+	return response
+}
+
 export const logout = async () => {
-	return await http.post("/auth/logout")
+	Cookies.remove("accessToken")
+
+	return
 }
