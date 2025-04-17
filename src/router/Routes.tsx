@@ -7,6 +7,8 @@ import Profile from "@pages/app/Profile"
 import Create from "@pages/app/Create"
 import LinkedInPage from "@pages/app/linkedin"
 import Templates from "@pages/app/Templates"
+import Portfolio from "src/portfolioTemplates/t1/template1"
+import Template2 from "@templatesPortfolio/t2/template2"
 
 
 export const appRoutes = [
@@ -45,5 +47,13 @@ export const appRoutes = [
   {
     path: "/templates",
     element: <Templates />,
+  },
+  {
+    path: "/templates1",
+    element: <Portfolio />,
+  },
+  {
+    path: "/templates2",
+    element: <Template2 />,
   },
 ]

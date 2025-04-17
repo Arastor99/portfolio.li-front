@@ -92,7 +92,7 @@ export default function MainMenu() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
               >
-                Portfolio Pro
+                Myportfolio
               </motion.h1>
             </div>
 

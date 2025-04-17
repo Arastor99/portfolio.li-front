@@ -7,7 +7,7 @@ export default function Home() {
 
       <main className="flex-1 md:ml-64 p-6">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6">Bienvenido a Portfolio Pro</h1>
+          <h1 className="text-3xl font-bold mb-6">Bienvenido a Myportfolio</h1>
 
           <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
             <h2 className="text-xl font-semibold mb-4">Crea tu portfolio profesional</h2>
