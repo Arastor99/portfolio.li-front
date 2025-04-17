@@ -52,8 +52,4 @@ export const appRoutes = [
     path: "/templates1",
     element: <Portfolio />,
   },
-  {
-    path: "/templates2",
-    element: <Template2 />,
-  },
 ]
