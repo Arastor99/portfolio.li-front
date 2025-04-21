@@ -12,9 +12,15 @@ interface Props {
 	type: "portfolio" | "cv"
 	profile: Profile | undefined
 	handleBack: () => void
+	handleTriggerRegister: () => void
 }
 
-export default function Step4Preview({ type, profile, handleBack }: Props) {
+export default function Step4Preview({
+	type,
+	profile,
+	handleBack,
+	handleTriggerRegister,
+}: Props) {
 	const [modalRegister, setModalRegister] = useState(false)
 
 	const handleViewFullPreview = () => {
@@ -128,7 +134,10 @@ export default function Step4Preview({ type, profile, handleBack }: Props) {
 				</div>
 			</motion.div>
 			<Modal isOpen={modalRegister} onClose={() => setModalRegister(false)}>
-				<ModalRegister onClose={() => setModalRegister(false)} />
+				<ModalRegister
+					onClose={() => setModalRegister(false)}
+					triggerRegister={handleTriggerRegister}
+				/>
 			</Modal>
 		</>
 	)

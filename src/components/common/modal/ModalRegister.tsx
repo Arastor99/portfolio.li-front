@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import toast from "react-hot-toast"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { register } from "@lib/services/auth.service"
 import { EyeOff, Eye, Lock, Mail, User } from "lucide-react"
@@ -11,6 +11,8 @@ interface Props {
 }
 
 const ModalRegister: React.FC<Props> = ({ onClose, triggerRegister }) => {
+	const navigate = useNavigate()
+
 	const [name, setName] = useState("")
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
@@ -18,6 +20,10 @@ const ModalRegister: React.FC<Props> = ({ onClose, triggerRegister }) => {
 	const [isLoading, setIsLoading] = useState(false)
 
 	const handleSubmit = async (e: React.FormEvent) => {
+		if (!name || !email || !password) {
+			toast.error("Please fill in all fields")
+			return
+		}
 		e.preventDefault()
 		setIsLoading(true)
 		await toast
@@ -27,7 +33,13 @@ const ModalRegister: React.FC<Props> = ({ onClose, triggerRegister }) => {
 				error: "Registration failed. Please check your details.",
 			})
 			.then(() => triggerRegister && triggerRegister())
-		setIsLoading(false)
+			.then(() => {
+				navigate("/dashboard", { replace: true })
+				onClose()
+			})
+			.finally(() => {
+				setIsLoading(false)
+			})
 	}
 	return (
 		<div className=" z-50 flex items-center justify-center ">

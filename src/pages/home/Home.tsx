@@ -9,6 +9,7 @@ import Step3TemplateSelection from "@components/common/wizard/Step3TemplateSelec
 import Step4Preview from "@components/common/wizard/Step4Preview"
 import WizardContainer from "@components/common/wizard/WizardContainer"
 import toast from "react-hot-toast"
+import { createPortfolio } from "@lib/services/portfolio.service"
 
 export default function Home() {
 	// This is just a placeholder for demonstration
@@ -69,6 +70,21 @@ export default function Home() {
 		setCurrentStep(4)
 	}
 
+	const handleTriggerRegister = async () => {
+		if (!profileData || !type || !templateId) {
+			toast.error("Por favor completa todos los pasos")
+			return
+		}
+		await createPortfolio({
+			templateId,
+			url: profileData.publicId,
+		}).then(() => {
+			localStorage.removeItem("profile-home")
+			localStorage.removeItem("type-home")
+			localStorage.removeItem("templateId-home")
+		})
+	}
+
 	const handle4thStepBack = () => {
 		setCurrentStep(3)
 		setTemplateId("")
@@ -123,6 +139,7 @@ export default function Home() {
 						type={type}
 						profile={profileData}
 						handleBack={handle4thStepBack}
+						handleTriggerRegister={handleTriggerRegister}
 					/>
 				)}
 			</WizardContainer>
