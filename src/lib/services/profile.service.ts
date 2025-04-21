@@ -6,19 +6,8 @@ import { Profile } from "@common/types/profile"
 export const getProfile = async ({ publicId }: { publicId: string }) => {
 	return (await http.get(`/profile/${publicId}`, {
 		timeout: 70000, // 70 seconds
-	})) as unknown as Promise<
-		Omit<
-			Profile,
-			| "experiences"
-			| "education"
-			| "languages"
-			| "publications"
-			| "certifications"
-			| "volunteer"
-			| "honors"
-			| "projects"
-			| "skills"
-		>
+	})).data as unknown as Promise<
+		Profile
 	>
 }
 

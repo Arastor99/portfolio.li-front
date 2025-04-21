@@ -1,16 +1,21 @@
 import { motion } from "framer-motion"
 import { Button } from "@components/ui/button"
 import { ArrowRight, Badge, Code, Github, Linkedin, Star, Twitter } from "lucide-react"
+import { Profile } from "@common/types/profile"
+import ImgProxy from "@components/ui/ImgProxy"
 
 interface HeroProps {
     scrollToSection: (sectionId: string) => void
     handleMouseEnter: () => void
     handleMouseLeave: () => void
+    profile: Profile
 }
 
 
-const Hero: React.FC<HeroProps> = ({handleMouseEnter,handleMouseLeave,scrollToSection}) => {
+const Hero: React.FC<HeroProps> = ({handleMouseEnter,handleMouseLeave,scrollToSection, profile}) => {
+  console.log(profile)
   return (
+    
     <div className="grid place-content-center">
         <section id="home" className="min-h-screen flex items-center relative overflow-hidden pt-16 lg:pt-0">
           <div className="container py-20">
@@ -28,7 +33,7 @@ const Hero: React.FC<HeroProps> = ({handleMouseEnter,handleMouseLeave,scrollToSe
                     transition={{ duration: 0.5, delay: 0.3 }}
                     className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm font-medium text-emerald-400"
                   >
-                    <span>Desarrollador & Creador de Contenido</span>
+                    <span>{profile.experiences[0].title}</span>
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   </motion.div>
 
@@ -38,10 +43,10 @@ const Hero: React.FC<HeroProps> = ({handleMouseEnter,handleMouseLeave,scrollToSe
                     transition={{ duration: 0.8, delay: 0.4 }}
                     className="text-5xl font-bold tracking-tight sm:text-6xl xl:text-7xl/none"
                   >
-                    <span className="block">Miguel Angel</span>
+                    <span className="block">{profile.firstName}</span>
                     <div className="relative">
                       <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 animate-text-gradient bg-300%">
-                        Durán García
+                        {profile.lastName}
                       </span>
                       <motion.span
                         initial={{ width: 0 }}
@@ -58,8 +63,7 @@ const Hero: React.FC<HeroProps> = ({handleMouseEnter,handleMouseLeave,scrollToSe
                     transition={{ duration: 0.8, delay: 0.5 }}
                     className="text-white/70 text-lg max-w-2xl mt-4 leading-relaxed"
                   >
-                    Ingeniero de Software y Desarrollador Web. Reconocido como GitHub Star, Microsoft MVP y Google
-                    Developer Expert.
+                    {profile.headline}
                   </motion.p>
 
                   <motion.div
@@ -162,15 +166,15 @@ const Hero: React.FC<HeroProps> = ({handleMouseEnter,handleMouseLeave,scrollToSe
                     <div className="relative bg-[#030014] p-2 rounded-2xl rotate-3 shadow-xl">
                       {/* Profile image */}
                       <div className="relative aspect-[4/5] w-[280px] sm:w-[320px] overflow-hidden rounded-xl border-2 border-white/10">
-                      <img
-                        src="/suu.jpg"
-                        alt="Miguel Angel Durán García"
-                        className="absolute inset-0 w-full h-full object-cover"
-                        loading="eager"
-                        />
+                      
+                      <ImgProxy 
+                        src={profile.profilePictureUrl}
+                        alt="Profile picture"
+                        css="absolute inset-0 w-full h-full object-cover z-10"
+                      />
 
                         {/* Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#030014]/80 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#030014]/80 via-transparent to-transparent z-20" />
 
                         {/* Content overlay */}
                         <div className="absolute bottom-0 left-0 right-0 p-4">
@@ -197,7 +201,7 @@ const Hero: React.FC<HeroProps> = ({handleMouseEnter,handleMouseLeave,scrollToSe
                   >
                     <div className="flex items-center gap-1">
                       <Star className="h-3 w-3 text-yellow-300 fill-yellow-300" />
-                      <span>GitHub Star</span>
+                      <span>{profile.honors?.[0]?.title}</span>
                     </div>
                   </motion.div>
 
@@ -209,7 +213,7 @@ const Hero: React.FC<HeroProps> = ({handleMouseEnter,handleMouseLeave,scrollToSe
                   >
                     <div className="flex items-center gap-1">
                       <Code className="h-3 w-3" />
-                      <span>Microsoft MVP</span>
+                      <span>{profile.honors?.[1]?.title}</span>
                     </div>
                   </motion.div>
                 </div>

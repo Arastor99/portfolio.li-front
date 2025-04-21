@@ -1,11 +1,15 @@
+import { Profile } from "@common/types/profile"
 import Portfolio from "@templatesPortfolio/t1/template1"
 import { motion } from "framer-motion"
 
+
 interface Props {
 	type: "portfolio" | "cv"
+	profile: Profile | undefined
 }
 
-export default function Step4Preview({ type }: Props) {
+export default function Step4Preview({ type, profile }: Props) {
+	if (!profile) return null
 	return (
 		<motion.div
 			initial={{ opacity: 0 }}
@@ -27,7 +31,7 @@ export default function Step4Preview({ type }: Props) {
 
 					<div className="w-full h-[500px] overflow-x-hidden overflow-auto border rounded-xl shadow-lg flex justify-center bg-[#030014] hide-scrollbar">
 						<div className="scale-75 origin-top transform  ">
-							<Portfolio />
+							<Portfolio profile={profile} />
 						</div>
 					</div>
 					{/* </div> */}

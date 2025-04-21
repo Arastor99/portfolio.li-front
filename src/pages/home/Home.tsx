@@ -64,7 +64,7 @@ export default function Home() {
 						setCurrentStep={setCurrentStep}
 					/>
 				)}
-				{currentStep === 4 && <Step4Preview type={type} />}
+				{currentStep === 4 && <Step4Preview type={type} profile={profileData} />}
 			</WizardContainer>
 		</main>
 	)

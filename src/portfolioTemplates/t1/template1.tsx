@@ -22,8 +22,9 @@ import Projects from "./sections/Projects"
 import Education from "./sections/Education"
 import Contact from "./sections/Contact"
 import Footer from "./sections/Footer"
+import { Profile } from "@common/types/profile"
 
-export default function Portfolio() {
+export default function Portfolio( {profile}: { profile: Profile}) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const [activeSection, setActiveSection] = useState("home")
 	const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
@@ -312,6 +313,7 @@ export default function Portfolio() {
 					handleMouseEnter={handleMouseEnter}
 					handleMouseLeave={handleMouseLeave}
 					scrollToSection={scrollToSection}
+					profile={profile}
 				/>
 				{/* About Section */}
 				<About />
