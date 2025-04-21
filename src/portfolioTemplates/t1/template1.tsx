@@ -316,16 +316,17 @@ export default function Portfolio( {profile}: { profile: Profile}) {
 					profile={profile}
 				/>
 				{/* About Section */}
-				<About />
+				<About profile={profile} />
 				{/* Experience Section */}
-				<Experience />
+				<Experience profile={profile} />
 				{/* Projects Section */}
 				<Projects
 					handleMouseEnter={handleMouseEnter}
 					handleMouseLeave={handleMouseLeave}
+					profile={profile}
 				/>
 				{/* Education Section */}
-				<Education />
+				<Education profile={profile} />
 				{/* Contact Section */}
 				<Contact
 					handleMouseEnter={handleMouseEnter}
