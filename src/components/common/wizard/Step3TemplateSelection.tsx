@@ -6,13 +6,13 @@ import { useEffect, useState } from "react"
 interface Props {
 	type: "portfolio" | "cv"
 	handleNext: (templateId: string) => void
-	setCurrentStep: (step: number) => void
+	handleBack: () => void
 }
 
 export default function Step3TemplateSelection({
 	type,
 	handleNext,
-	setCurrentStep,
+	handleBack,
 }: Props) {
 	const [templates, setTemplates] = useState<PortfolioTemplate[]>([])
 
@@ -30,6 +30,7 @@ export default function Step3TemplateSelection({
 
 	useEffect(() => {
 		fetchTemplates()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [type])
 
 	return (
@@ -99,7 +100,7 @@ export default function Step3TemplateSelection({
 
 			<div className="flex justify-between pt-4">
 				<motion.button
-					onClick={() => setCurrentStep(2)}
+					onClick={handleBack}
 					whileHover={{ scale: 1.02 }}
 					whileTap={{ scale: 0.98 }}
 					className="px-6 py-2 border border-gray-300 text-[#64748B] font-medium rounded-lg hover:bg-gray-50 transition-colors"

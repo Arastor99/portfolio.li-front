@@ -4,6 +4,8 @@ import ForgotPassword from "@pages/auth/ForgotPassword"
 
 import Home from "@pages/home/Home"
 
+import Preview from "@pages/preview/Preview"
+
 import Dashboard from "@pages/app/Dashboard"
 
 import AccountPage from "@pages/account/AccountPage"
@@ -41,6 +43,10 @@ export const appRoutes = [
 	{
 		path: "/templates",
 		element: <TemplatesPage />,
+	},
+	{
+		path: "/preview",
+		element: <Preview />,
 	},
 	// { // TODO?
 	// 	path: "/create",

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { Profile } from "@common/types/profile"
 import { getProfile } from "@lib/services/profile.service"
@@ -20,6 +20,8 @@ export default function Home() {
 	const [type, setType] = useState<"portfolio" | "cv">("portfolio")
 	const [templateId, setTemplateId] = useState<string>("")
 
+	console.log("templateId", templateId)
+
 	const handle1stStepNext = async (publicId: string) => {
 		setCurrentStep(2)
 
@@ -28,22 +30,74 @@ export default function Home() {
 			success: "Perfil cargado",
 			error: (err) => {
 				setCurrentStep(1)
-				return err.message
+				setProfileData(undefined)
+				localStorage.removeItem("profile-home")
+				localStorage.removeItem("type-home")
+				localStorage.removeItem("templateId-home")
+				return err.message.includes("404")
+					? "Perfil no encontrado"
+					: "Error al cargar el perfil, intentelo de nuevo"
 			},
 		})
+		localStorage.setItem("profile-home", JSON.stringify(profile))
 		setProfileData(profile)
-		console.log(profile)
 	}
 
 	const handle2ndStepNext = (type: "portfolio" | "cv") => {
 		setType(type)
+		localStorage.setItem("type-home", JSON.stringify(type))
 		setCurrentStep(3)
+	}
+
+	const handle2ndStepBack = () => {
+		setCurrentStep(1)
+		setProfileData(undefined)
+		localStorage.removeItem("profile-home")
+		localStorage.removeItem("type-home")
+		localStorage.removeItem("templateId-home")
+	}
+
+	const handle3rdStepBack = () => {
+		setCurrentStep(2)
+		setTemplateId("")
+		localStorage.removeItem("templateId-home")
 	}
 
 	const handle3rdStepNext = (templateId: string) => {
 		setTemplateId(templateId)
+		localStorage.setItem("templateId-home", JSON.stringify(templateId))
 		setCurrentStep(4)
 	}
+
+	const handle4thStepBack = () => {
+		setCurrentStep(3)
+		setTemplateId("")
+		localStorage.removeItem("templateId-home")
+	}
+
+	useEffect(() => {
+		const storedProfile = localStorage.getItem("profile-home")
+		const storedType = localStorage.getItem("type-home")
+		const storedTemplateId = localStorage.getItem("templateId-home")
+
+		if (storedProfile) {
+			const profile = JSON.parse(storedProfile)
+			setProfileData(profile)
+			setCurrentStep(2)
+		}
+
+		if (storedType) {
+			const type = JSON.parse(storedType)
+			setType(type)
+			setCurrentStep(3)
+		}
+
+		if (storedTemplateId) {
+			const templateId = JSON.parse(storedTemplateId)
+			setTemplateId(templateId)
+			setCurrentStep(4)
+		}
+	}, [])
 
 	return (
 		<main>
@@ -54,17 +108,23 @@ export default function Home() {
 				{currentStep === 2 && (
 					<Step2Selection
 						handleNext={handle2ndStepNext}
-						setCurrentStep={setCurrentStep}
+						hanldeBack={handle2ndStepBack}
 					/>
 				)}
 				{currentStep === 3 && (
 					<Step3TemplateSelection
 						type={type}
 						handleNext={(templateId) => handle3rdStepNext(templateId)}
-						setCurrentStep={setCurrentStep}
+						handleBack={handle3rdStepBack}
 					/>
 				)}
-				{currentStep === 4 && <Step4Preview type={type} profile={profileData} />}
+				{currentStep === 4 && (
+					<Step4Preview
+						type={type}
+						profile={profileData}
+						handleBack={handle4thStepBack}
+					/>
+				)}
 			</WizardContainer>
 		</main>
 	)

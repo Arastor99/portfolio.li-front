@@ -2,10 +2,10 @@ import { motion } from "framer-motion"
 
 interface Props {
 	handleNext: (type: "portfolio" | "cv") => void
-	setCurrentStep: (step: number) => void
+	hanldeBack: () => void
 }
 
-export default function Step2Selection({ handleNext, setCurrentStep }: Props) {
+export default function Step2Selection({ handleNext, hanldeBack }: Props) {
 	const handleContinue = (type: "portfolio" | "cv") => {
 		handleNext(type)
 	}
@@ -97,7 +97,7 @@ export default function Step2Selection({ handleNext, setCurrentStep }: Props) {
 
 			<div className="flex justify-between pt-4">
 				<motion.button
-					onClick={() => setCurrentStep(1)}
+					onClick={hanldeBack}
 					whileHover={{ scale: 1.02 }}
 					whileTap={{ scale: 0.98 }}
 					className="px-6 py-2 border border-gray-300 text-[#64748B] font-medium rounded-lg hover:bg-gray-50 transition-colors"
