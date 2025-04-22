@@ -20,7 +20,7 @@
 			"@assets/*": ["src/assets/*"],
 			"@router/*": ["src/router/*"],
 			"@lib/*": ["src/lib/*"],
-			"@hooks/*": ["src/features/app/hooks/*"],
+			"@hooks/*": ["src/common/hooks/*"],
 			"@templatesPortfolio/*": ["src/portfolioTemplates/*"]
 		}
 	},
