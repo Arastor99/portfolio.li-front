@@ -18,7 +18,7 @@ const Preview = () => {
 			localStorage.removeItem("profileData")
 		} else {
 			// redirige a otra ruta si no hay datos
-			navigate("/", { replace: true }) // o "/"
+			navigate("/home", { replace: true }) // o "/"
 		}
 	}, [navigate])
 

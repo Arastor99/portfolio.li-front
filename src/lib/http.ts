@@ -19,4 +19,14 @@ http.interceptors.request.use(
 	},
 	(error) => Promise.reject(error)
 )
+
+// ADD LOGOUT WITH 401 ERROR
+http.interceptors.response.use((response) => {
+	if (response.status === 401) {
+		Cookies.remove("accessToken")
+		Cookies.remove("refreshToken")
+		window.location.href = "/auth/login"
+	}
+	return response
+})
 export default http

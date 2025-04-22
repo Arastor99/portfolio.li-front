@@ -34,7 +34,7 @@ const ModalRegister: React.FC<Props> = ({ onClose, triggerRegister }) => {
 			})
 			.then(() => triggerRegister && triggerRegister())
 			.then(() => {
-				navigate("/dashboard", { replace: true })
+				navigate("/app/dashboard", { replace: true })
 				onClose()
 			})
 			.finally(() => {
@@ -137,7 +137,7 @@ const ModalRegister: React.FC<Props> = ({ onClose, triggerRegister }) => {
 				<div className="mt-4 text-center text-sm">
 					<span className="text-gray-600">Already signed in? </span>
 					<Link
-						to="/login"
+						to="/auth/login"
 						className="font-medium text-[#6366F1] hover:underline"
 					>
 						Log in

@@ -1,23 +1,14 @@
-import { Navigate, useLocation } from "react-router-dom"
+import { Navigate, Outlet } from "react-router-dom"
 import Cookies from "js-cookie"
 
-interface PrivateRouteProps {
-  children: React.ReactNode
-}
+const PrivateRoute = () => {
+	const token = Cookies.get("accessToken")
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
-  const location = useLocation()
-  
-  
-  const token = Cookies.get("token")
+	console.log("token", token)
 
-  
-  if (!token) {
-    return <Navigate to="/login" state={{ from: location }} />
-  }
+	if (!token) return <Navigate to={"/auth/login"} replace />
 
-  
-  return <>{children}</>
+	return <Outlet />
 }
 
 export default PrivateRoute

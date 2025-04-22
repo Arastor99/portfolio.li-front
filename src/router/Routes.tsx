@@ -6,62 +6,55 @@ import Home from "@pages/home/Home"
 
 import Preview from "@pages/preview/Preview"
 
-import Dashboard from "@pages/app/Dashboard"
-
 import AccountPage from "@pages/account/AccountPage"
 import ProfilePage from "@pages/profile/ProfilePage"
 import TemplatesPage from "@pages/templates/TemplatesPage"
 import PortfolioPage from "@pages/portfolio/PortfolioPage"
+import DashboardPage from "@pages/dashboard/DashboardPage"
 
-import Portfolio from "src/portfolioTemplates/t1/template1"
-
-export const appRoutes = [
+export const publicRoutes = [
 	{
-		path: "/",
+		path: "/home",
 		element: <Home />,
 	},
 	{
-		path: "/login",
+		path: "/auth/login",
 		element: <Login />,
 	},
 	{
-		path: "/register",
+		path: "/auth/register",
 		element: <Register />,
 	},
 	{
-		path: "/forgot-password",
+		path: "/auth/forgot-password",
 		element: <ForgotPassword />,
 	},
+
 	{
-		path: "/dashboard",
-		element: <Dashboard />,
+		path: "/home/preview",
+		element: <Preview />,
+	},
+]
+
+export const privateRoutes = [
+	{
+		path: "/app/dashboard",
+		element: <DashboardPage />,
 	},
 	{
-		path: "/profile",
+		path: "/app/profile",
 		element: <ProfilePage />,
 	},
 	{
-		path: "/templates",
+		path: "/app/templates",
 		element: <TemplatesPage />,
 	},
 	{
-		path: "/preview",
-		element: <Preview />,
-	},
-	// { // TODO?
-	// 	path: "/create",
-	// 	element: <Create />,
-	// },
-	{
-		path: "/account",
+		path: "/app/account",
 		element: <AccountPage />,
 	},
 	{
-		path: "/templates",
+		path: "/app/portfolio",
 		element: <PortfolioPage />,
-	},
-	{
-		path: "/templates1",
-		element: <Portfolio />,
 	},
 ]

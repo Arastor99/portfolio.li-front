@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import toast from "react-hot-toast"
 
 import { Profile } from "@common/types/profile"
 import { getProfile } from "@lib/services/profile.service"
@@ -8,7 +9,6 @@ import Step2Selection from "@components/common/wizard/Step2Selection"
 import Step3TemplateSelection from "@components/common/wizard/Step3TemplateSelection"
 import Step4Preview from "@components/common/wizard/Step4Preview"
 import WizardContainer from "@components/common/wizard/WizardContainer"
-import toast from "react-hot-toast"
 import { createPortfolio } from "@lib/services/portfolio.service"
 
 export default function Home() {

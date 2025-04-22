@@ -1,70 +1,358 @@
+import { useState } from "react"
 import { motion } from "framer-motion"
+import { Edit, Save, Plus, Trash, X, Calendar } from "lucide-react"
+
+import {
+	Profile,
+	Experience,
+	Education,
+	Language,
+	Certification,
+	Project,
+	Skill,
+} from "@common/types/profile"
+
+// Sample data
+const sampleProfile: Profile = {
+	id: "1",
+	firstName: "John",
+	lastName: "Doe",
+	publicId: "johndoe",
+	headline: "Senior Frontend Developer",
+	summary:
+		"Desarrollador frontend con más de 5 años de experiencia en React, TypeScript y diseño de interfaces de usuario.",
+	student: false,
+	locationName: "Madrid, España",
+	geoCountryName: "España",
+	geoLocationName: "Madrid",
+	industryName: "Tecnología",
+	birthDay: 15,
+	birthMonth: 4,
+	experiences: [
+		{
+			id: "exp1",
+			title: "Senior Frontend Developer",
+			companyName: "Tech Solutions Inc.",
+			description:
+				"Desarrollo de aplicaciones web con React y TypeScript. Implementación de arquitecturas escalables y optimización de rendimiento.",
+			startDate: new Date("2020-01-01"),
+			endDate: undefined,
+			locationName: "Madrid",
+			companyIndustries: ["Tecnología", "Software"],
+		},
+		{
+			id: "exp2",
+			title: "Frontend Developer",
+			companyName: "Digital Agency",
+			description:
+				"Desarrollo de sitios web responsivos y aplicaciones interactivas utilizando React y Vue.js.",
+			startDate: new Date("2018-03-01"),
+			endDate: new Date("2019-12-31"),
+			locationName: "Barcelona",
+			companyIndustries: ["Marketing", "Diseño"],
+		},
+	],
+	education: [
+		{
+			id: "edu1",
+			schoolName: "Universidad Tecnológica",
+			degreeName: "Ingeniería Informática",
+			fieldOfStudy: "Desarrollo de software",
+			startYear: 2014,
+			endYear: 2018,
+			description: "Especialización en desarrollo de software y sistemas web.",
+		},
+	],
+	languages: [
+		{ id: "lang1", name: "Español", proficiency: "Nativo" },
+		{ id: "lang2", name: "Inglés", proficiency: "Avanzado" },
+	],
+	publications: [],
+	certifications: [
+		{
+			id: "cert1",
+			name: "React Developer Certification",
+			authority: "React Academy",
+			url: "https://reactacademy.com/cert/123456",
+			startDate: new Date("2021-05-15"),
+		},
+	],
+	volunteer: [],
+	honors: [],
+	projects: [
+		{
+			id: "proj1",
+			title: "E-commerce Website",
+			description: "Tienda online desarrollada con React y Node.js",
+			startDate: new Date("2022-01-01"),
+			endDate: new Date("2022-03-15"),
+		},
+	],
+	skills: [
+		{ id: "skill1", name: "React" },
+		{ id: "skill2", name: "TypeScript" },
+		{ id: "skill3", name: "JavaScript" },
+		{ id: "skill4", name: "HTML5" },
+		{ id: "skill5", name: "CSS3" },
+		{ id: "skill6", name: "Tailwind CSS" },
+		{ id: "skill7", name: "Node.js" },
+		{ id: "skill8", name: "Git" },
+	],
+}
 
 export default function ProfilePage() {
-	const sections = [
-		{
-			id: "personal",
-			title: "Información Personal",
-			content: {
-				name: "John Doe",
-				title: "Senior Frontend Developer",
-				location: "Madrid, España",
-				email: "john.doe@example.com",
-				phone: "+34 600 123 456",
-				about:
-					"Desarrollador frontend con más de 5 años de experiencia en React, TypeScript y diseño de interfaces de usuario.",
-			},
-		},
-		{
-			id: "experience",
-			title: "Experiencia Laboral",
-			items: [
-				{
-					company: "Tech Solutions Inc.",
-					position: "Senior Frontend Developer",
-					period: "2020 - Presente",
-					description:
-						"Desarrollo de aplicaciones web con React y TypeScript. Implementación de arquitecturas escalables y optimización de rendimiento.",
-				},
-				{
-					company: "Digital Agency",
-					position: "Frontend Developer",
-					period: "2018 - 2020",
-					description:
-						"Desarrollo de sitios web responsivos y aplicaciones interactivas utilizando React y Vue.js.",
-				},
-			],
-		},
-		{
-			id: "education",
-			title: "Educación",
-			items: [
-				{
-					institution: "Universidad Tecnológica",
-					degree: "Ingeniería Informática",
-					period: "2014 - 2018",
-					description:
-						"Especialización en desarrollo de software y sistemas web.",
-				},
-			],
-		},
-		{
-			id: "skills",
-			title: "Habilidades",
-			tags: [
-				"React",
-				"TypeScript",
-				"JavaScript",
-				"HTML5",
-				"CSS3",
-				"Tailwind CSS",
-				"Node.js",
-				"Git",
-				"Figma",
-				"UI/UX",
-			],
-		},
-	]
+	const [profile, setProfile] = useState<Profile>(sampleProfile)
+	const [activeSection, setActiveSection] = useState<string>("personal")
+	const [editMode, setEditMode] = useState<boolean>(false)
+
+	// State for editing items
+	const [editingExperience, setEditingExperience] = useState<Experience | null>(
+		null
+	)
+	const [editingEducation, setEditingEducation] = useState<Education | null>(
+		null
+	)
+	const [editingSkill, setEditingSkill] = useState<string>("")
+	const [editingLanguage, setEditingLanguage] = useState<Language | null>(null)
+	const [editingCertification, setEditingCertification] =
+		useState<Certification | null>(null)
+	const [editingProject, setEditingProject] = useState<Project | null>(null)
+
+	// Function to format date
+	const formatDate = (date?: Date) => {
+		if (!date) return ""
+		return new Date(date).toLocaleDateString("es-ES", {
+			year: "numeric",
+			month: "long",
+		})
+	}
+
+	// Function to handle profile updates
+	const handleProfileUpdate = (field: string, value: any) => {
+		setProfile((prev) => ({
+			...prev,
+			[field]: value,
+		}))
+	}
+
+	// Function to add a new experience
+	const handleAddExperience = () => {
+		const newExperience: Experience = {
+			id: `exp${Date.now()}`,
+			title: "",
+			companyName: "",
+			description: "",
+			companyIndustries: [],
+		}
+		setEditingExperience(newExperience)
+	}
+
+	// Function to save experience
+	const handleSaveExperience = (experience: Experience) => {
+		if (profile.experiences.find((exp) => exp.id === experience.id)) {
+			// Update existing experience
+			setProfile((prev) => ({
+				...prev,
+				experiences: prev.experiences.map((exp) =>
+					exp.id === experience.id ? experience : exp
+				),
+			}))
+		} else {
+			// Add new experience
+			setProfile((prev) => ({
+				...prev,
+				experiences: [...prev.experiences, experience],
+			}))
+		}
+		setEditingExperience(null)
+	}
+
+	// Function to delete experience
+	const handleDeleteExperience = (id: string) => {
+		setProfile((prev) => ({
+			...prev,
+			experiences: prev.experiences.filter((exp) => exp.id !== id),
+		}))
+	}
+
+	// Function to add a new education
+	const handleAddEducation = () => {
+		const newEducation: Education = {
+			id: `edu${Date.now()}`,
+			schoolName: "",
+			degreeName: "",
+			fieldOfStudy: "",
+		}
+		setEditingEducation(newEducation)
+	}
+
+	// Function to save education
+	const handleSaveEducation = (education: Education) => {
+		if (profile.education.find((edu) => edu.id === education.id)) {
+			// Update existing education
+			setProfile((prev) => ({
+				...prev,
+				education: prev.education.map((edu) =>
+					edu.id === education.id ? education : edu
+				),
+			}))
+		} else {
+			// Add new education
+			setProfile((prev) => ({
+				...prev,
+				education: [...prev.education, education],
+			}))
+		}
+		setEditingEducation(null)
+	}
+
+	// Function to delete education
+	const handleDeleteEducation = (id: string) => {
+		setProfile((prev) => ({
+			...prev,
+			education: prev.education.filter((edu) => edu.id !== id),
+		}))
+	}
+
+	// Function to add a new skill
+	const handleAddSkill = () => {
+		if (editingSkill.trim() === "") return
+
+		const newSkill: Skill = {
+			id: `skill${Date.now()}`,
+			name: editingSkill,
+		}
+
+		setProfile((prev) => ({
+			...prev,
+			skills: [...prev.skills, newSkill],
+		}))
+
+		setEditingSkill("")
+	}
+
+	// Function to delete skill
+	const handleDeleteSkill = (id: string) => {
+		setProfile((prev) => ({
+			...prev,
+			skills: prev.skills.filter((skill) => skill.id !== id),
+		}))
+	}
+
+	// Function to add a new language
+	const handleAddLanguage = () => {
+		const newLanguage: Language = {
+			id: `lang${Date.now()}`,
+			name: "",
+			proficiency: "",
+		}
+		setEditingLanguage(newLanguage)
+	}
+
+	// Function to save language
+	const handleSaveLanguage = (language: Language) => {
+		if (profile.languages.find((lang) => lang.id === language.id)) {
+			// Update existing language
+			setProfile((prev) => ({
+				...prev,
+				languages: prev.languages.map((lang) =>
+					lang.id === language.id ? language : lang
+				),
+			}))
+		} else {
+			// Add new language
+			setProfile((prev) => ({
+				...prev,
+				languages: [...prev.languages, language],
+			}))
+		}
+		setEditingLanguage(null)
+	}
+
+	// Function to delete language
+	const handleDeleteLanguage = (id: string) => {
+		setProfile((prev) => ({
+			...prev,
+			languages: prev.languages.filter((lang) => lang.id !== id),
+		}))
+	}
+
+	// Function to add a new certification
+	const handleAddCertification = () => {
+		const newCertification: Certification = {
+			id: `cert${Date.now()}`,
+			name: "",
+			authority: "",
+			url: "",
+		}
+		setEditingCertification(newCertification)
+	}
+
+	// Function to save certification
+	const handleSaveCertification = (certification: Certification) => {
+		if (profile.certifications.find((cert) => cert.id === certification.id)) {
+			// Update existing certification
+			setProfile((prev) => ({
+				...prev,
+				certifications: prev.certifications.map((cert) =>
+					cert.id === certification.id ? certification : cert
+				),
+			}))
+		} else {
+			// Add new certification
+			setProfile((prev) => ({
+				...prev,
+				certifications: [...prev.certifications, certification],
+			}))
+		}
+		setEditingCertification(null)
+	}
+
+	// Function to delete certification
+	const handleDeleteCertification = (id: string) => {
+		setProfile((prev) => ({
+			...prev,
+			certifications: prev.certifications.filter((cert) => cert.id !== id),
+		}))
+	}
+
+	// Function to add a new project
+	const handleAddProject = () => {
+		const newProject: Project = {
+			id: `proj${Date.now()}`,
+			title: "",
+			description: "",
+		}
+		setEditingProject(newProject)
+	}
+
+	// Function to save project
+	const handleSaveProject = (project: Project) => {
+		if (profile.projects.find((proj) => proj.id === project.id)) {
+			// Update existing project
+			setProfile((prev) => ({
+				...prev,
+				projects: prev.projects.map((proj) =>
+					proj.id === project.id ? project : proj
+				),
+			}))
+		} else {
+			// Add new project
+			setProfile((prev) => ({
+				...prev,
+				projects: [...prev.projects, project],
+			}))
+		}
+		setEditingProject(null)
+	}
+
+	// Function to delete project
+	const handleDeleteProject = (id: string) => {
+		setProfile((prev) => ({
+			...prev,
+			projects: prev.projects.filter((proj) => proj.id !== id),
+		}))
+	}
 
 	return (
 		<div className="min-h-screen bg-[#F9FAFB] p-4 md:p-8 pt-20">
@@ -74,101 +362,1574 @@ export default function ProfilePage() {
 				transition={{ duration: 0.5 }}
 				className="max-w-4xl mx-auto"
 			>
+				{/* Profile Header */}
 				<div className="bg-white rounded-xl shadow-md overflow-hidden mb-6">
-					<div className="p-6 md:p-8">
+					<div className="h-32 bg-gradient-to-r from-[#6366F1]/80 to-[#8B5CF6]/80 relative">
+						{profile.backgroundPictureUrl ? (
+							<img
+								src={profile.backgroundPictureUrl || "/placeholder.svg"}
+								alt="Background"
+								className="w-full h-full object-cover"
+							/>
+						) : null}
+
+						{editMode ? (
+							<button className="absolute right-4 top-4 bg-white/80 p-2 rounded-full text-[#6366F1] hover:bg-white">
+								<Edit size={16} />
+							</button>
+						) : null}
+					</div>
+
+					<div className="p-6 md:p-8 relative">
 						<div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
-							<div className="w-24 h-24 bg-[#6366F1]/10 rounded-full flex items-center justify-center text-[#6366F1] text-2xl font-bold">
-								JD
+							<div className="w-24 h-24 bg-[#6366F1]/10 rounded-full flex items-center justify-center text-[#6366F1] text-2xl font-bold -mt-16 border-4 border-white relative">
+								{profile.profilePictureUrl ? (
+									<img
+										src={profile.profilePictureUrl || "/placeholder.svg"}
+										alt={`${profile.firstName} ${profile.lastName}`}
+										className="w-full h-full rounded-full object-cover"
+									/>
+								) : (
+									`${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}`
+								)}
+
+								{editMode ? (
+									<button className="absolute right-0 bottom-0 bg-white p-1 rounded-full text-[#6366F1] shadow-md hover:bg-gray-100">
+										<Edit size={14} />
+									</button>
+								) : null}
 							</div>
+
+							<div className="flex-1">
+								{editMode ? (
+									<div className="space-y-3">
+										<div className="flex gap-3">
+											<input
+												type="text"
+												value={profile.firstName}
+												onChange={(e) =>
+													handleProfileUpdate("firstName", e.target.value)
+												}
+												className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-1/2"
+												placeholder="Nombre"
+											/>
+											<input
+												type="text"
+												value={profile.lastName}
+												onChange={(e) =>
+													handleProfileUpdate("lastName", e.target.value)
+												}
+												className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-1/2"
+												placeholder="Apellido"
+											/>
+										</div>
+										<input
+											type="text"
+											value={profile.headline || ""}
+											onChange={(e) =>
+												handleProfileUpdate("headline", e.target.value)
+											}
+											className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+											placeholder="Título profesional"
+										/>
+										<input
+											type="text"
+											value={profile.locationName || ""}
+											onChange={(e) =>
+												handleProfileUpdate("locationName", e.target.value)
+											}
+											className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+											placeholder="Ubicación"
+										/>
+									</div>
+								) : (
+									<>
+										<h1 className="text-2xl font-bold text-[#0F172A]">
+											{profile.firstName} {profile.lastName}
+										</h1>
+										<p className="text-[#64748B]">{profile.headline}</p>
+										<p className="text-[#64748B] text-sm">
+											{profile.locationName}
+										</p>
+									</>
+								)}
+							</div>
+
 							<div>
-								<h1 className="text-2xl font-bold text-[#0F172A]">
-									{sections[0].content.name}
-								</h1>
-								<p className="text-[#64748B]">{sections[0].content.title}</p>
-								<p className="text-[#64748B] text-sm">
-									{sections[0].content.location}
-								</p>
+								{editMode ? (
+									<button
+										onClick={() => setEditMode(false)}
+										className="px-4 py-2 bg-[#6366F1] text-white rounded-lg shadow-sm flex items-center gap-2"
+									>
+										<Save size={16} />
+										<span>Guardar</span>
+									</button>
+								) : (
+									<button
+										onClick={() => setEditMode(true)}
+										className="px-4 py-2 border border-[#6366F1] text-[#6366F1] rounded-lg flex items-center gap-2"
+									>
+										<Edit size={16} />
+										<span>Editar perfil</span>
+									</button>
+								)}
 							</div>
 						</div>
 					</div>
 				</div>
 
-				{sections.map((section) => (
+				{/* Profile Navigation */}
+				<div className="bg-white rounded-xl shadow-md overflow-hidden mb-6">
+					<div className="flex overflow-x-auto">
+						{[
+							"personal",
+							"experiences",
+							"education",
+							"skills",
+							"languages",
+							"certifications",
+							"projects",
+						].map((section) => (
+							<button
+								key={section}
+								onClick={() => setActiveSection(section)}
+								className={`px-4 py-3 text-sm font-medium whitespace-nowrap ${
+									activeSection === section
+										? "text-[#6366F1] border-b-2 border-[#6366F1]"
+										: "text-[#64748B] hover:text-[#0F172A] hover:bg-gray-50"
+								}`}
+							>
+								{section.charAt(0).toUpperCase() + section.slice(1)}
+							</button>
+						))}
+					</div>
+				</div>
+
+				{/* Personal Information Section */}
+				{activeSection === "personal" && (
 					<motion.div
-						key={section.id}
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.5, delay: 0.2 }}
+						transition={{ duration: 0.3 }}
 						className="bg-white rounded-xl shadow-md overflow-hidden mb-6"
 					>
-						<div className="border-b border-gray-100 p-4 md:p-6">
+						<div className="p-6 border-b border-gray-100">
 							<h2 className="text-xl font-semibold text-[#0F172A]">
-								{section.title}
+								Información Personal
 							</h2>
 						</div>
 
-						<div className="p-4 md:p-6">
-							{section.id === "personal" && (
-								<div className="space-y-4">
+						<div className="p-6">
+							{editMode ? (
+								<div className="space-y-6">
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+										<div className="space-y-2">
+											<label className="text-sm font-medium text-[#64748B]">
+												Email
+											</label>
+											<input
+												type="email"
+												value={profile.publicId}
+												onChange={(e) =>
+													handleProfileUpdate("publicId", e.target.value)
+												}
+												className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+											/>
+										</div>
+
+										<div className="space-y-2">
+											<label className="text-sm font-medium text-[#64748B]">
+												Industria
+											</label>
+											<input
+												type="text"
+												value={profile.industryName || ""}
+												onChange={(e) =>
+													handleProfileUpdate("industryName", e.target.value)
+												}
+												className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+											/>
+										</div>
+									</div>
+
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+										<div className="space-y-2">
+											<label className="text-sm font-medium text-[#64748B]">
+												País
+											</label>
+											<input
+												type="text"
+												value={profile.geoCountryName || ""}
+												onChange={(e) =>
+													handleProfileUpdate("geoCountryName", e.target.value)
+												}
+												className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+											/>
+										</div>
+
+										<div className="space-y-2">
+											<label className="text-sm font-medium text-[#64748B]">
+												Ciudad
+											</label>
+											<input
+												type="text"
+												value={profile.geoLocationName || ""}
+												onChange={(e) =>
+													handleProfileUpdate("geoLocationName", e.target.value)
+												}
+												className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+											/>
+										</div>
+									</div>
+
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+										<div className="space-y-2">
+											<label className="text-sm font-medium text-[#64748B]">
+												Mes de nacimiento
+											</label>
+											<select
+												value={profile.birthMonth || ""}
+												onChange={(e) =>
+													handleProfileUpdate(
+														"birthMonth",
+														e.target.value
+															? Number.parseInt(e.target.value)
+															: undefined
+													)
+												}
+												className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+											>
+												<option value="">Seleccionar mes</option>
+												{Array.from({ length: 12 }, (_, i) => (
+													<option key={i + 1} value={i + 1}>
+														{new Date(0, i).toLocaleString("es-ES", {
+															month: "long",
+														})}
+													</option>
+												))}
+											</select>
+										</div>
+
+										<div className="space-y-2">
+											<label className="text-sm font-medium text-[#64748B]">
+												Día de nacimiento
+											</label>
+											<select
+												value={profile.birthDay || ""}
+												onChange={(e) =>
+													handleProfileUpdate(
+														"birthDay",
+														e.target.value
+															? Number.parseInt(e.target.value)
+															: undefined
+													)
+												}
+												className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+											>
+												<option value="">Seleccionar día</option>
+												{Array.from({ length: 31 }, (_, i) => (
+													<option key={i + 1} value={i + 1}>
+														{i + 1}
+													</option>
+												))}
+											</select>
+										</div>
+									</div>
+
+									<div className="space-y-2">
+										<label className="text-sm font-medium text-[#64748B]">
+											Resumen profesional
+										</label>
+										<textarea
+											value={profile.summary || ""}
+											onChange={(e) =>
+												handleProfileUpdate("summary", e.target.value)
+											}
+											className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full min-h-[100px]"
+											placeholder="Escribe un breve resumen sobre ti y tu experiencia profesional"
+										/>
+									</div>
+
+									<div className="flex items-center gap-2">
+										<input
+											type="checkbox"
+											id="student"
+											checked={profile.student}
+											onChange={(e) =>
+												handleProfileUpdate("student", e.target.checked)
+											}
+											className="rounded border-gray-300 text-[#6366F1] focus:ring-[#6366F1]"
+										/>
+										<label
+											htmlFor="student"
+											className="text-sm font-medium text-[#64748B]"
+										>
+											Soy estudiante
+										</label>
+									</div>
+								</div>
+							) : (
+								<div className="space-y-6">
 									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 										<div>
 											<p className="text-sm text-[#64748B]">Email</p>
-											<p className="text-[#0F172A]">{section.content.email}</p>
+											<p className="text-[#0F172A]">{profile.publicId}</p>
 										</div>
+
 										<div>
-											<p className="text-sm text-[#64748B]">Teléfono</p>
-											<p className="text-[#0F172A]">{section.content.phone}</p>
+											<p className="text-sm text-[#64748B]">Industria</p>
+											<p className="text-[#0F172A]">
+												{profile.industryName || "No especificado"}
+											</p>
 										</div>
 									</div>
+
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+										<div>
+											<p className="text-sm text-[#64748B]">Ubicación</p>
+											<p className="text-[#0F172A]">
+												{profile.geoLocationName}, {profile.geoCountryName}
+											</p>
+										</div>
+
+										<div>
+											<p className="text-sm text-[#64748B]">
+												Fecha de nacimiento
+											</p>
+											<p className="text-[#0F172A]">
+												{profile.birthDay && profile.birthMonth
+													? `${profile.birthDay} de ${new Date(
+															0,
+															profile.birthMonth - 1
+													  ).toLocaleString("es-ES", { month: "long" })}`
+													: "No especificado"}
+											</p>
+										</div>
+									</div>
+
 									<div>
-										<p className="text-sm text-[#64748B]">Sobre mí</p>
-										<p className="text-[#0F172A]">{section.content.about}</p>
+										<p className="text-sm text-[#64748B]">
+											Resumen profesional
+										</p>
+										<p className="text-[#0F172A]">
+											{profile.summary || "No especificado"}
+										</p>
+									</div>
+
+									<div>
+										<p className="text-sm text-[#64748B]">Estudiante</p>
+										<p className="text-[#0F172A]">
+											{profile.student ? "Sí" : "No"}
+										</p>
+									</div>
+								</div>
+							)}
+						</div>
+					</motion.div>
+				)}
+
+				{/* Experiences Section */}
+				{activeSection === "experiences" && (
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.3 }}
+						className="bg-white rounded-xl shadow-md overflow-hidden mb-6"
+					>
+						<div className="p-6 border-b border-gray-100 flex justify-between items-center">
+							<h2 className="text-xl font-semibold text-[#0F172A]">
+								Experiencia Laboral
+							</h2>
+							{editMode && (
+								<button
+									onClick={handleAddExperience}
+									className="p-2 text-[#6366F1] rounded-full hover:bg-[#6366F1]/10"
+								>
+									<Plus size={20} />
+								</button>
+							)}
+						</div>
+
+						<div className="p-6">
+							{profile.experiences.length === 0 ? (
+								<p className="text-[#64748B] text-center py-4">
+									No hay experiencia laboral registrada
+								</p>
+							) : (
+								<div className="space-y-6">
+									{profile.experiences.map((experience) => (
+										<div
+											key={experience.id}
+											className="border-l-2 border-[#6366F1] pl-4 ml-2 relative"
+										>
+											{editMode && (
+												<div className="absolute right-0 top-0 flex gap-2">
+													<button
+														onClick={() => setEditingExperience(experience)}
+														className="p-1 text-[#6366F1] rounded-full hover:bg-[#6366F1]/10"
+													>
+														<Edit size={16} />
+													</button>
+													<button
+														onClick={() =>
+															handleDeleteExperience(experience.id)
+														}
+														className="p-1 text-red-500 rounded-full hover:bg-red-50"
+													>
+														<Trash size={16} />
+													</button>
+												</div>
+											)}
+
+											<h3 className="font-medium text-[#0F172A]">
+												{experience.title}
+											</h3>
+											<p className="text-[#64748B]">{experience.companyName}</p>
+											<p className="text-sm text-[#64748B]">
+												{formatDate(experience.startDate)} -{" "}
+												{experience.endDate
+													? formatDate(experience.endDate)
+													: "Presente"}
+												{experience.locationName &&
+													` · ${experience.locationName}`}
+											</p>
+											{experience.description && (
+												<p className="mt-2 text-[#0F172A]">
+													{experience.description}
+												</p>
+											)}
+											{experience.companyIndustries &&
+												experience.companyIndustries.length > 0 && (
+													<div className="mt-2 flex flex-wrap gap-2">
+														{experience.companyIndustries.map(
+															(industry, index) => (
+																<span
+																	key={index}
+																	className="px-2 py-1 bg-gray-100 text-[#64748B] rounded-full text-xs"
+																>
+																	{industry}
+																</span>
+															)
+														)}
+													</div>
+												)}
+										</div>
+									))}
+								</div>
+							)}
+
+							{/* Experience Edit Modal */}
+							{editingExperience && (
+								<div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+									<div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+										<div className="p-6 border-b border-gray-100 flex justify-between items-center">
+											<h3 className="text-lg font-semibold text-[#0F172A]">
+												{profile.experiences.find(
+													(exp) => exp.id === editingExperience.id
+												)
+													? "Editar experiencia"
+													: "Añadir experiencia"}
+											</h3>
+											<button
+												onClick={() => setEditingExperience(null)}
+												className="p-1 text-[#64748B] rounded-full hover:bg-gray-100"
+											>
+												<X size={20} />
+											</button>
+										</div>
+
+										<div className="p-6 space-y-4">
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Puesto
+												</label>
+												<input
+													type="text"
+													value={editingExperience.title || ""}
+													onChange={(e) =>
+														setEditingExperience({
+															...editingExperience,
+															title: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: Frontend Developer"
+												/>
+											</div>
+
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Empresa
+												</label>
+												<input
+													type="text"
+													value={editingExperience.companyName || ""}
+													onChange={(e) =>
+														setEditingExperience({
+															...editingExperience,
+															companyName: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: Acme Inc."
+												/>
+											</div>
+
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Ubicación
+												</label>
+												<input
+													type="text"
+													value={editingExperience.locationName || ""}
+													onChange={(e) =>
+														setEditingExperience({
+															...editingExperience,
+															locationName: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: Madrid, España"
+												/>
+											</div>
+
+											<div className="grid grid-cols-2 gap-4">
+												<div className="space-y-2">
+													<label className="text-sm font-medium text-[#64748B]">
+														Fecha de inicio
+													</label>
+													<div className="relative">
+														<input
+															type="date"
+															value={
+																editingExperience.startDate
+																	? new Date(editingExperience.startDate)
+																			.toISOString()
+																			.split("T")[0]
+																	: ""
+															}
+															onChange={(e) =>
+																setEditingExperience({
+																	...editingExperience,
+																	startDate: e.target.value
+																		? new Date(e.target.value)
+																		: undefined,
+																})
+															}
+															className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+														/>
+														<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
+													</div>
+												</div>
+
+												<div className="space-y-2">
+													<label className="text-sm font-medium text-[#64748B]">
+														Fecha de fin
+													</label>
+													<div className="relative">
+														<input
+															type="date"
+															value={
+																editingExperience.endDate
+																	? new Date(editingExperience.endDate)
+																			.toISOString()
+																			.split("T")[0]
+																	: ""
+															}
+															onChange={(e) =>
+																setEditingExperience({
+																	...editingExperience,
+																	endDate: e.target.value
+																		? new Date(e.target.value)
+																		: undefined,
+																})
+															}
+															className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+														/>
+														<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
+													</div>
+												</div>
+											</div>
+
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Descripción
+												</label>
+												<textarea
+													value={editingExperience.description || ""}
+													onChange={(e) =>
+														setEditingExperience({
+															...editingExperience,
+															description: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full min-h-[100px]"
+													placeholder="Describe tus responsabilidades y logros"
+												/>
+											</div>
+
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Industrias (separadas por coma)
+												</label>
+												<input
+													type="text"
+													value={(
+														editingExperience.companyIndustries || []
+													).join(", ")}
+													onChange={(e) =>
+														setEditingExperience({
+															...editingExperience,
+															companyIndustries: e.target.value
+																.split(",")
+																.map((i) => i.trim())
+																.filter((i) => i),
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: Tecnología, Software, Marketing"
+												/>
+											</div>
+										</div>
+
+										<div className="p-6 border-t border-gray-100 flex justify-end gap-3">
+											<button
+												onClick={() => setEditingExperience(null)}
+												className="px-4 py-2 border border-gray-300 text-[#64748B] rounded-lg hover:bg-gray-50"
+											>
+												Cancelar
+											</button>
+											<button
+												onClick={() => handleSaveExperience(editingExperience)}
+												className="px-4 py-2 bg-[#6366F1] text-white rounded-lg shadow-sm hover:bg-[#5253cc]"
+											>
+												Guardar
+											</button>
+										</div>
+									</div>
+								</div>
+							)}
+						</div>
+					</motion.div>
+				)}
+
+				{/* Education Section */}
+				{activeSection === "education" && (
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.3 }}
+						className="bg-white rounded-xl shadow-md overflow-hidden mb-6"
+					>
+						<div className="p-6 border-b border-gray-100 flex justify-between items-center">
+							<h2 className="text-xl font-semibold text-[#0F172A]">
+								Educación
+							</h2>
+							{editMode && (
+								<button
+									onClick={handleAddEducation}
+									className="p-2 text-[#6366F1] rounded-full hover:bg-[#6366F1]/10"
+								>
+									<Plus size={20} />
+								</button>
+							)}
+						</div>
+
+						<div className="p-6">
+							{profile.education.length === 0 ? (
+								<p className="text-[#64748B] text-center py-4">
+									No hay educación registrada
+								</p>
+							) : (
+								<div className="space-y-6">
+									{profile.education.map((education) => (
+										<div
+											key={education.id}
+											className="border-l-2 border-[#6366F1] pl-4 ml-2 relative"
+										>
+											{editMode && (
+												<div className="absolute right-0 top-0 flex gap-2">
+													<button
+														onClick={() => setEditingEducation(education)}
+														className="p-1 text-[#6366F1] rounded-full hover:bg-[#6366F1]/10"
+													>
+														<Edit size={16} />
+													</button>
+													<button
+														onClick={() => handleDeleteEducation(education.id)}
+														className="p-1 text-red-500 rounded-full hover:bg-red-50"
+													>
+														<Trash size={16} />
+													</button>
+												</div>
+											)}
+
+											<h3 className="font-medium text-[#0F172A]">
+												{education.degreeName}
+											</h3>
+											<p className="text-[#64748B]">{education.schoolName}</p>
+											<p className="text-sm text-[#64748B]">
+												{education.startYear} -{" "}
+												{education.endYear || "Presente"}
+												{education.fieldOfStudy &&
+													` · ${education.fieldOfStudy}`}
+											</p>
+											{education.description && (
+												<p className="mt-2 text-[#0F172A]">
+													{education.description}
+												</p>
+											)}
+										</div>
+									))}
+								</div>
+							)}
+
+							{/* Education Edit Modal */}
+							{editingEducation && (
+								<div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+									<div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+										<div className="p-6 border-b border-gray-100 flex justify-between items-center">
+											<h3 className="text-lg font-semibold text-[#0F172A]">
+												{profile.education.find(
+													(edu) => edu.id === editingEducation.id
+												)
+													? "Editar educación"
+													: "Añadir educación"}
+											</h3>
+											<button
+												onClick={() => setEditingEducation(null)}
+												className="p-1 text-[#64748B] rounded-full hover:bg-gray-100"
+											>
+												<X size={20} />
+											</button>
+										</div>
+
+										<div className="p-6 space-y-4">
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Institución
+												</label>
+												<input
+													type="text"
+													value={editingEducation.schoolName || ""}
+													onChange={(e) =>
+														setEditingEducation({
+															...editingEducation,
+															schoolName: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: Universidad Complutense de Madrid"
+												/>
+											</div>
+
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Título
+												</label>
+												<input
+													type="text"
+													value={editingEducation.degreeName || ""}
+													onChange={(e) =>
+														setEditingEducation({
+															...editingEducation,
+															degreeName: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: Grado en Ingeniería Informática"
+												/>
+											</div>
+
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Campo de estudio
+												</label>
+												<input
+													type="text"
+													value={editingEducation.fieldOfStudy || ""}
+													onChange={(e) =>
+														setEditingEducation({
+															...editingEducation,
+															fieldOfStudy: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: Desarrollo de Software"
+												/>
+											</div>
+
+											<div className="grid grid-cols-2 gap-4">
+												<div className="space-y-2">
+													<label className="text-sm font-medium text-[#64748B]">
+														Año de inicio
+													</label>
+													<input
+														type="number"
+														value={editingEducation.startYear || ""}
+														onChange={(e) =>
+															setEditingEducation({
+																...editingEducation,
+																startYear: e.target.value
+																	? Number.parseInt(e.target.value)
+																	: undefined,
+															})
+														}
+														className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+														placeholder="Ej: 2018"
+													/>
+												</div>
+
+												<div className="space-y-2">
+													<label className="text-sm font-medium text-[#64748B]">
+														Año de fin
+													</label>
+													<input
+														type="number"
+														value={editingEducation.endYear || ""}
+														onChange={(e) =>
+															setEditingEducation({
+																...editingEducation,
+																endYear: e.target.value
+																	? Number.parseInt(e.target.value)
+																	: undefined,
+															})
+														}
+														className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+														placeholder="Ej: 2022"
+													/>
+												</div>
+											</div>
+
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Calificación
+												</label>
+												<input
+													type="text"
+													value={editingEducation.grade || ""}
+													onChange={(e) =>
+														setEditingEducation({
+															...editingEducation,
+															grade: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: Sobresaliente"
+												/>
+											</div>
+
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Actividades y sociedades
+												</label>
+												<input
+													type="text"
+													value={editingEducation.activities || ""}
+													onChange={(e) =>
+														setEditingEducation({
+															...editingEducation,
+															activities: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: Club de programación, Equipo de debate"
+												/>
+											</div>
+
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Descripción
+												</label>
+												<textarea
+													value={editingEducation.description || ""}
+													onChange={(e) =>
+														setEditingEducation({
+															...editingEducation,
+															description: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full min-h-[100px]"
+													placeholder="Describe tu experiencia educativa"
+												/>
+											</div>
+										</div>
+
+										<div className="p-6 border-t border-gray-100 flex justify-end gap-3">
+											<button
+												onClick={() => setEditingEducation(null)}
+												className="px-4 py-2 border border-gray-300 text-[#64748B] rounded-lg hover:bg-gray-50"
+											>
+												Cancelar
+											</button>
+											<button
+												onClick={() => handleSaveEducation(editingEducation)}
+												className="px-4 py-2 bg-[#6366F1] text-white rounded-lg shadow-sm hover:bg-[#5253cc]"
+											>
+												Guardar
+											</button>
+										</div>
+									</div>
+								</div>
+							)}
+						</div>
+					</motion.div>
+				)}
+
+				{/* Skills Section */}
+				{activeSection === "skills" && (
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.3 }}
+						className="bg-white rounded-xl shadow-md overflow-hidden mb-6"
+					>
+						<div className="p-6 border-b border-gray-100">
+							<h2 className="text-xl font-semibold text-[#0F172A]">
+								Habilidades
+							</h2>
+						</div>
+
+						<div className="p-6">
+							{editMode && (
+								<div className="mb-6">
+									<div className="flex gap-2">
+										<input
+											type="text"
+											value={editingSkill}
+											onChange={(e) => setEditingSkill(e.target.value)}
+											className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all flex-1"
+											placeholder="Añadir nueva habilidad"
+											onKeyDown={(e) => e.key === "Enter" && handleAddSkill()}
+										/>
+										<button
+											onClick={handleAddSkill}
+											className="px-4 py-2 bg-[#6366F1] text-white rounded-lg shadow-sm hover:bg-[#5253cc]"
+										>
+											Añadir
+										</button>
 									</div>
 								</div>
 							)}
 
-							{(section.id === "experience" || section.id === "education") &&
-								section.items && (
-									<div className="space-y-6">
-										{section.items.map((item, index) => (
-											<div
-												key={index}
-												className="border-l-2 border-[#6366F1] pl-4 ml-2"
-											>
-												<h3 className="font-medium text-[#0F172A]">
-													{section.id === "experience"
-														? item.position
-														: item.degree}
-												</h3>
-												<p className="text-[#64748B]">
-													{section.id === "experience"
-														? item.company
-														: item.institution}
-												</p>
-												<p className="text-sm text-[#64748B]">{item.period}</p>
-												<p className="mt-2 text-[#0F172A]">
-													{item.description}
-												</p>
-											</div>
-										))}
-									</div>
-								)}
-
-							{section.id === "skills" && section.tags && (
+							{profile.skills.length === 0 ? (
+								<p className="text-[#64748B] text-center py-4">
+									No hay habilidades registradas
+								</p>
+							) : (
 								<div className="flex flex-wrap gap-2">
-									{section.tags.map((tag, index) => (
-										<span
-											key={index}
-											className="px-3 py-1 bg-[#6366F1]/10 text-[#6366F1] rounded-full text-sm"
+									{profile.skills.map((skill) => (
+										<div
+											key={skill.id}
+											className={`px-3 py-1.5 rounded-full text-sm ${
+												editMode
+													? "bg-[#6366F1]/10 text-[#6366F1] pr-1 flex items-center gap-1"
+													: "bg-[#6366F1]/10 text-[#6366F1]"
+											}`}
 										>
-											{tag}
-										</span>
+											{skill.name}
+											{editMode && (
+												<button
+													onClick={() => handleDeleteSkill(skill.id)}
+													className="p-0.5 text-[#6366F1] rounded-full hover:bg-[#6366F1]/20"
+												>
+													<X size={14} />
+												</button>
+											)}
+										</div>
 									))}
 								</div>
 							)}
 						</div>
 					</motion.div>
-				))}
+				)}
+
+				{/* Languages Section */}
+				{activeSection === "languages" && (
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.3 }}
+						className="bg-white rounded-xl shadow-md overflow-hidden mb-6"
+					>
+						<div className="p-6 border-b border-gray-100 flex justify-between items-center">
+							<h2 className="text-xl font-semibold text-[#0F172A]">Idiomas</h2>
+							{editMode && (
+								<button
+									onClick={handleAddLanguage}
+									className="p-2 text-[#6366F1] rounded-full hover:bg-[#6366F1]/10"
+								>
+									<Plus size={20} />
+								</button>
+							)}
+						</div>
+
+						<div className="p-6">
+							{profile.languages.length === 0 ? (
+								<p className="text-[#64748B] text-center py-4">
+									No hay idiomas registrados
+								</p>
+							) : (
+								<div className="space-y-4">
+									{profile.languages.map((language) => (
+										<div
+											key={language.id}
+											className="flex justify-between items-center"
+										>
+											<div>
+												<h3 className="font-medium text-[#0F172A]">
+													{language.name}
+												</h3>
+												<p className="text-sm text-[#64748B]">
+													{language.proficiency}
+												</p>
+											</div>
+
+											{editMode && (
+												<div className="flex gap-2">
+													<button
+														onClick={() => setEditingLanguage(language)}
+														className="p-1 text-[#6366F1] rounded-full hover:bg-[#6366F1]/10"
+													>
+														<Edit size={16} />
+													</button>
+													<button
+														onClick={() => handleDeleteLanguage(language.id)}
+														className="p-1 text-red-500 rounded-full hover:bg-red-50"
+													>
+														<Trash size={16} />
+													</button>
+												</div>
+											)}
+										</div>
+									))}
+								</div>
+							)}
+
+							{/* Language Edit Modal */}
+							{editingLanguage && (
+								<div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+									<div className="bg-white rounded-xl shadow-xl max-w-lg w-full">
+										<div className="p-6 border-b border-gray-100 flex justify-between items-center">
+											<h3 className="text-lg font-semibold text-[#0F172A]">
+												{profile.languages.find(
+													(lang) => lang.id === editingLanguage.id
+												)
+													? "Editar idioma"
+													: "Añadir idioma"}
+											</h3>
+											<button
+												onClick={() => setEditingLanguage(null)}
+												className="p-1 text-[#64748B] rounded-full hover:bg-gray-100"
+											>
+												<X size={20} />
+											</button>
+										</div>
+
+										<div className="p-6 space-y-4">
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Idioma
+												</label>
+												<input
+													type="text"
+													value={editingLanguage.name || ""}
+													onChange={(e) =>
+														setEditingLanguage({
+															...editingLanguage,
+															name: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: Inglés"
+												/>
+											</div>
+
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Nivel
+												</label>
+												<select
+													value={editingLanguage.proficiency || ""}
+													onChange={(e) =>
+														setEditingLanguage({
+															...editingLanguage,
+															proficiency: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+												>
+													<option value="">Seleccionar nivel</option>
+													<option value="Nativo">Nativo</option>
+													<option value="Bilingüe">Bilingüe</option>
+													<option value="Avanzado">Avanzado</option>
+													<option value="Intermedio">Intermedio</option>
+													<option value="Básico">Básico</option>
+												</select>
+											</div>
+										</div>
+
+										<div className="p-6 border-t border-gray-100 flex justify-end gap-3">
+											<button
+												onClick={() => setEditingLanguage(null)}
+												className="px-4 py-2 border border-gray-300 text-[#64748B] rounded-lg hover:bg-gray-50"
+											>
+												Cancelar
+											</button>
+											<button
+												onClick={() => handleSaveLanguage(editingLanguage)}
+												className="px-4 py-2 bg-[#6366F1] text-white rounded-lg shadow-sm hover:bg-[#5253cc]"
+											>
+												Guardar
+											</button>
+										</div>
+									</div>
+								</div>
+							)}
+						</div>
+					</motion.div>
+				)}
+
+				{/* Certifications Section */}
+				{activeSection === "certifications" && (
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.3 }}
+						className="bg-white rounded-xl shadow-md overflow-hidden mb-6"
+					>
+						<div className="p-6 border-b border-gray-100 flex justify-between items-center">
+							<h2 className="text-xl font-semibold text-[#0F172A]">
+								Certificaciones
+							</h2>
+							{editMode && (
+								<button
+									onClick={handleAddCertification}
+									className="p-2 text-[#6366F1] rounded-full hover:bg-[#6366F1]/10"
+								>
+									<Plus size={20} />
+								</button>
+							)}
+						</div>
+
+						<div className="p-6">
+							{profile.certifications.length === 0 ? (
+								<p className="text-[#64748B] text-center py-4">
+									No hay certificaciones registradas
+								</p>
+							) : (
+								<div className="space-y-6">
+									{profile.certifications.map((certification) => (
+										<div key={certification.id} className="relative">
+											{editMode && (
+												<div className="absolute right-0 top-0 flex gap-2">
+													<button
+														onClick={() =>
+															setEditingCertification(certification)
+														}
+														className="p-1 text-[#6366F1] rounded-full hover:bg-[#6366F1]/10"
+													>
+														<Edit size={16} />
+													</button>
+													<button
+														onClick={() =>
+															handleDeleteCertification(certification.id)
+														}
+														className="p-1 text-red-500 rounded-full hover:bg-red-50"
+													>
+														<Trash size={16} />
+													</button>
+												</div>
+											)}
+
+											<h3 className="font-medium text-[#0F172A]">
+												{certification.name}
+											</h3>
+											<p className="text-[#64748B]">
+												{certification.authority}
+											</p>
+											{certification.startDate && (
+												<p className="text-sm text-[#64748B]">
+													Expedición: {formatDate(certification.startDate)}
+													{certification.endDate &&
+														` · Vence: ${formatDate(certification.endDate)}`}
+												</p>
+											)}
+											{certification.url && (
+												<a
+													href={certification.url}
+													target="_blank"
+													rel="noopener noreferrer"
+													className="text-sm text-[#6366F1] hover:underline mt-1 inline-block"
+												>
+													Ver credencial
+												</a>
+											)}
+										</div>
+									))}
+								</div>
+							)}
+
+							{/* Certification Edit Modal */}
+							{editingCertification && (
+								<div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+									<div className="bg-white rounded-xl shadow-xl max-w-lg w-full">
+										<div className="p-6 border-b border-gray-100 flex justify-between items-center">
+											<h3 className="text-lg font-semibold text-[#0F172A]">
+												{profile.certifications.find(
+													(cert) => cert.id === editingCertification.id
+												)
+													? "Editar certificación"
+													: "Añadir certificación"}
+											</h3>
+											<button
+												onClick={() => setEditingCertification(null)}
+												className="p-1 text-[#64748B] rounded-full hover:bg-gray-100"
+											>
+												<X size={20} />
+											</button>
+										</div>
+
+										<div className="p-6 space-y-4">
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Nombre
+												</label>
+												<input
+													type="text"
+													value={editingCertification.name || ""}
+													onChange={(e) =>
+														setEditingCertification({
+															...editingCertification,
+															name: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: AWS Certified Developer"
+												/>
+											</div>
+
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Entidad emisora
+												</label>
+												<input
+													type="text"
+													value={editingCertification.authority || ""}
+													onChange={(e) =>
+														setEditingCertification({
+															...editingCertification,
+															authority: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: Amazon Web Services"
+												/>
+											</div>
+
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													URL de la credencial
+												</label>
+												<input
+													type="url"
+													value={editingCertification.url || ""}
+													onChange={(e) =>
+														setEditingCertification({
+															...editingCertification,
+															url: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: https://www.credential.net/..."
+												/>
+											</div>
+
+											<div className="grid grid-cols-2 gap-4">
+												<div className="space-y-2">
+													<label className="text-sm font-medium text-[#64748B]">
+														Fecha de expedición
+													</label>
+													<div className="relative">
+														<input
+															type="date"
+															value={
+																editingCertification.startDate
+																	? new Date(editingCertification.startDate)
+																			.toISOString()
+																			.split("T")[0]
+																	: ""
+															}
+															onChange={(e) =>
+																setEditingCertification({
+																	...editingCertification,
+																	startDate: e.target.value
+																		? new Date(e.target.value)
+																		: undefined,
+																})
+															}
+															className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+														/>
+														<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
+													</div>
+												</div>
+
+												<div className="space-y-2">
+													<label className="text-sm font-medium text-[#64748B]">
+														Fecha de vencimiento
+													</label>
+													<div className="relative">
+														<input
+															type="date"
+															value={
+																editingCertification.endDate
+																	? new Date(editingCertification.endDate)
+																			.toISOString()
+																			.split("T")[0]
+																	: ""
+															}
+															onChange={(e) =>
+																setEditingCertification({
+																	...editingCertification,
+																	endDate: e.target.value
+																		? new Date(e.target.value)
+																		: undefined,
+																})
+															}
+															className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+														/>
+														<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div className="p-6 border-t border-gray-100 flex justify-end gap-3">
+											<button
+												onClick={() => setEditingCertification(null)}
+												className="px-4 py-2 border border-gray-300 text-[#64748B] rounded-lg hover:bg-gray-50"
+											>
+												Cancelar
+											</button>
+											<button
+												onClick={() =>
+													handleSaveCertification(editingCertification)
+												}
+												className="px-4 py-2 bg-[#6366F1] text-white rounded-lg shadow-sm hover:bg-[#5253cc]"
+											>
+												Guardar
+											</button>
+										</div>
+									</div>
+								</div>
+							)}
+						</div>
+					</motion.div>
+				)}
+
+				{/* Projects Section */}
+				{activeSection === "projects" && (
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.3 }}
+						className="bg-white rounded-xl shadow-md overflow-hidden mb-6"
+					>
+						<div className="p-6 border-b border-gray-100 flex justify-between items-center">
+							<h2 className="text-xl font-semibold text-[#0F172A]">
+								Proyectos
+							</h2>
+							{editMode && (
+								<button
+									onClick={handleAddProject}
+									className="p-2 text-[#6366F1] rounded-full hover:bg-[#6366F1]/10"
+								>
+									<Plus size={20} />
+								</button>
+							)}
+						</div>
+
+						<div className="p-6">
+							{profile.projects.length === 0 ? (
+								<p className="text-[#64748B] text-center py-4">
+									No hay proyectos registrados
+								</p>
+							) : (
+								<div className="space-y-6">
+									{profile.projects.map((project) => (
+										<div key={project.id} className="relative">
+											{editMode && (
+												<div className="absolute right-0 top-0 flex gap-2">
+													<button
+														onClick={() => setEditingProject(project)}
+														className="p-1 text-[#6366F1] rounded-full hover:bg-[#6366F1]/10"
+													>
+														<Edit size={16} />
+													</button>
+													<button
+														onClick={() => handleDeleteProject(project.id)}
+														className="p-1 text-red-500 rounded-full hover:bg-red-50"
+													>
+														<Trash size={16} />
+													</button>
+												</div>
+											)}
+
+											<h3 className="font-medium text-[#0F172A]">
+												{project.title}
+											</h3>
+											{project.startDate && (
+												<p className="text-sm text-[#64748B]">
+													{formatDate(project.startDate)}
+													{project.endDate &&
+														` - ${formatDate(project.endDate)}`}
+												</p>
+											)}
+											{project.description && (
+												<p className="mt-2 text-[#0F172A]">
+													{project.description}
+												</p>
+											)}
+										</div>
+									))}
+								</div>
+							)}
+
+							{/* Project Edit Modal */}
+							{editingProject && (
+								<div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+									<div className="bg-white rounded-xl shadow-xl max-w-lg w-full">
+										<div className="p-6 border-b border-gray-100 flex justify-between items-center">
+											<h3 className="text-lg font-semibold text-[#0F172A]">
+												{profile.projects.find(
+													(proj) => proj.id === editingProject.id
+												)
+													? "Editar proyecto"
+													: "Añadir proyecto"}
+											</h3>
+											<button
+												onClick={() => setEditingProject(null)}
+												className="p-1 text-[#64748B] rounded-full hover:bg-gray-100"
+											>
+												<X size={20} />
+											</button>
+										</div>
+
+										<div className="p-6 space-y-4">
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Título
+												</label>
+												<input
+													type="text"
+													value={editingProject.title || ""}
+													onChange={(e) =>
+														setEditingProject({
+															...editingProject,
+															title: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+													placeholder="Ej: E-commerce Website"
+												/>
+											</div>
+
+											<div className="grid grid-cols-2 gap-4">
+												<div className="space-y-2">
+													<label className="text-sm font-medium text-[#64748B]">
+														Fecha de inicio
+													</label>
+													<div className="relative">
+														<input
+															type="date"
+															value={
+																editingProject.startDate
+																	? new Date(editingProject.startDate)
+																			.toISOString()
+																			.split("T")[0]
+																	: ""
+															}
+															onChange={(e) =>
+																setEditingProject({
+																	...editingProject,
+																	startDate: e.target.value
+																		? new Date(e.target.value)
+																		: undefined,
+																})
+															}
+															className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+														/>
+														<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
+													</div>
+												</div>
+
+												<div className="space-y-2">
+													<label className="text-sm font-medium text-[#64748B]">
+														Fecha de fin
+													</label>
+													<div className="relative">
+														<input
+															type="date"
+															value={
+																editingProject.endDate
+																	? new Date(editingProject.endDate)
+																			.toISOString()
+																			.split("T")[0]
+																	: ""
+															}
+															onChange={(e) =>
+																setEditingProject({
+																	...editingProject,
+																	endDate: e.target.value
+																		? new Date(e.target.value)
+																		: undefined,
+																})
+															}
+															className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full"
+														/>
+														<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
+													</div>
+												</div>
+											</div>
+
+											<div className="space-y-2">
+												<label className="text-sm font-medium text-[#64748B]">
+													Descripción
+												</label>
+												<textarea
+													value={editingProject.description || ""}
+													onChange={(e) =>
+														setEditingProject({
+															...editingProject,
+															description: e.target.value,
+														})
+													}
+													className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent outline-none transition-all w-full min-h-[100px]"
+													placeholder="Describe el proyecto, tecnologías utilizadas y tu rol"
+												/>
+											</div>
+										</div>
+
+										<div className="p-6 border-t border-gray-100 flex justify-end gap-3">
+											<button
+												onClick={() => setEditingProject(null)}
+												className="px-4 py-2 border border-gray-300 text-[#64748B] rounded-lg hover:bg-gray-50"
+											>
+												Cancelar
+											</button>
+											<button
+												onClick={() => handleSaveProject(editingProject)}
+												className="px-4 py-2 bg-[#6366F1] text-white rounded-lg shadow-sm hover:bg-[#5253cc]"
+											>
+												Guardar
+											</button>
+										</div>
+									</div>
+								</div>
+							)}
+						</div>
+					</motion.div>
+				)}
 			</motion.div>
 		</div>
 	)

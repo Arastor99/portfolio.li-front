@@ -24,7 +24,7 @@ import Contact from "./sections/Contact"
 import Footer from "./sections/Footer"
 import { Profile } from "@common/types/profile"
 
-export default function Portfolio( {profile}: { profile: Profile}) {
+export default function Portfolio({ profile }: { profile: Profile }) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const [activeSection, setActiveSection] = useState("home")
 	const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
