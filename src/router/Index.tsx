@@ -1,26 +1,29 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import { privateRoutes, publicRoutes } from "./Routes"
-import PrivateRoute from "./PrivateRoute"
-import RedirectRoute from "./RedirectRoute"
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
+import { publicRoutes, privateRoutes } from "./Routes"
+import Cookies from "js-cookie"
 
 const Index = () => {
+	const isAuthenticated = () => {
+		const token = Cookies.get("accessToken")
+		return !!token
+	}
+
 	return (
 		<Router>
 			<Routes>
-				<Route path="/" element={<RedirectRoute />}>
-					{publicRoutes.map(({ path, element }, index) => (
-						<Route key={index} path={path} element={element} />
-					))}
-				</Route>
+				{publicRoutes.map(({ path, element }, index) => (
+					<Route key={index} path={path} element={element} />
+				))}
 
-				<Route path="/app" element={<PrivateRoute />}>
-					{/* <PrivateRoute> */}
-					{privateRoutes.map(({ path, element }, index) => (
-						<Route key={index} path={path} element={element} />
-					))}
-				</Route>
+				{privateRoutes.map(({ path, element }, index) => (
+					<Route
+						key={index}
+						path={path}
+						element={isAuthenticated() ? element : <Navigate to="/auth/login" replace />}
+					/>
+				))}
 
-				<Route path="*" element={<RedirectRoute />} />
+				<Route path="*" element={<Navigate to="/" replace />} />
 			</Routes>
 		</Router>
 	)

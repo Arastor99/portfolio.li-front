@@ -58,3 +58,8 @@ export const logout = async () => {
 
 	return
 }
+
+export const isAuthenticated = () => {
+	const token = Cookies.get("accessToken")
+	return !!token
+}
