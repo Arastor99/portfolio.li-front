@@ -24,7 +24,7 @@ export default function Step4Preview({
 	const [modalRegister, setModalRegister] = useState(false)
 
 	const handleViewFullPreview = () => {
-		window.open("/preview", "_blank")
+		window.open("/home/preview", "_blank")
 
 		// Si necesitas pasar datos, puedes usar localStorage, sessionStorage o query params
 		localStorage.setItem("profileData", JSON.stringify(profile))

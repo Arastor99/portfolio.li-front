@@ -14,6 +14,7 @@ export default function Login() {
 				transition={{ duration: 0.5 }}
 				className="w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-lg"
 			>
+				
 				<div>
 					<Link
 						to="/home"

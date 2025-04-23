@@ -23,7 +23,7 @@ const Index = () => {
 					/>
 				))}
 
-				<Route path="*" element={<Navigate to="/" replace />} />
+				<Route path="*" element={<Navigate to="/home" replace />} />
 			</Routes>
 		</Router>
 	)
