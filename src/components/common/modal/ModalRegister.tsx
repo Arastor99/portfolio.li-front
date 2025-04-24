@@ -1,18 +1,16 @@
 import React, { useState } from "react"
 import toast from "react-hot-toast"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 import { register } from "@lib/services/auth.service"
 import { EyeOff, Eye, Lock, Mail, User } from "lucide-react"
 
 interface Props {
 	onClose: () => void
-	triggerRegister?: () => void
+	triggerRegister?: () => Promise<void>
 }
 
 const ModalRegister: React.FC<Props> = ({ onClose, triggerRegister }) => {
-	const navigate = useNavigate()
-
 	const [name, setName] = useState("")
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
@@ -32,11 +30,14 @@ const ModalRegister: React.FC<Props> = ({ onClose, triggerRegister }) => {
 				success: "Registered successfully!",
 				error: "Registration failed. Please check your details.",
 			})
-			.then(() => triggerRegister && triggerRegister())
-			.then(() => {
-				navigate("/app/dashboard", { replace: true })
-				onClose()
-			})
+			.then(
+				() =>
+					triggerRegister &&
+					triggerRegister().then(() => {
+						onClose()
+						window.location.href = "/app/dashboard"
+					})
+			)
 			.finally(() => {
 				setIsLoading(false)
 			})

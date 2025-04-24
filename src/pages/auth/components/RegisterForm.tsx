@@ -18,11 +18,16 @@ export default function RegisterForm() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 		setIsLoading(true)
-		await toast.promise(register({ fullName: name, email, password }), {
-			loading: "Registering...",
-			success: "Registered successfully!",
-			error: "Registration failed. Please check your details.",
-		})
+		await toast
+			.promise(register({ fullName: name, email, password }), {
+				loading: "Registering...",
+				success: "Registered successfully!",
+				error: "Registration failed. Please check your details.",
+			})
+			.then(() => {
+				// La sincronizacion de las cookies requiere un window.location.href
+				window.location.href = "/app/dashboard"
+			})
 		setIsLoading(false)
 	}
 

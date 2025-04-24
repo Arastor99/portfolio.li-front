@@ -1,14 +1,19 @@
 import { motion } from "framer-motion"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false)
 
+	const navigate = useNavigate()
+
 	const menuItems = [
-		{ name: "Profile", icon: "user" },
-		{ name: "Templates", icon: "template" },
-		{ name: "Portfolio", icon: "briefcase" },
-		{ name: "Cuenta", icon: "settings" },
+		{ name: "Dashboard", icon: "home", href: "/app/dashboard" },
+		{ name: "Profile", icon: "user", href: "/app/profile" },
+		{ name: "Templates", icon: "template", href: "/app/templates" },
+		{ name: "Portfolio", icon: "briefcase", href: "/app/portfolio" },
+		{ name: "Cuenta", icon: "settings", href: "/app/account" },
+		{ name: "Cerrar sesión", icon: "logout", href: "/app/logout" },
 	]
 
 	return (
@@ -68,6 +73,10 @@ export default function Navbar() {
 					<div className="space-y-1">
 						{menuItems.map((item) => (
 							<motion.a
+								onClick={() => {
+									navigate(item.href)
+									setIsOpen(false)
+								}}
 								key={item.name}
 								whileHover={{ x: 5, backgroundColor: "#F3F4F6" }}
 								className="flex items-center space-x-3 px-4 py-2.5 rounded-lg cursor-pointer"

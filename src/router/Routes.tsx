@@ -11,6 +11,7 @@ import ProfilePage from "@pages/profile/ProfilePage"
 import TemplatesPage from "@pages/templates/TemplatesPage"
 import PortfolioPage from "@pages/portfolio/PortfolioPage"
 import DashboardPage from "@pages/dashboard/DashboardPage"
+import Logout from "@pages/Logout"
 
 export const publicRoutes = [
 	{
@@ -86,6 +87,13 @@ export const privateRoutes = [
 		element: <Preview />,
 		isPrivate: false,
 		redirectTo: null,
+		navbar: false,
+	},
+	{
+		path: "/app/logout",
+		element: <Logout />,
+		isPrivate: true,
+		redirectTo: "/auth/login",
 		navbar: false,
 	},
 ]

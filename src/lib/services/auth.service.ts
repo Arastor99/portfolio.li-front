@@ -55,7 +55,8 @@ export const verifyEmail = async (token: string) => {
 
 export const logout = async () => {
 	Cookies.remove("accessToken")
-
+	Cookies.remove("refreshToken")
+	window.location.href = "/auth/login"
 	return
 }
 

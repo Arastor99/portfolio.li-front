@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import toast from "react-hot-toast"
 import { motion } from "framer-motion"
 import { useTranslation } from "react-i18next"
@@ -17,8 +17,6 @@ export default function LoginForm() {
 	const [showPassword, setShowPassword] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 
-	const navigate = useNavigate()
-
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 		setIsLoading(true)
@@ -28,7 +26,10 @@ export default function LoginForm() {
 				success: "Logged in successfully!",
 				error: "Login failed. Please check your credentials.",
 			})
-			.then(() => navigate("/app/dashboard"))
+			.then(() => {
+				// La sincronizacion de las cookies requiere un window.location.href
+				window.location.href = "/app/dashboard"
+			})
 
 		setIsLoading(false)
 	}

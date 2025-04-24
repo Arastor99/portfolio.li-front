@@ -4,7 +4,7 @@ import Navbar from "@components/common/Navbar"
 
 const PrivateLayout = () => {
 	return (
-		<div className="flex flex-col h-screen overflow-hidden">
+		<div className="flex flex-col min-h-screen overflow-hidden">
 			<Navbar />
 			<div className="">
 				<Outlet />
