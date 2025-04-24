@@ -22,7 +22,6 @@ export default function ForgotPasswordForm() {
 		}
 
 		await new Promise((resolve) => setTimeout(resolve, 1500))
-		console.log("Password reset requested for:", email)
 
 		setIsLoading(false)
 		setIsSubmitted(true)

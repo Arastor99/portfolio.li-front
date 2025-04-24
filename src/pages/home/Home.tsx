@@ -21,8 +21,6 @@ export default function Home() {
 	const [type, setType] = useState<"portfolio" | "cv">("portfolio")
 	const [templateId, setTemplateId] = useState<string>("")
 
-	console.log("templateId", templateId)
-
 	const handle1stStepNext = async (publicId: string) => {
 		setCurrentStep(2)
 

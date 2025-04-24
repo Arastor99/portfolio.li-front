@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import toast from "react-hot-toast"
 import { motion } from "framer-motion"
 import { useTranslation } from "react-i18next"
@@ -16,14 +16,20 @@ export default function LoginForm() {
 	const [password, setPassword] = useState("")
 	const [showPassword, setShowPassword] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
+
+	const navigate = useNavigate()
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 		setIsLoading(true)
-		await toast.promise(login({ email, password }), {
-			loading: "Logging in...",
-			success: "Logged in successfully!",
-			error: "Login failed. Please check your credentials.",
-		})
+		await toast
+			.promise(login({ email, password }), {
+				loading: "Logging in...",
+				success: "Logged in successfully!",
+				error: "Login failed. Please check your credentials.",
+			})
+			.then(() => navigate("/app/dashboard"))
+
 		setIsLoading(false)
 	}
 

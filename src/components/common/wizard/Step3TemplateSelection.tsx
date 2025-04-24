@@ -23,7 +23,6 @@ export default function Step3TemplateSelection({
 			// setTemplates(templates)
 		} else {
 			const templates = await getPotfolioTemplates()
-			console.log(templates)
 			setTemplates(templates)
 		}
 	}

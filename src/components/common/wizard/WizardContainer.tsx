@@ -1,5 +1,7 @@
 import type { ReactNode } from "react"
 import { motion } from "framer-motion"
+import { Link } from "react-router-dom"
+import { ArrowLeftCircle } from "lucide-react"
 
 import StepIndicator from "./StepIndicatior"
 
@@ -16,6 +18,17 @@ export default function WizardContainer({
 }: WizardContainerProps) {
 	return (
 		<div className="min-h-screen bg-[#F9FAFB] flex flex-col items-center justify-center p-4 md:p-8">
+			{/* ALREADY HAVE A PROFILE?{" "} */}
+			<div className=" justify-start mb-4  w-full max-w-6xl">
+				<Link
+					to="/auth/login"
+					className="inline-flex items-center hover:text-[#6366F1] hover:underline"
+				>
+					<ArrowLeftCircle className="w-6 h-6" />
+					<span className="text-sm text-gray-500 ml-2">Ya tengo un perfil</span>
+				</Link>
+			</div>
+
 			<motion.div
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
