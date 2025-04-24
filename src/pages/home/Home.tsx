@@ -2,18 +2,18 @@ import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 
 import { Profile } from "@common/types/profile"
+import { generateRandomString } from "@common/utils/utils"
+
 import { getProfile } from "@lib/services/profile.service"
+import { createPortfolio } from "@lib/services/portfolio.service"
 
 import Step1LinkedInInput from "@components/common/wizard/Step1LinkedinInput"
 import Step2Selection from "@components/common/wizard/Step2Selection"
 import Step3TemplateSelection from "@components/common/wizard/Step3TemplateSelection"
 import Step4Preview from "@components/common/wizard/Step4Preview"
 import WizardContainer from "@components/common/wizard/WizardContainer"
-import { createPortfolio } from "@lib/services/portfolio.service"
 
 export default function Home() {
-	// This is just a placeholder for demonstration
-	// In a real implementation, you would handle this with your own state management
 	const totalSteps = 4
 	const [currentStep, setCurrentStep] = useState(1)
 
@@ -75,7 +75,7 @@ export default function Home() {
 		}
 		await createPortfolio({
 			templateId,
-			url: profileData.publicId,
+			url: `${profileData.publicId}-${templateId}-${generateRandomString(4)}`,
 		}).then(() => {
 			localStorage.removeItem("profile-home")
 			localStorage.removeItem("type-home")

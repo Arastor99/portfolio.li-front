@@ -82,6 +82,22 @@ export default function Navbar() {
 								className="flex items-center space-x-3 px-4 py-2.5 rounded-lg cursor-pointer"
 							>
 								<span className="text-[#6366F1]">
+									{item.icon === "home" && (
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											className="h-5 w-5"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+											/>
+										</svg>
+									)}
 									{item.icon === "user" && (
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
@@ -149,6 +165,22 @@ export default function Navbar() {
 												strokeLinejoin="round"
 												strokeWidth={2}
 												d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+											/>
+										</svg>
+									)}
+									{item.icon === "logout" && (
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											className="h-5 w-5"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M17 16l4-4m0 0l-4-4m4 4H7m6 8a9 9 0 100-18 9 9 0 000 18z"
 											/>
 										</svg>
 									)}

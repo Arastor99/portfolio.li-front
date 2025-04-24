@@ -33,7 +33,7 @@ const ModalRegister: React.FC<Props> = ({ onClose, triggerRegister }) => {
 			.then(
 				() =>
 					triggerRegister &&
-					triggerRegister().then(() => {
+					triggerRegister().finally(() => {
 						onClose()
 						window.location.href = "/app/dashboard"
 					})
