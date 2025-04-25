@@ -8,8 +8,8 @@ export const getPotfolioTemplates = async () => {
 		.then((data) => data.data)) as unknown as Promise<PortfolioTemplate[]>
 }
 
-export const getPortfolioTemplate = async (id: string) => {
+export const getPortfolioTemplate = async (name: string) => {
 	return (await http
-		.get(`/portfolio-template/${id}`)
+		.get(`/portfolio-template/${name}`)
 		.then((data) => data.data)) as unknown as Promise<PortfolioTemplate>
 }

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 
 interface Props {
 	type: "portfolio" | "cv"
-	handleNext: (templateId: string) => void
+	handleNext: (templateName: string) => void
 	handleBack: () => void
 }
 
@@ -52,7 +52,7 @@ export default function Step3TemplateSelection({
 				{templates.map((template) => (
 					<motion.div
 						onClick={() => {
-							handleNext(template.id)
+							handleNext(template.name)
 						}}
 						key={template.id}
 						whileHover={{ scale: 1.05, y: -5 }}

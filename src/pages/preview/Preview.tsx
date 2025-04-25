@@ -2,19 +2,23 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { Profile } from "@common/types/profile"
-import Portfolio from "@templatesPortfolio/t1/template1"
+import { getTemplate } from "@common/utils/templates"
 
 const Preview = () => {
 	const [profile, setProfile] = useState<Profile | null>(null)
+	const [templateName, setTemplateName] = useState<string>("")
 	const navigate = useNavigate()
 
 	useEffect(() => {
 		const storedProfile = localStorage.getItem("profileData")
+		const storedTemplate = localStorage.getItem("templateName")
 
 		if (storedProfile) {
 			const profile = JSON.parse(storedProfile)
 			setProfile(profile)
-
+			console.log(storedTemplate)
+			setTemplateName(JSON.parse(storedTemplate || ""))
+			localStorage.removeItem("templateName")
 			localStorage.removeItem("profileData")
 		} else {
 			// redirige a otra ruta si no hay datos
@@ -32,7 +36,7 @@ const Preview = () => {
 
 	return (
 		<div>
-			<Portfolio profile={profile} />
+			{getTemplate(templateName, profile)}
 		</div>
 	)
 }

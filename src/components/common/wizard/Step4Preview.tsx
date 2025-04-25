@@ -3,15 +3,16 @@ import { useState } from "react"
 
 import { Profile } from "@common/types/profile"
 
-import Portfolio from "@templatesPortfolio/t1/template1"
+
 import Modal from "../modal/Modal"
 import ModalRegister from "../modal/ModalRegister"
 import { ArrowLeftCircle } from "lucide-react"
-import Portfolio2 from "@templatesPortfolio/t2/Template2"
 
+import { getTemplate } from "@common/utils/templates"
 interface Props {
 	type: "portfolio" | "cv"
 	profile: Profile | undefined
+	TemplateName: string
 	handleBack: () => void
 	handleTriggerRegister: () => void
 }
@@ -20,6 +21,7 @@ export default function Step4Preview({
 	type,
 	profile,
 	handleBack,
+	TemplateName,
 	handleTriggerRegister,
 }: Props) {
 	const [modalRegister, setModalRegister] = useState(false)
@@ -29,6 +31,7 @@ export default function Step4Preview({
 
 		// Si necesitas pasar datos, puedes usar localStorage, sessionStorage o query params
 		localStorage.setItem("profileData", JSON.stringify(profile))
+		localStorage.setItem("templateName", JSON.stringify(TemplateName))
 	}
 
 	if (!profile) return null
@@ -55,7 +58,7 @@ export default function Step4Preview({
 
 						<div className="w-full h-[500px] overflow-x-hidden overflow-auto border rounded-xl shadow-lg flex justify-center bg-[#030014] hide-scrollbar">
 							<div className="scale-75 origin-top transform  ">
-								<Portfolio2 profile={profile} />
+							{getTemplate(TemplateName, profile)}
 							</div>
 						</div>
 						{/* </div> */}
@@ -137,7 +140,7 @@ export default function Step4Preview({
 			<Modal isOpen={modalRegister} onClose={() => setModalRegister(false)}>
 				<ModalRegister
 					onClose={() => setModalRegister(false)}
-					triggerRegister={handleTriggerRegister}
+					triggerRegister={async () => handleTriggerRegister()}
 				/>
 			</Modal>
 		</>

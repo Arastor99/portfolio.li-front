@@ -19,7 +19,7 @@ export default function Home() {
 
 	const [profileData, setProfileData] = useState<Profile>()
 	const [type, setType] = useState<"portfolio" | "cv">("portfolio")
-	const [templateId, setTemplateId] = useState<string>("")
+	const [TemplateName, setTemplateName] = useState<string>("")
 
 	const handle1stStepNext = async (publicId: string) => {
 		setCurrentStep(2)
@@ -32,7 +32,7 @@ export default function Home() {
 				setProfileData(undefined)
 				localStorage.removeItem("profile-home")
 				localStorage.removeItem("type-home")
-				localStorage.removeItem("templateId-home")
+				localStorage.removeItem("TemplateName-home")
 				return err.message.includes("404")
 					? "Perfil no encontrado"
 					: "Error al cargar el perfil, intentelo de nuevo"
@@ -53,46 +53,46 @@ export default function Home() {
 		setProfileData(undefined)
 		localStorage.removeItem("profile-home")
 		localStorage.removeItem("type-home")
-		localStorage.removeItem("templateId-home")
+		localStorage.removeItem("TemplateName-home")
 	}
 
 	const handle3rdStepBack = () => {
 		setCurrentStep(2)
-		setTemplateId("")
-		localStorage.removeItem("templateId-home")
+		setTemplateName("")
+		localStorage.removeItem("TemplateName-home")
 	}
 
-	const handle3rdStepNext = (templateId: string) => {
-		setTemplateId(templateId)
-		localStorage.setItem("templateId-home", JSON.stringify(templateId))
+	const handle3rdStepNext = (TemplateName: string) => {
+		setTemplateName(TemplateName)
+		localStorage.setItem("TemplateName-home", JSON.stringify(TemplateName))
 		setCurrentStep(4)
 	}
 
 	const handleTriggerRegister = async () => {
-		if (!profileData || !type || !templateId) {
+		if (!profileData || !type || !TemplateName) {
 			toast.error("Por favor completa todos los pasos")
 			return
 		}
 		await createPortfolio({
-			templateId,
-			url: `${profileData.publicId}-${templateId}-${generateRandomString(4)}`,
+			templateName: TemplateName,
+			url: `${profileData.publicId}-${TemplateName}-${generateRandomString(4)}`,
 		}).then(() => {
 			localStorage.removeItem("profile-home")
 			localStorage.removeItem("type-home")
-			localStorage.removeItem("templateId-home")
+			localStorage.removeItem("TemplateName-home")
 		})
 	}
 
 	const handle4thStepBack = () => {
 		setCurrentStep(3)
-		setTemplateId("")
-		localStorage.removeItem("templateId-home")
+		setTemplateName("")
+		localStorage.removeItem("TemplateName-home")
 	}
 
 	useEffect(() => {
 		const storedProfile = localStorage.getItem("profile-home")
 		const storedType = localStorage.getItem("type-home")
-		const storedTemplateId = localStorage.getItem("templateId-home")
+		const storedTemplateName = localStorage.getItem("TemplateName-home")
 
 		if (storedProfile) {
 			const profile = JSON.parse(storedProfile)
@@ -106,9 +106,9 @@ export default function Home() {
 			setCurrentStep(3)
 		}
 
-		if (storedTemplateId) {
-			const templateId = JSON.parse(storedTemplateId)
-			setTemplateId(templateId)
+		if (storedTemplateName) {
+			const TemplateName = JSON.parse(storedTemplateName)
+			setTemplateName(TemplateName)
 			setCurrentStep(4)
 		}
 	}, [])
@@ -128,7 +128,7 @@ export default function Home() {
 				{currentStep === 3 && (
 					<Step3TemplateSelection
 						type={type}
-						handleNext={(templateId) => handle3rdStepNext(templateId)}
+						handleNext={(TemplateName) => handle3rdStepNext(TemplateName)}
 						handleBack={handle3rdStepBack}
 					/>
 				)}
@@ -137,6 +137,7 @@ export default function Home() {
 						type={type}
 						profile={profileData}
 						handleBack={handle4thStepBack}
+						TemplateName={TemplateName}
 						handleTriggerRegister={handleTriggerRegister}
 					/>
 				)}

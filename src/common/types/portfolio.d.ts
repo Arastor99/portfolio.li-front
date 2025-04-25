@@ -6,6 +6,6 @@ export interface Portfolio {
 
 	active: boolean
 
-	templateId: string
+	templateName: string
 	template: PortfolioTemplate
 }
