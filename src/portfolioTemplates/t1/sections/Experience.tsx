@@ -33,7 +33,7 @@ const Experience: React.FC<ExperienceProps> = ({ profile }) => {
         <p className="text-white/70">Un recorrido por mi carrera como desarrollador y creador de contenido.</p>
       </motion.div>
 
-      (
+      
     <div className="max-w-4xl mx-auto">
       <div className="relative">
         {/* Timeline line */}

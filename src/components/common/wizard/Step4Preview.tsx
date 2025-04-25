@@ -7,6 +7,7 @@ import Portfolio from "@templatesPortfolio/t1/template1"
 import Modal from "../modal/Modal"
 import ModalRegister from "../modal/ModalRegister"
 import { ArrowLeftCircle } from "lucide-react"
+import Portfolio2 from "@templatesPortfolio/t2/Template2"
 
 interface Props {
 	type: "portfolio" | "cv"
@@ -54,7 +55,7 @@ export default function Step4Preview({
 
 						<div className="w-full h-[500px] overflow-x-hidden overflow-auto border rounded-xl shadow-lg flex justify-center bg-[#030014] hide-scrollbar">
 							<div className="scale-75 origin-top transform  ">
-								<Portfolio profile={profile} />
+								<Portfolio2 profile={profile} />
 							</div>
 						</div>
 						{/* </div> */}
