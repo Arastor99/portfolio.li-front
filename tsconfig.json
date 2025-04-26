@@ -21,7 +21,8 @@
 			"@router/*": ["src/router/*"],
 			"@lib/*": ["src/lib/*"],
 			"@hooks/*": ["src/common/hooks/*"],
-			"@templatesPortfolio/*": ["src/portfolioTemplates/*"]
+			"@templatesPortfolio/*": ["src/portfolioTemplates/*"],
+			"@store/*": ["src/store/*"]
 		}
 	},
 	"files": [],

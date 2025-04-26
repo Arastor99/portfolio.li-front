@@ -1,5 +1,5 @@
 export interface Profile {
-	id: string
+	id?: string
 	firstName: string
 	lastName: string
 	publicId: string
@@ -33,7 +33,7 @@ export interface Profile {
 }
 
 export interface Experience {
-	id: string
+	id?: string
 	title: string
 	description?: string
 	startDate?: Date
@@ -48,7 +48,7 @@ export interface Experience {
 }
 
 export interface Education {
-	id: string
+	id?: string
 	schoolName: string
 	schoolLogoUrl?: string
 	degreeName?: string
@@ -61,13 +61,13 @@ export interface Education {
 }
 
 export interface Language {
-	id: string
+	id?: string
 	name: string
 	proficiency: string
 }
 
 export interface Publication {
-	id: string
+	id?: string
 	name: string
 	publisher: string
 	description?: string
@@ -75,7 +75,7 @@ export interface Publication {
 }
 
 export interface Certification {
-	id: string
+	id?: string
 	authority: string
 	name: string
 	url: string
@@ -86,7 +86,7 @@ export interface Certification {
 }
 
 export interface Volunteer {
-	id: string
+	id?: string
 	role: string
 	description?: string
 	cause?: string
@@ -97,7 +97,7 @@ export interface Volunteer {
 }
 
 export interface Honor {
-	id: string
+	id?: string
 	title: string
 	description?: string
 	issueDate?: Date
@@ -105,7 +105,7 @@ export interface Honor {
 }
 
 export interface Project {
-	id: string
+	id?: string
 	title: string
 	importedImage?: string
 
@@ -115,6 +115,6 @@ export interface Project {
 }
 
 export interface Skill {
-	id: string
+	id?: string
 	name: string
 }

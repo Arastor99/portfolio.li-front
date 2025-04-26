@@ -21,12 +21,15 @@ http.interceptors.request.use(
 )
 
 // ADD LOGOUT WITH 401 ERROR
-http.interceptors.response.use((response) => {
-	if (response.status === 401) {
-		Cookies.remove("accessToken")
-		Cookies.remove("refreshToken")
-		window.location.href = "/auth/login"
+http.interceptors.response.use(
+	(response) => response,
+	(error) => {
+		if (error.response && error.response.status === 401) {
+			Cookies.remove("accessToken")
+			Cookies.remove("refreshToken")
+			window.location.href = "/auth/login"
+		}
+		return Promise.reject(error)
 	}
-	return response
-})
+)
 export default http

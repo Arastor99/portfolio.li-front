@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Edit, Save, Plus, Trash, X, Calendar } from "lucide-react"
 
@@ -11,6 +11,10 @@ import {
 	Project,
 	Skill,
 } from "@common/types/profile"
+
+import { useProfileStore } from "@store/profileStore"
+import toast from "react-hot-toast"
+import { getUserProfile, updateProfile } from "@lib/services/profile.service"
 
 // Sample data
 const sampleProfile: Profile = {
@@ -101,8 +105,15 @@ const sampleProfile: Profile = {
 }
 
 export default function ProfilePage() {
-	const [profile, setProfile] = useState<Profile>(sampleProfile)
+	const { profileStore, updateProfileStore, setProfileStore } =
+		useProfileStore()
+
+	const [profile, setProfile] = useState<Profile | null>(profileStore)
+
+	//handler for selecting sections
 	const [activeSection, setActiveSection] = useState<string>("personal")
+
+	// State for edit mode
 	const [editMode, setEditMode] = useState<boolean>(false)
 
 	// State for editing items
@@ -117,6 +128,40 @@ export default function ProfilePage() {
 	const [editingCertification, setEditingCertification] =
 		useState<Certification | null>(null)
 	const [editingProject, setEditingProject] = useState<Project | null>(null)
+
+	useEffect(() => {
+		if (!profileStore) {
+			getUserProfile().then((profile) => {
+				setProfile(profile)
+				setProfileStore(profile)
+			})
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	if (!profile) {
+		return (
+			<div className="flex items-center justify-center min-h-screen bg-gray-100">
+				<p className="text-gray-500">Cargando perfil...</p>
+			</div>
+		)
+	}
+
+	// Function to handle Submit profile
+	const handleSubmitProfile = async (profile: Profile) => {
+		// Save profile changes
+		await toast
+			.promise(updateProfile(profile), {
+				loading: "Guardando cambios...",
+				success: "Cambios guardados",
+				error: "Error al guardar cambios",
+			})
+			.then(() => {
+				setEditMode(false)
+				updateProfileStore(profile)
+				setProfile(profile)
+			})
+	}
 
 	// Function to format date
 	const formatDate = (date?: Date) => {
@@ -138,7 +183,6 @@ export default function ProfilePage() {
 	// Function to add a new experience
 	const handleAddExperience = () => {
 		const newExperience: Experience = {
-			id: `exp${Date.now()}`,
 			title: "",
 			companyName: "",
 			description: "",
@@ -151,34 +195,42 @@ export default function ProfilePage() {
 	const handleSaveExperience = (experience: Experience) => {
 		if (profile.experiences.find((exp) => exp.id === experience.id)) {
 			// Update existing experience
-			setProfile((prev) => ({
-				...prev,
-				experiences: prev.experiences.map((exp) =>
-					exp.id === experience.id ? experience : exp
-				),
-			}))
+			setProfile(
+				(prev) =>
+					prev && {
+						...prev,
+						experiences: prev.experiences.map((exp) =>
+							exp.id === experience.id ? experience : exp
+						),
+					}
+			)
 		} else {
 			// Add new experience
-			setProfile((prev) => ({
-				...prev,
-				experiences: [...prev.experiences, experience],
-			}))
+			setProfile(
+				(prev) =>
+					prev && {
+						...prev,
+						experiences: [...prev.experiences, experience],
+					}
+			)
 		}
 		setEditingExperience(null)
 	}
 
 	// Function to delete experience
 	const handleDeleteExperience = (id: string) => {
-		setProfile((prev) => ({
-			...prev,
-			experiences: prev.experiences.filter((exp) => exp.id !== id),
-		}))
+		setProfile(
+			(prev) =>
+				prev && {
+					...prev,
+					experiences: prev.experiences.filter((exp) => exp.id !== id),
+				}
+		)
 	}
 
 	// Function to add a new education
 	const handleAddEducation = () => {
 		const newEducation: Education = {
-			id: `edu${Date.now()}`,
 			schoolName: "",
 			degreeName: "",
 			fieldOfStudy: "",
@@ -190,28 +242,37 @@ export default function ProfilePage() {
 	const handleSaveEducation = (education: Education) => {
 		if (profile.education.find((edu) => edu.id === education.id)) {
 			// Update existing education
-			setProfile((prev) => ({
-				...prev,
-				education: prev.education.map((edu) =>
-					edu.id === education.id ? education : edu
-				),
-			}))
+			setProfile(
+				(prev) =>
+					prev && {
+						...prev,
+						education: prev.education.map((edu) =>
+							edu.id === education.id ? education : edu
+						),
+					}
+			)
 		} else {
 			// Add new education
-			setProfile((prev) => ({
-				...prev,
-				education: [...prev.education, education],
-			}))
+			setProfile(
+				(prev) =>
+					prev && {
+						...prev,
+						education: [...prev.education, education],
+					}
+			)
 		}
 		setEditingEducation(null)
 	}
 
 	// Function to delete education
 	const handleDeleteEducation = (id: string) => {
-		setProfile((prev) => ({
-			...prev,
-			education: prev.education.filter((edu) => edu.id !== id),
-		}))
+		setProfile(
+			(prev) =>
+				prev && {
+					...prev,
+					education: prev.education.filter((edu) => edu.id !== id),
+				}
+		)
 	}
 
 	// Function to add a new skill
@@ -219,30 +280,34 @@ export default function ProfilePage() {
 		if (editingSkill.trim() === "") return
 
 		const newSkill: Skill = {
-			id: `skill${Date.now()}`,
 			name: editingSkill,
 		}
 
-		setProfile((prev) => ({
-			...prev,
-			skills: [...prev.skills, newSkill],
-		}))
+		setProfile(
+			(prev) =>
+				prev && {
+					...prev,
+					skills: [...prev.skills, newSkill],
+				}
+		)
 
 		setEditingSkill("")
 	}
 
 	// Function to delete skill
 	const handleDeleteSkill = (id: string) => {
-		setProfile((prev) => ({
-			...prev,
-			skills: prev.skills.filter((skill) => skill.id !== id),
-		}))
+		setProfile(
+			(prev) =>
+				prev && {
+					...prev,
+					skills: prev.skills.filter((skill) => skill.id !== id),
+				}
+		)
 	}
 
 	// Function to add a new language
 	const handleAddLanguage = () => {
 		const newLanguage: Language = {
-			id: `lang${Date.now()}`,
 			name: "",
 			proficiency: "",
 		}
@@ -253,34 +318,42 @@ export default function ProfilePage() {
 	const handleSaveLanguage = (language: Language) => {
 		if (profile.languages.find((lang) => lang.id === language.id)) {
 			// Update existing language
-			setProfile((prev) => ({
-				...prev,
-				languages: prev.languages.map((lang) =>
-					lang.id === language.id ? language : lang
-				),
-			}))
+			setProfile(
+				(prev) =>
+					prev && {
+						...prev,
+						languages: prev.languages.map((lang) =>
+							lang.id === language.id ? language : lang
+						),
+					}
+			)
 		} else {
 			// Add new language
-			setProfile((prev) => ({
-				...prev,
-				languages: [...prev.languages, language],
-			}))
+			setProfile(
+				(prev) =>
+					prev && {
+						...prev,
+						languages: [...prev.languages, language],
+					}
+			)
 		}
 		setEditingLanguage(null)
 	}
 
 	// Function to delete language
 	const handleDeleteLanguage = (id: string) => {
-		setProfile((prev) => ({
-			...prev,
-			languages: prev.languages.filter((lang) => lang.id !== id),
-		}))
+		setProfile(
+			(prev) =>
+				prev && {
+					...prev,
+					languages: prev.languages.filter((lang) => lang.id !== id),
+				}
+		)
 	}
 
 	// Function to add a new certification
 	const handleAddCertification = () => {
 		const newCertification: Certification = {
-			id: `cert${Date.now()}`,
 			name: "",
 			authority: "",
 			url: "",
@@ -292,34 +365,42 @@ export default function ProfilePage() {
 	const handleSaveCertification = (certification: Certification) => {
 		if (profile.certifications.find((cert) => cert.id === certification.id)) {
 			// Update existing certification
-			setProfile((prev) => ({
-				...prev,
-				certifications: prev.certifications.map((cert) =>
-					cert.id === certification.id ? certification : cert
-				),
-			}))
+			setProfile(
+				(prev) =>
+					prev && {
+						...prev,
+						certifications: prev.certifications.map((cert) =>
+							cert.id === certification.id ? certification : cert
+						),
+					}
+			)
 		} else {
 			// Add new certification
-			setProfile((prev) => ({
-				...prev,
-				certifications: [...prev.certifications, certification],
-			}))
+			setProfile(
+				(prev) =>
+					prev && {
+						...prev,
+						certifications: [...prev.certifications, certification],
+					}
+			)
 		}
 		setEditingCertification(null)
 	}
 
 	// Function to delete certification
 	const handleDeleteCertification = (id: string) => {
-		setProfile((prev) => ({
-			...prev,
-			certifications: prev.certifications.filter((cert) => cert.id !== id),
-		}))
+		setProfile(
+			(prev) =>
+				prev && {
+					...prev,
+					certifications: prev.certifications.filter((cert) => cert.id !== id),
+				}
+		)
 	}
 
 	// Function to add a new project
 	const handleAddProject = () => {
 		const newProject: Project = {
-			id: `proj${Date.now()}`,
 			title: "",
 			description: "",
 		}
@@ -330,28 +411,37 @@ export default function ProfilePage() {
 	const handleSaveProject = (project: Project) => {
 		if (profile.projects.find((proj) => proj.id === project.id)) {
 			// Update existing project
-			setProfile((prev) => ({
-				...prev,
-				projects: prev.projects.map((proj) =>
-					proj.id === project.id ? project : proj
-				),
-			}))
+			setProfile(
+				(prev) =>
+					prev && {
+						...prev,
+						projects: prev.projects.map((proj) =>
+							proj.id === project.id ? project : proj
+						),
+					}
+			)
 		} else {
 			// Add new project
-			setProfile((prev) => ({
-				...prev,
-				projects: [...prev.projects, project],
-			}))
+			setProfile(
+				(prev) =>
+					prev && {
+						...prev,
+						projects: [...prev.projects, project],
+					}
+			)
 		}
 		setEditingProject(null)
 	}
 
 	// Function to delete project
 	const handleDeleteProject = (id: string) => {
-		setProfile((prev) => ({
-			...prev,
-			projects: prev.projects.filter((proj) => proj.id !== id),
-		}))
+		setProfile(
+			(prev) =>
+				prev && {
+					...prev,
+					projects: prev.projects.filter((proj) => proj.id !== id),
+				}
+		)
 	}
 
 	return (
@@ -458,7 +548,7 @@ export default function ProfilePage() {
 							<div>
 								{editMode ? (
 									<button
-										onClick={() => setEditMode(false)}
+										onClick={() => handleSubmitProfile(profile)}
 										className="px-4 py-2 bg-[#6366F1] text-white rounded-lg shadow-sm flex items-center gap-2"
 									>
 										<Save size={16} />
@@ -772,6 +862,7 @@ export default function ProfilePage() {
 													</button>
 													<button
 														onClick={() =>
+															experience.id &&
 															handleDeleteExperience(experience.id)
 														}
 														className="p-1 text-red-500 rounded-full hover:bg-red-50"
@@ -1056,7 +1147,10 @@ export default function ProfilePage() {
 														<Edit size={16} />
 													</button>
 													<button
-														onClick={() => handleDeleteEducation(education.id)}
+														onClick={() =>
+															education.id &&
+															handleDeleteEducation(education.id)
+														}
 														className="p-1 text-red-500 rounded-full hover:bg-red-50"
 													>
 														<Trash size={16} />
@@ -1330,7 +1424,9 @@ export default function ProfilePage() {
 											{skill.name}
 											{editMode && (
 												<button
-													onClick={() => handleDeleteSkill(skill.id)}
+													onClick={() =>
+														skill.id && handleDeleteSkill(skill.id)
+													}
 													className="p-0.5 text-[#6366F1] rounded-full hover:bg-[#6366F1]/20"
 												>
 													<X size={14} />
@@ -1394,7 +1490,9 @@ export default function ProfilePage() {
 														<Edit size={16} />
 													</button>
 													<button
-														onClick={() => handleDeleteLanguage(language.id)}
+														onClick={() =>
+															language.id && handleDeleteLanguage(language.id)
+														}
 														className="p-1 text-red-500 rounded-full hover:bg-red-50"
 													>
 														<Trash size={16} />
@@ -1533,6 +1631,7 @@ export default function ProfilePage() {
 													</button>
 													<button
 														onClick={() =>
+															certification.id &&
 															handleDeleteCertification(certification.id)
 														}
 														className="p-1 text-red-500 rounded-full hover:bg-red-50"
@@ -1767,7 +1866,9 @@ export default function ProfilePage() {
 														<Edit size={16} />
 													</button>
 													<button
-														onClick={() => handleDeleteProject(project.id)}
+														onClick={() =>
+															project.id && handleDeleteProject(project.id)
+														}
 														className="p-1 text-red-500 rounded-full hover:bg-red-50"
 													>
 														<Trash size={16} />

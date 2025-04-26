@@ -4,7 +4,7 @@ import toast from "react-hot-toast"
 import { Profile } from "@common/types/profile"
 import { generateRandomString } from "@common/utils/utils"
 
-import { getProfile } from "@lib/services/profile.service"
+import { attachProfile, getProfile } from "@lib/services/profile.service"
 import { createPortfolio } from "@lib/services/portfolio.service"
 
 import Step1LinkedInInput from "@components/common/wizard/Step1LinkedinInput"
@@ -73,13 +73,17 @@ export default function Home() {
 			toast.error("Por favor completa todos los pasos")
 			return
 		}
-		await createPortfolio({
-			templateName: TemplateName,
-			url: `${profileData.publicId}-${TemplateName}-${generateRandomString(4)}`,
-		}).then(() => {
-			localStorage.removeItem("profile-home")
-			localStorage.removeItem("type-home")
-			localStorage.removeItem("TemplateName-home")
+		await attachProfile(profileData.publicId).then(async () => {
+			await createPortfolio({
+				templateName: TemplateName,
+				url: `${profileData.publicId}-${TemplateName}-${generateRandomString(
+					4
+				)}`,
+			}).then(() => {
+				localStorage.removeItem("profile-home")
+				localStorage.removeItem("type-home")
+				localStorage.removeItem("TemplateName-home")
+			})
 		})
 	}
 
