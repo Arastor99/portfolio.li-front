@@ -1,13 +1,42 @@
 "use client"
 
+import { getPortfolio } from "@lib/services/portfolio.service"
+import Preview from "@pages/preview/Preview"
 import { motion } from "framer-motion"
 import { Plus, Edit, Download, Eye } from "lucide-react"
-import { useState } from "react"
-
+import { useEffect, useState } from "react"
+import { getPortfolioTemplate } from "@lib/services/portfolio-template.service"
+import { useProfileStore } from "@store/profileStore"
 export default function DashboardPage() {
 	const [hasPortfolio, setHasPortfolio] = useState(false)
 	const [hasCV, setHasCV] = useState(true)
-
+	const [loading, setLoading] = useState(true);
+	const [templateName, setTemplateName] = useState<string>("")
+	const { profileStore } =
+			useProfileStore()
+	useEffect(() => {
+		const checkUserPortfolio = async () => {
+		  try {
+			// Llamada al backend para obtener el portfolio
+			const portfolio = await getPortfolio();
+			if (portfolio) {
+			  setHasPortfolio(true);
+			  console.log("portfolio", portfolio.templateId);
+			  const template = await getPortfolioTemplate(portfolio.templateId);
+			  if (template) {
+				setTemplateName(template.name);
+			  }
+			}
+		  } catch (error) {
+			setHasPortfolio(false);
+		  } finally {
+			setLoading(false);
+		  }
+		};
+	
+		checkUserPortfolio();
+	  }, []);
+	
 	return (
 		<div className="min-h-screen bg-[#F9FAFB] p-4 md:p-8 pt-20">
 			<motion.div
@@ -55,7 +84,7 @@ export default function DashboardPage() {
 								<div className="p-6">
 									<div className="aspect-[3/4] bg-gray-50 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
 										<img
-											src="/placeholder.svg?height=300&width=220"
+											src="https://cdn-images.livecareer.es/images/lc/common/cv-templates/jt/es/plantilla-curriculum-moderno-05@3x.png"
 											alt="CV Preview"
 											className="w-full h-auto object-contain"
 										/>
@@ -153,38 +182,36 @@ export default function DashboardPage() {
 						</div>
 
 						{hasPortfolio ? (
-							<div>
-								<div className="p-6">
-									<div className="aspect-video bg-gray-50 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-										<img
-											src="/placeholder.svg?height=200&width=350"
-											alt="Portfolio Preview"
-											className="w-full h-auto object-contain"
-										/>
-									</div>
-									<p className="text-[#64748B] mb-4">
-										Última actualización: 3 de mayo, 2023
-									</p>
-									<div className="flex flex-wrap gap-3">
-										<motion.button
-											whileHover={{ scale: 1.02 }}
-											whileTap={{ scale: 0.98 }}
-											className="px-4 py-2 bg-[#6366F1] text-white rounded-lg shadow-sm flex items-center gap-2"
-										>
-											<Edit size={16} />
-											<span>Editar</span>
-										</motion.button>
-										<motion.button
-											whileHover={{ scale: 1.02 }}
-											whileTap={{ scale: 0.98 }}
-											className="px-4 py-2 border border-gray-300 text-[#64748B] rounded-lg flex items-center gap-2"
-										>
-											<Eye size={16} />
-											<span>Ver online</span>
-										</motion.button>
-									</div>
-								</div>
+							<div className="p-6">
+							{profileStore && templateName && (
+							  <div className="w-full aspect-[3/4] overflow-x-hidden overflow-auto border mb-4 rounded-xl shadow-lg flex justify-center bg-[#030014] hide-scrollbar">
+              					<div className="w-full h-full scale-75 origin-top transform  ">
+								<Preview templateNameProps={templateName} profileData={profileStore}/>
+							  </div>
+							  </div>
+							)}
+							<p className="text-[#64748B] mb-4">
+							  Última actualización: 3 de mayo, 2023
+							</p>
+							<div className="flex flex-wrap gap-3">
+							  <motion.button
+								whileHover={{ scale: 1.02 }}
+								whileTap={{ scale: 0.98 }}
+								className="px-4 py-2 bg-[#6366F1] text-white rounded-lg shadow-sm flex items-center gap-2"
+							  >
+								<Edit size={16} />
+								<span>Editar</span>
+							  </motion.button>
+							  <motion.button
+								whileHover={{ scale: 1.02 }}
+								whileTap={{ scale: 0.98 }}
+								className="px-4 py-2 border border-gray-300 text-[#64748B] rounded-lg flex items-center gap-2"
+							  >
+								<Eye size={16} />
+								<span>Ver online</span>
+							  </motion.button>
 							</div>
+						  </div>
 						) : (
 							<div className="p-6 flex flex-col items-center justify-center text-center">
 								<div className="w-20 h-20 bg-[#6366F1]/10 rounded-full flex items-center justify-center mb-4">

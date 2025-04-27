@@ -11,14 +11,14 @@ import Step1LinkedInInput from "@components/common/wizard/Step1LinkedinInput"
 import Step3TemplateSelection from "@components/common/wizard/Step3TemplateSelection"
 import Step4Preview from "@components/common/wizard/Step4Preview"
 import WizardContainer from "@components/common/wizard/WizardContainer"
-
+import {isAuthenticated} from "@lib/services/auth.service"
 export default function CreatePortfolio() {
 	const totalSteps = 3
 	const [currentStep, setCurrentStep] = useState(1)
 
 	const [profileData, setProfileData] = useState<Profile>()
 	const [TemplateName, setTemplateName] = useState<string>("")
-	const type = "portfolio" // Siempre será portfolio
+	const type = "portfolio" 
 
 	const handle1stStepNext = async (publicId: string) => {
 		const profile = await toast.promise(getProfile({ publicId }), {
@@ -59,16 +59,19 @@ export default function CreatePortfolio() {
 	}
 
 	const handleTriggerRegister = async () => {
-		if (!profileData || !TemplateName) {
+		if (!profileData || !type || !TemplateName) {
 			toast.error("Por favor completa todos los pasos")
 			return
 		}
 		await attachProfile(profileData.publicId).then(async () => {
 			await createPortfolio({
 				templateName: TemplateName,
-				url: `${profileData.publicId}-${TemplateName}-${generateRandomString(4)}`,
+				url: `${profileData.publicId}-${TemplateName}-${generateRandomString(
+					4
+				)}`,
 			}).then(() => {
 				localStorage.removeItem("profile-home")
+				localStorage.removeItem("type-home")
 				localStorage.removeItem("TemplateName-home")
 			})
 		})
@@ -111,6 +114,7 @@ export default function CreatePortfolio() {
 						handleBack={handle3rdStepBack}
 						TemplateName={TemplateName}
 						handleTriggerRegister={handleTriggerRegister}
+						isAuthenticated={isAuthenticated() ? true : false}
 					/>
 				)}
 			</WizardContainer>
