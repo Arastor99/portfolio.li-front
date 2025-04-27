@@ -58,7 +58,7 @@ export default function CreatePortfolio() {
 		localStorage.removeItem("TemplateName-home")
 	}
 
-	const handleTriggerRegister = async () => {
+	const handleCreate = async () => {
 		if (!profileData || !type || !TemplateName) {
 			toast.error("Por favor completa todos los pasos")
 			return
@@ -113,8 +113,9 @@ export default function CreatePortfolio() {
 						profile={profileData}
 						handleBack={handle3rdStepBack}
 						TemplateName={TemplateName}
-						handleTriggerRegister={handleTriggerRegister}
+						handleAction={handleCreate}
 						isAuthenticated={isAuthenticated() ? true : false}
+						mode="create"
 					/>
 				)}
 			</WizardContainer>

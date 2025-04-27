@@ -2,21 +2,25 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Profile } from "@common/types/profile"
 import { getTemplate } from "@common/utils/templates"
+import { useProfileStore } from "@store/profileStore"
+import { usePortfolioStore } from "@store/portfolioStore"
 
 interface Props {
 	templateNameProps?: string
 	profileData?: Profile
 }
 
-const Preview: React.FC<Props> = ({profileData, templateNameProps}) => {
+const Preview: React.FC<Props> = () => {
 	const [profile, setProfile] = useState<Profile | null>(null)
 	const [templateName, setTemplateName] = useState<string>("")
 	const navigate = useNavigate()
+		const { profileStore } = useProfileStore()
+		const { portfolioStore } = usePortfolioStore()
 	useEffect(() => {
-
-		if( profileData && templateNameProps) {
-			setProfile(profileData)
-			setTemplateName(templateNameProps)
+		if (profileStore && portfolioStore) {
+			setProfile(profileStore)
+			setTemplateName(portfolioStore.template.name)
+		
 		}else{
 		const storedProfile = localStorage.getItem("profileData")
 		const storedTemplate = localStorage.getItem("templateName")
@@ -33,7 +37,7 @@ const Preview: React.FC<Props> = ({profileData, templateNameProps}) => {
 			navigate("/home", { replace: true }) // o "/"
 		}
 	}
-	}, [navigate])
+	}, [profileStore, portfolioStore, navigate])
 
 	if (!profile) {
 		return (

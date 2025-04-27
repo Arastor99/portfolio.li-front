@@ -12,7 +12,8 @@ import TemplatesPage from "@pages/templates/TemplatesPage"
 import PortfolioPage from "@pages/portfolio/PortfolioPage"
 import DashboardPage from "@pages/dashboard/DashboardPage"
 import Logout from "@pages/Logout"
-import CreatePortfolio from "@pages/create/CreatePortfolio"
+import CreatePortfolio from "@pages/portfolio/CreatePortfolio"
+import UpdatePortfolio from "@pages/portfolio/UpdatePortfolio"
 
 export const publicRoutes = [
 	{
@@ -100,7 +101,14 @@ export const privateRoutes = [
 	{
 		path: "/app/portfolio/create",
 		element: <CreatePortfolio />,
-		isPrivate: false,
+		isPrivate: true,
+		redirectTo: null,
+		navbar: false,
+	},
+	{
+		path: "/app/portfolio/update",
+		element: <UpdatePortfolio />,
+		isPrivate: true,
 		redirectTo: null,
 		navbar: false,
 	},

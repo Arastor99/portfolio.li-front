@@ -5,7 +5,7 @@ import { Profile } from "@common/types/profile";
 
 import Modal from "../modal/Modal";
 import ModalRegister from "../modal/ModalRegister";
-import { ArrowLeftCircle, Eye, Plus, User } from "lucide-react";
+import { ArrowLeftCircle, Eye, Plus, RefreshCcw, User } from "lucide-react";
 
 import { getTemplate } from "@common/utils/templates";
 interface Props {
@@ -13,8 +13,9 @@ interface Props {
   profile: Profile | undefined;
   TemplateName: string;
   isAuthenticated?: boolean;
+  mode?: "create" | "update";
   handleBack: () => void;
-  handleTriggerRegister: () => void;
+  handleAction: () => void;
 }
 
 export default function Step4Preview({
@@ -22,8 +23,9 @@ export default function Step4Preview({
   profile,
   handleBack,
   TemplateName,
-  handleTriggerRegister,
+  handleAction,
   isAuthenticated = false,
+  mode = "create",
 }: Props) {
   const [modalRegister, setModalRegister] = useState(false);
 
@@ -78,14 +80,15 @@ export default function Step4Preview({
 
               <div className="space-y-3 ">
                 <button
-                  onClick={() => isAuthenticated ? handleTriggerRegister(): setModalRegister(true)}
+                  onClick={() => isAuthenticated ? handleAction(): setModalRegister(true)}
                   type="button"
                   className="w-full inline-flex items-center justify-center bg-[#6366F1] text-white font-semibold py-2 px-4 rounded-lg cursor-pointer transition duration-200"
                 >
                   {isAuthenticated ? (
                     <>
                       {" "}
-                      <Plus /> Create portoflio
+                      {mode === "create" ? (<><Plus /> Create portoflio </>) : (<><RefreshCcw /> Update portfolio</>)}
+                      
                     </>
                   ) : (
                     <>
@@ -119,7 +122,7 @@ export default function Step4Preview({
       <Modal isOpen={modalRegister} onClose={() => setModalRegister(false)}>
         <ModalRegister
           onClose={() => setModalRegister(false)}
-          triggerRegister={async () => handleTriggerRegister()}
+          triggerRegister={async () => handleAction()}
         />
       </Modal>
     </>

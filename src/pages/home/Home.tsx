@@ -142,7 +142,7 @@ export default function Home() {
 						profile={profileData}
 						handleBack={handle4thStepBack}
 						TemplateName={TemplateName}
-						handleTriggerRegister={handleTriggerRegister}
+						handleAction={handleTriggerRegister}
 					/>
 				)}
 			</WizardContainer>
