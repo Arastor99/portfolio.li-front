@@ -8,9 +8,7 @@ const PrivateLayout = () => {
 	return (
 		<div className="flex flex-col min-h-screen overflow-hidden">
 			<Navbar />
-			<div className="">
-				<Outlet />
-			</div>
+			<Outlet />
 		</div>
 	)
 }

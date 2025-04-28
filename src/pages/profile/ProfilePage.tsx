@@ -17,92 +17,92 @@ import toast from "react-hot-toast"
 import { getUserProfile, updateProfile } from "@lib/services/profile.service"
 
 // Sample data
-const sampleProfile: Profile = {
-	id: "1",
-	firstName: "John",
-	lastName: "Doe",
-	publicId: "johndoe",
-	headline: "Senior Frontend Developer",
-	summary:
-		"Desarrollador frontend con más de 5 años de experiencia en React, TypeScript y diseño de interfaces de usuario.",
-	student: false,
-	locationName: "Madrid, España",
-	geoCountryName: "España",
-	geoLocationName: "Madrid",
-	industryName: "Tecnología",
-	birthDay: 15,
-	birthMonth: 4,
-	experiences: [
-		{
-			id: "exp1",
-			title: "Senior Frontend Developer",
-			companyName: "Tech Solutions Inc.",
-			description:
-				"Desarrollo de aplicaciones web con React y TypeScript. Implementación de arquitecturas escalables y optimización de rendimiento.",
-			startDate: new Date("2020-01-01"),
-			endDate: undefined,
-			locationName: "Madrid",
-			companyIndustries: ["Tecnología", "Software"],
-		},
-		{
-			id: "exp2",
-			title: "Frontend Developer",
-			companyName: "Digital Agency",
-			description:
-				"Desarrollo de sitios web responsivos y aplicaciones interactivas utilizando React y Vue.js.",
-			startDate: new Date("2018-03-01"),
-			endDate: new Date("2019-12-31"),
-			locationName: "Barcelona",
-			companyIndustries: ["Marketing", "Diseño"],
-		},
-	],
-	education: [
-		{
-			id: "edu1",
-			schoolName: "Universidad Tecnológica",
-			degreeName: "Ingeniería Informática",
-			fieldOfStudy: "Desarrollo de software",
-			startYear: 2014,
-			endYear: 2018,
-			description: "Especialización en desarrollo de software y sistemas web.",
-		},
-	],
-	languages: [
-		{ id: "lang1", name: "Español", proficiency: "Nativo" },
-		{ id: "lang2", name: "Inglés", proficiency: "Avanzado" },
-	],
-	publications: [],
-	certifications: [
-		{
-			id: "cert1",
-			name: "React Developer Certification",
-			authority: "React Academy",
-			url: "https://reactacademy.com/cert/123456",
-			startDate: new Date("2021-05-15"),
-		},
-	],
-	volunteer: [],
-	honors: [],
-	projects: [
-		{
-			id: "proj1",
-			title: "E-commerce Website",
-			description: "Tienda online desarrollada con React y Node.js",
-			startDate: new Date("2022-01-01"),
-			endDate: new Date("2022-03-15"),
-		},
-	],
-	skills: [
-		{ id: "skill1", name: "React" },
-		{ id: "skill2", name: "TypeScript" },
-		{ id: "skill3", name: "JavaScript" },
-		{ id: "skill4", name: "HTML5" },
-		{ id: "skill5", name: "CSS3" },
-		{ id: "skill6", name: "Tailwind CSS" },
-		{ id: "skill7", name: "Node.js" },
-		{ id: "skill8", name: "Git" },
-	],
-}
+// const sampleProfile: Profile = {
+// 	id: "1",
+// 	firstName: "John",
+// 	lastName: "Doe",
+// 	publicId: "johndoe",
+// 	headline: "Senior Frontend Developer",
+// 	summary:
+// 		"Desarrollador frontend con más de 5 años de experiencia en React, TypeScript y diseño de interfaces de usuario.",
+// 	student: false,
+// 	locationName: "Madrid, España",
+// 	geoCountryName: "España",
+// 	geoLocationName: "Madrid",
+// 	industryName: "Tecnología",
+// 	birthDay: 15,
+// 	birthMonth: 4,
+// 	experiences: [
+// 		{
+// 			id: "exp1",
+// 			title: "Senior Frontend Developer",
+// 			companyName: "Tech Solutions Inc.",
+// 			description:
+// 				"Desarrollo de aplicaciones web con React y TypeScript. Implementación de arquitecturas escalables y optimización de rendimiento.",
+// 			startDate: new Date("2020-01-01"),
+// 			endDate: undefined,
+// 			locationName: "Madrid",
+// 			companyIndustries: ["Tecnología", "Software"],
+// 		},
+// 		{
+// 			id: "exp2",
+// 			title: "Frontend Developer",
+// 			companyName: "Digital Agency",
+// 			description:
+// 				"Desarrollo de sitios web responsivos y aplicaciones interactivas utilizando React y Vue.js.",
+// 			startDate: new Date("2018-03-01"),
+// 			endDate: new Date("2019-12-31"),
+// 			locationName: "Barcelona",
+// 			companyIndustries: ["Marketing", "Diseño"],
+// 		},
+// 	],
+// 	education: [
+// 		{
+// 			id: "edu1",
+// 			schoolName: "Universidad Tecnológica",
+// 			degreeName: "Ingeniería Informática",
+// 			fieldOfStudy: "Desarrollo de software",
+// 			startYear: 2014,
+// 			endYear: 2018,
+// 			description: "Especialización en desarrollo de software y sistemas web.",
+// 		},
+// 	],
+// 	languages: [
+// 		{ id: "lang1", name: "Español", proficiency: "Nativo" },
+// 		{ id: "lang2", name: "Inglés", proficiency: "Avanzado" },
+// 	],
+// 	publications: [],
+// 	certifications: [
+// 		{
+// 			id: "cert1",
+// 			name: "React Developer Certification",
+// 			authority: "React Academy",
+// 			url: "https://reactacademy.com/cert/123456",
+// 			startDate: new Date("2021-05-15"),
+// 		},
+// 	],
+// 	volunteer: [],
+// 	honors: [],
+// 	projects: [
+// 		{
+// 			id: "proj1",
+// 			title: "E-commerce Website",
+// 			description: "Tienda online desarrollada con React y Node.js",
+// 			startDate: new Date("2022-01-01"),
+// 			endDate: new Date("2022-03-15"),
+// 		},
+// 	],
+// 	skills: [
+// 		{ id: "skill1", name: "React" },
+// 		{ id: "skill2", name: "TypeScript" },
+// 		{ id: "skill3", name: "JavaScript" },
+// 		{ id: "skill4", name: "HTML5" },
+// 		{ id: "skill5", name: "CSS3" },
+// 		{ id: "skill6", name: "Tailwind CSS" },
+// 		{ id: "skill7", name: "Node.js" },
+// 		{ id: "skill8", name: "Git" },
+// 	],
+// }
 
 export default function ProfilePage() {
 	const { profileStore, updateProfileStore, setProfileStore } =
@@ -173,11 +173,18 @@ export default function ProfilePage() {
 	}
 
 	// Function to handle profile updates
-	const handleProfileUpdate = (field: string, value: any) => {
-		setProfile((prev) => ({
-			...prev,
-			[field]: value,
-		}))
+	const handleProfileUpdate = (
+		field: string,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		value: any
+	) => {
+		setProfile(
+			(prev) =>
+				prev && {
+					...prev,
+					[field]: value,
+				}
+		)
 	}
 
 	// Function to add a new experience
@@ -452,6 +459,14 @@ export default function ProfilePage() {
 				transition={{ duration: 0.5 }}
 				className="max-w-4xl mx-auto"
 			>
+				<div className="mb-8">
+					<h1 className="text-2xl md:text-3xl font-bold text-[#0F172A]">
+						Profile
+					</h1>
+					<p className="text-[#64748B]">
+						Administra tu perfil y mantén tu información actualizada.
+					</p>
+				</div>
 				{/* Profile Header */}
 				<div className="bg-white rounded-xl shadow-md overflow-hidden mb-6">
 					<div className="h-32 bg-gradient-to-r from-[#6366F1]/80 to-[#8B5CF6]/80 relative">

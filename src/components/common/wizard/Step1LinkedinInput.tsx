@@ -9,18 +9,20 @@ interface Props {
 export default function Step1LinkedInInput({ handleNext }: Props) {
 	const [inputValue, setInputValue] = useState("")
 	const [isValid, setIsValid] = useState(false)
-	const regex = "^https?://(www.)?linkedin.com/in/[a-zA-Z0-9-_%]+/?$"
+	const regex =
+		/^https?:\/\/(www\.)?linkedin\.com\/in\/([a-zA-Z0-9-_%]+)(\/.*)?$/
 	const regexPattern = new RegExp(regex)
 
 	const handleContinue = () => {
 		if (inputValue) {
-			if (!regexPattern.test(inputValue)) {
+			const match = inputValue.match(regexPattern)
+			if (!match) {
 				toast.error("Por favor, introduce una URL válida de LinkedIn")
 				setIsValid(false)
 				return
 			}
 
-			const publicId = inputValue.split("/").pop() || ""
+			const publicId = match[2] // Aquí sigue estando el publicId
 
 			if (!publicId) {
 				toast.error("Por favor, introduce una URL válida de LinkedIn")
