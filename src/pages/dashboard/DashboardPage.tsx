@@ -168,7 +168,7 @@ export default function DashboardPage() {
 							<div className="p-6">
 							{profileStore && portfolioStore?.template.name && (
 							  <div className="w-full aspect-[3/4] overflow-x-hidden overflow-auto border mb-4 rounded-xl shadow-lg flex justify-center bg-[#030014] hide-scrollbar">
-              					<div className="w-full h-full scale-75 origin-top transform  ">
+              					<div className="w-full h-full  origin-top transform  ">
 								<Preview/>
 							  </div>
 							  </div>

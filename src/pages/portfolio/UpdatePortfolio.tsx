@@ -16,8 +16,7 @@ export default function UpdatePortfolio() {
   const [currentStep, setCurrentStep] = useState(1)
   const [templateName, setTemplateName] = useState<string>("")
   const type = "portfolio"
-    const { profileStore } =
-            useProfileStore()
+    const { profileStore } = useProfileStore()
   const handle2ndStepNext = (TemplateName: string) => {
     setTemplateName(TemplateName)
     
@@ -35,6 +34,7 @@ export default function UpdatePortfolio() {
       toast.error("Por favor completa todos los pasos")
       return
     }
+    console.log("TemplateName", templateName)
     await updatePortfolio({templateName})
     navigate("/app/dashboard");
   }

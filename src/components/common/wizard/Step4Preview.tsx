@@ -51,8 +51,8 @@ export default function Step4Preview({
             Preview your {type === "cv" ? "CV" : "portfolio"}
           </h2>
           <div className="flex flex-col  gap-8 items-center">
-            <div className="w-full h-[500px] overflow-x-hidden overflow-auto border rounded-xl shadow-lg flex justify-center bg-[#030014] hide-scrollbar">
-              <div className="scale-75 origin-top transform  ">
+            <div className="w-full aspect[5/3]  h-[550px] overflow-x-hidden overflow-auto border rounded-xl shadow-lg flex justify-center bg-[#030014] hide-scrollbar ">
+              <div className=" origin-top transform  ">
                 {getTemplate(TemplateName, profile)}
               </div>
             </div>
