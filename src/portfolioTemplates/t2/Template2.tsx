@@ -34,7 +34,7 @@ const Portfolio2 = ({ profile, colors = defaultColors }: PortfolioProps) => {
 			style={{
 				backgroundImage: `linear-gradient(to bottom right, ${colors.primaryBg}, ${colors.secondaryBg})`,
 			}}
-			className="min-h-screen overflow-hidden"
+			className="min-h-screen overflow-hidden portfolio"
 			initial={{ opacity: 0 }}
 			animate={controls}
 			transition={{ duration: 0.5 }}

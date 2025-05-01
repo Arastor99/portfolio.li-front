@@ -1,0 +1,9 @@
+ .portfolio {
+    scroll-behavior: smooth; /* Esto agrega un desplazamiento suave cuando haces scroll */
+
+  }
+  
+  .portfolio ::-webkit-scrollbar {
+    display: none; /* Oculta la barra de desplazamiento en Webkit (Chrome, Safari) */
+  }
+  

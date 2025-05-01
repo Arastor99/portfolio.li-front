@@ -8,9 +8,10 @@ import { usePortfolioStore } from "@store/portfolioStore"
 interface Props {
 	templateNameProps?: string
 	profileData?: Profile
+	forceMobile?: boolean
 }
 
-const Preview: React.FC<Props> = () => {
+const Preview: React.FC<Props> = ({forceMobile}) => {
 	const [profile, setProfile] = useState<Profile | null>(null)
 	const [templateName, setTemplateName] = useState<string>("")
 	const navigate = useNavigate()
@@ -49,7 +50,7 @@ const Preview: React.FC<Props> = () => {
 
 	return (
 		<div>
-			{getTemplate(templateName, profile)}
+			{getTemplate(templateName, profile, forceMobile)}
 		</div>
 	)
 }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-
+import styles from "../../portfolio-style.module.css"
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 import {
   Mail,
@@ -24,12 +24,13 @@ import Contact from "./sections/Contact";
 import Footer from "./sections/Footer";
 import { Profile } from "@common/types/profile";
 
-export default function Portfolio({ profile }: { profile: Profile }) {
+export default function Portfolio({ profile, forceMobile }: { profile: Profile, forceMobile?: boolean }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [cursorVariant, setCursorVariant] = useState("default");
-  const isMobile = useMobile();
+  const rawIsMobile = useMobile();
+  const isMobile = forceMobile ?? rawIsMobile;
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll();
 
@@ -139,35 +140,35 @@ export default function Portfolio({ profile }: { profile: Profile }) {
 
   return (
     <div
-      ref={containerRef}
-      className="min-h-screen bg-[#030014] text-white overflow-hidden "
-    >
-      {/* Custom cursor */}
-      {!isMobile && typeof window !== "undefined" && (
-        <motion.div
-          className="fixed top-0 left-0 rounded-full pointer-events-none z-50"
-          variants={cursorVariants}
-          animate={cursorVariant}
-        />
-      )}
+  ref={containerRef}
+  className={`min-h-screen bg-[#030014] text-white overflow-hidden portfolio ${styles.portfolio}`}
+>
+  {/* Custom cursor */}
+  {!isMobile && typeof window !== "undefined" && (
+    <motion.div
+      className="fixed top-0 left-0 rounded-full pointer-events-none z-50"
+      variants={cursorVariants}
+      animate={cursorVariant}
+    />
+  )}
 
-      {/* Progress bar */}
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 z-50"
-        style={{ scaleX: scrollYProgress, transformOrigin: "0%" }}
-      />
+  {/* Progress bar */}
+  <motion.div
+    className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 z-50"
+    style={{ scaleX: scrollYProgress, transformOrigin: "0%" }}
+  />
 
-      {/* Background Elements */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute top-0 left-0 w-full h-full bg-[#030014] opacity-90" />
-        <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute top-[20%] right-[10%] w-96 h-96 rounded-full bg-emerald-500 opacity-20 blur-[120px]" />
-          <div className="absolute bottom-[10%] left-[15%] w-80 h-80 rounded-full bg-cyan-500 opacity-20 blur-[120px]" />
-        </div>
-        <div className="absolute inset-0">
-          <div className="h-full w-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48ZyBmaWxsPSIjMjIyIiBmaWxsLW9wYWNpdHk9IjAuMDUiPjxwYXRoIGQ9Ik0wIDBoMXYxSDB6TTAgOWgxdjFIMHpNOSAwaDFWMUg5ek05IDloMXYxSDl6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20" />
-        </div>
-      </div>
+  {/* Background Elements */}
+  <div className="fixed inset-0 z-0 overflow-hidden">
+    <div className="absolute top-0 left-0 w-full h-full bg-[#030014] opacity-90" />
+    <div className="absolute top-0 left-0 w-full h-full">
+      <div className="absolute top-[20%] right-[10%] w-96 h-96 rounded-full bg-emerald-500 opacity-20 blur-[120px]" />
+      <div className="absolute bottom-[10%] left-[15%] w-80 h-80 rounded-full bg-cyan-500 opacity-20 blur-[120px]" />
+    </div>
+    <div className="absolute inset-0">
+      <div className="h-full w-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48ZyBmaWxsPSIjMjIyIiBmaWxsLW9wYWNpdHk9IjAuMDUiPjxwYXRoIGQ9Ik0wIDBoMXYxSDB6TTAgOWgxdjFIMHpNOSAwaDFWMUg5ek05IDloMXYxSDl6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20" />
+    </div>
+  </div>
 
       {/* Side Navigation */}
       <nav className="fixed left-6 top-1/2 transform -translate-y-1/2 z-50 hidden lg:block">
@@ -219,7 +220,7 @@ export default function Portfolio({ profile }: { profile: Profile }) {
       </nav>
 
       {/* Mobile Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden backdrop-blur-lg bg-[#030014]/70 border-b border-white/10">
+      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden backdrop-blur-lg bg-[#030014]/70 border-b border-white/10 rounded-t-xl px-4">
         <div className="container flex h-16 items-center justify-between">
           <motion.div
             initial={{ opacity: 0, x: -20 }}

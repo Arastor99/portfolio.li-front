@@ -13,3 +13,37 @@
 button:hover {
 	cursor: pointer;
 }
+
+@media (max-width: 640px) {
+	.iframe-scroll {
+	  scrollbar-width: none;       /* Firefox */
+	  -ms-overflow-style: none;    /* IE y Edge */
+  
+	  /* Para WebKit (Chrome, Safari) */
+	}
+	.iframe-scroll::-webkit-scrollbar {
+	  display: none;
+	}
+  }
+/* Estilo general del scrollbar */
+::-webkit-scrollbar {
+	width: 6px; /* Ancho muy fino */
+	height: 6px; /* Alto para desplazamiento horizontal */
+  }
+  
+  /* Estilo del track (la pista) */
+  ::-webkit-scrollbar-track {
+	background: transparent; /* Fondo transparente */
+  }
+  
+  /* Estilo del thumb (la parte que se mueve) */
+  ::-webkit-scrollbar-thumb {
+	background-color: #888; /* Color básico para el thumb */
+	border-radius: 3px; /* Bordes sutiles y rectangulares */
+	transition: background-color 0.3s ease; /* Transición de color */
+  }
+  
+  /* Efecto hover en el thumb */
+  ::-webkit-scrollbar-thumb:hover {
+	background-color: #555; /* Color más oscuro en hover */
+  }
