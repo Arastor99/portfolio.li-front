@@ -220,7 +220,7 @@ export default function Portfolio({ profile, forceMobile }: { profile: Profile, 
       </nav>
 
       {/* Mobile Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden backdrop-blur-lg bg-[#030014]/70 border-b border-white/10 rounded-t-xl px-4">
+      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden backdrop-blur-lg bg-[#030014]/70 border-b border-white/10 rounded-t-lg px-4">
         <div className="container flex h-16 items-center justify-between">
           <motion.div
             initial={{ opacity: 0, x: -20 }}

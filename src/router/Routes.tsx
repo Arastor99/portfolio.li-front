@@ -14,6 +14,8 @@ import DashboardPage from "@pages/dashboard/DashboardPage"
 import Logout from "@pages/Logout"
 import CreatePortfolio from "@pages/portfolio/CreatePortfolio"
 import UpdatePortfolio from "@pages/portfolio/UpdatePortfolio"
+import { ViewCv } from "src/CvTemplates/ViewCv"
+import LoadingAnimation from "@pages/loading/Loading"
 
 export const publicRoutes = [
 	{
@@ -116,6 +118,20 @@ export const privateRoutes = [
 		path: "/app/logout",
 		element: <Logout />,
 		isPrivate: true,
+		redirectTo: "/auth/login",
+		navbar: false,
+	},
+	{
+		path: "/app/cv",
+		element: <ViewCv />,
+		isPrivate: false,
+		redirectTo: "/auth/login",
+		navbar: false,
+	},
+	{
+		path: "/app/loading",
+		element: <LoadingAnimation />,
+		isPrivate: false,
 		redirectTo: "/auth/login",
 		navbar: false,
 	},

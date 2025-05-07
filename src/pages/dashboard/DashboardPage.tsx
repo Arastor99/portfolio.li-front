@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useProfileStore } from "@store/profileStore";
 import { useNavigate } from "react-router-dom";
 import { usePortfolioStore } from "@store/portfolioStore";
+import MyCV from "../../CvTemplates/t1/cv";
+import { PDFViewer } from "@react-pdf/renderer";
+import ModernCV from "src/CvTemplates/t1/cv2";
 export default function DashboardPage() {
   const [hasPortfolio, setHasPortfolio] = useState(false);
   const [hasCV, setHasCV] = useState(true);
@@ -59,46 +62,44 @@ export default function DashboardPage() {
             </div>
 
             {hasCV ? (
-              <div>
-                <div className="p-6">
-                  <div className="aspect-[3/4] bg-gray-50 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-                    <img
-                      src="https://cdn-images.livecareer.es/images/lc/common/cv-templates/jt/es/plantilla-curriculum-moderno-05@3x.png"
-                      alt="CV Preview"
-                      className="w-full h-auto object-contain"
-                    />
-                  </div>
-                  <p className="text-[#64748B] mb-4">
-                    Última actualización: 15 de abril, 2023
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="px-4 py-2 bg-[#6366F1] text-white rounded-lg shadow-sm flex items-center gap-2"
-                    >
-                      <Edit size={16} />
-                      <span>Editar</span>
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="px-4 py-2 border border-[#6366F1] text-[#6366F1] rounded-lg flex items-center gap-2"
-                    >
-                      <Download size={16} />
-                      <span>Descargar</span>
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="px-4 py-2 border border-gray-300 text-[#64748B] rounded-lg flex items-center gap-2"
-                    >
-                      <Eye size={16} />
-                      <span>Vista previa</span>
-                    </motion.button>
-                  </div>
-                </div>
+            <div>
+            <div className="p-6">
+              <div className="aspect-[3/4] bg-gray-50 rounded-lg mb-4 overflow-hidden">
+              <PDFViewer className="w-full h-full rounded-lg" style={{ border: 'none' }}>
+                <ModernCV/>
+              </PDFViewer>
               </div>
+              <p className="text-[#64748B] mb-4">
+                Última actualización: 15 de abril, 2023
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-4 py-2 bg-[#6366F1] text-white rounded-lg shadow-sm flex items-center gap-2"
+                >
+                  <Edit size={16} />
+                  <span>Editar</span>
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-4 py-2 border border-[#6366F1] text-[#6366F1] rounded-lg flex items-center gap-2"
+                >
+                  <Download size={16} />
+                  <span>Descargar</span>
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-4 py-2 border border-gray-300 text-[#64748B] rounded-lg flex items-center gap-2"
+                >
+                  <Eye size={16} />
+                  <span>Vista previa</span>
+                </motion.button>
+              </div>
+            </div>
+          </div>
             ) : (
               <div className="p-6 flex flex-col items-center justify-center text-center">
                 <div className="w-20 h-20 bg-[#6366F1]/10 rounded-full flex items-center justify-center mb-4">
@@ -231,6 +232,7 @@ export default function DashboardPage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="px-6 py-3 bg-[#6366F1] text-white rounded-lg shadow-md flex items-center gap-2"
+                  onClick={() => navigate("/app/portfolio/create")}
                 >
                   <Plus size={18} />
                   <span>Crear Portfolio</span>
