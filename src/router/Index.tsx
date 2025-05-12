@@ -42,20 +42,11 @@ const Index = () => {
 					}
 				>
 					{privateRoutes.map(({ path, element }, index) => (
-						<Route
-							key={index}
-							path={path}
-							element={
-								isAuthenticated() ? (
-									element
-								) : (
-									<Navigate to="/auth/login" replace />
-								)
-							}
-						/>
+						<Route key={index} path={path} element={element} />
 					))}
 				</Route>
 
+				{/* Redirect to home if no route matches */}
 				<Route path="*" element={<Navigate to="/home" replace />} />
 			</Routes>
 		</Router>
