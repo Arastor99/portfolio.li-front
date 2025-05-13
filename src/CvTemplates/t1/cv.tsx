@@ -479,7 +479,7 @@ const ModernCV = () => {
           </View>
           <View style={styles.headerRight}>
             
-            <Image src={profile.profileImage || "/placeholder.svg"} style={styles.profileImage} />
+            <Image src={import.meta.env.VITE_API_URL+`/api/proxy-image?url=${encodeURIComponent(profile.profileImage)}`} style={styles.profileImage} />
           </View>
         </View>
 

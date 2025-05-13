@@ -7,8 +7,9 @@ import Modal from "../modal/Modal";
 import ModalRegister from "../modal/ModalRegister";
 import { ArrowLeftCircle, Eye, Plus, RefreshCcw, User } from "lucide-react";
 
-import { getTemplate } from "@common/utils/templates";
+import { getTemplate, getTemplateCv } from "@common/utils/templates";
 import LoadingAnimation from "@pages/loading/Loading";
+import { PDFViewer } from "@react-pdf/renderer";
 interface Props {
   type: "portfolio" | "cv";
   profile: Profile | undefined;
@@ -52,11 +53,17 @@ export default function Step4Preview({
             Preview your {type === "cv" ? "CV" : "portfolio"}
           </h2>
           <div className="flex flex-col  gap-8 items-center">
+            {type === "portfolio" ? (
             <div className="w-full aspect[5/3]  h-[550px] overflow-x-hidden overflow-auto border rounded-xl shadow-lg flex justify-center bg-[#030014] hide-scrollbar ">
               <div className=" origin-top transform  ">
                 {getTemplate(TemplateName, profile)}
               </div>
-            </div>
+            </div>):<div className="w-full h-[600px] rounded-lg overflow-hidden bg-white">
+  <PDFViewer className="w-full h-full" style={{ border: "none" }}>
+    {getTemplateCv(TemplateName, profile)}
+  </PDFViewer>
+</div>
+            }
             {/* </div> */}
             <div className="w-full  space-y-6 md:inline-flex items-start justify-between gap-6">
               {!isAuthenticated ? (

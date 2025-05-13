@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useProfileStore } from "@store/profileStore";
 import { useNavigate } from "react-router-dom";
 import { usePortfolioStore } from "@store/portfolioStore";
-import MyCV from "../../CvTemplates/t1/cv";
 import { PDFViewer } from "@react-pdf/renderer";
 import ModernCV from "src/CvTemplates/t1/cv2";
 export default function DashboardPage() {

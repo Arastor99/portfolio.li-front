@@ -1,4 +1,6 @@
+import { CVTemplate } from "@common/types/cv-template"
 import { PortfolioTemplate } from "@common/types/portfolio-template"
+import { getCVTemplates } from "@lib/services/cv-template.service"
 import { getPotfolioTemplates } from "@lib/services/portfolio-template.service"
 import { motion, AnimatePresence } from "framer-motion"
 import { useEffect, useState, useRef } from "react"
@@ -14,21 +16,29 @@ export default function Step3TemplateSelection({
 	handleNext,
 	handleBack,
 }: Props) {
-	const [templates, setTemplates] = useState<PortfolioTemplate[]>([])
+	const [templates, setTemplates] = useState<PortfolioTemplate[] | CVTemplate[]>([])
 	const [imageIndexes, setImageIndexes] = useState<{ [id: string]: number }>({})
 	const intervalRefs = useRef<{ [id: string]: NodeJS.Timeout | null }>({})
 
-	const imageNames = [
+	const imageNamesPortfolios = [
 		"portfolio-hero.png",
 		"portfolio-experience.png",
 		"portfolio-about.png",
 		"portfolio-projects.png",
 	]
 
+  const imageNamesCV = [
+    "indio.png",
+  ]
+
+  const imageNames = type === "portfolio" ? imageNamesPortfolios : imageNamesCV
+  const basePath = type === "portfolio" ? "/templatesPortfolio" : "/templatesCv"
+
 	const fetchTemplates = async () => {
 		if (type === "cv") {
-			// const templates = await getCVTemplates()
-			// setTemplates(templates)
+			const templates = await getCVTemplates()
+      console.log(templates)
+			setTemplates(templates)
 		} else {
 			const templates = await getPotfolioTemplates()
 			setTemplates(templates)
@@ -88,8 +98,8 @@ export default function Step3TemplateSelection({
     {templates.map((template) => {
       const currentImage =
         imageNames[imageIndexes[template.id] || 0] ?? imageNames[0]
-      const imagePath = `/templates/${template.name}/${currentImage}`
-
+      const imagePath = `${basePath}/${template.name}/${currentImage}`
+      console.log(imagePath)
       return (
         <motion.div
           key={template.id}

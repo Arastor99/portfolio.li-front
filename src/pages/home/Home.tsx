@@ -12,6 +12,7 @@ import Step2Selection from "@components/common/wizard/Step2Selection"
 import Step3TemplateSelection from "@components/common/wizard/Step3TemplateSelection"
 import Step4Preview from "@components/common/wizard/Step4Preview"
 import WizardContainer from "@components/common/wizard/WizardContainer"
+import { createCV } from "@lib/services/cv.service.service"
 
 export default function Home() {
 	const totalSteps = 4
@@ -74,16 +75,29 @@ export default function Home() {
 			return
 		}
 		await attachProfile(profileData.publicId).then(async () => {
-			await createPortfolio({
+			
+			if (type === "portfolio") {
+				await createPortfolio({
 				templateName: TemplateName,
 				url: `${profileData.publicId}-${TemplateName}-${generateRandomString(
 					4
 				)}`,
+				
 			}).then(() => {
 				localStorage.removeItem("profile-home")
 				localStorage.removeItem("type-home")
 				localStorage.removeItem("TemplateName-home")
 			})
+			} else {
+				await createCV({
+					templateName: TemplateName,
+				}).then(() => {
+					localStorage.removeItem("profile-home")
+					localStorage.removeItem("type-home")
+					localStorage.removeItem("TemplateName-home")
+				})
+			}
+			
 		})
 	}
 
