@@ -17,9 +17,9 @@ const LoadingAnimation = () => {
       clearInterval(pageTimer)
     }
   }, [])
-
+//fixed inset-0
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 z-50">
+    <div className="flex items-center justify-center  z-50">
       <div className="relative w-full max-w-md px-8">
         {/* Logo/Brand */}
         <motion.div

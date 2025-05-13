@@ -8,6 +8,7 @@ import ModalRegister from "../modal/ModalRegister";
 import { ArrowLeftCircle, Eye, Plus, RefreshCcw, User } from "lucide-react";
 
 import { getTemplate } from "@common/utils/templates";
+import LoadingAnimation from "@pages/loading/Loading";
 interface Props {
   type: "portfolio" | "cv";
   profile: Profile | undefined;
@@ -36,7 +37,7 @@ export default function Step4Preview({
     localStorage.setItem("templateName", JSON.stringify(TemplateName));
   };
 
-  if (!profile) return null;
+  if (!profile) return <LoadingAnimation/>;
 
   return (
     <>
