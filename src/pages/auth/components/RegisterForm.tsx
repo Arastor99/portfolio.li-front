@@ -7,7 +7,11 @@ import toast from "react-hot-toast"
 import { register } from "@lib/services/auth.service"
 import GoogleAuthButton from "@components/common/GoogleAuthButton"
 
-export default function RegisterForm() {
+interface Props {
+	registerTrigger?: () => Promise<void>
+}
+
+export default function RegisterForm({ registerTrigger }: Props) {
 	const { t } = useTranslation()
 	const [name, setName] = useState("")
 	const [email, setEmail] = useState("")
@@ -24,7 +28,10 @@ export default function RegisterForm() {
 				success: "Registered successfully!",
 				error: "Registration failed. Please check your details.",
 			})
-			.then(() => {
+			.then(async () => {
+				if (registerTrigger) {
+					await registerTrigger()
+				}
 				// La sincronizacion de las cookies requiere un window.location.href
 				window.location.href = "/app/dashboard"
 			})
@@ -111,7 +118,7 @@ export default function RegisterForm() {
 					</span>
 				</div>
 				<div className="mt-6">
-					<GoogleAuthButton />
+					<GoogleAuthButton registerTrigger={registerTrigger} />
 				</div>
 			</div>
 
