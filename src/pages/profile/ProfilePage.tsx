@@ -105,6 +105,7 @@ import { getUserProfile, updateProfile } from "@lib/services/profile.service"
 // 		{ id: "skill8", name: "Git" },
 // 	],
 // }
+import ReactDOM from "react-dom"
 
 export default function ProfilePage() {
 	const { profileStore, updateProfileStore, setProfileStore } =
@@ -474,8 +475,12 @@ export default function ProfilePage() {
 		)
 	}
 
+	const Modal = ({ children }: { children: React.ReactNode }) => {
+		return ReactDOM.createPortal(children, document.body)
+	}
+
 	return (
-		<div className="min-h-screen p-4 md:p-8 pt-20 z-10">
+		<div className="min-h-screen p-4 md:p-8 pt-20 ">
 			<motion.div
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
@@ -529,7 +534,7 @@ export default function ProfilePage() {
 
 						{editMode ? (
 							<motion.button
-								className="absolute right-4 top-4 card-shine dark:card-shine/80 p-2 rounded-full text-accent"
+								className="absolute right-4 top-4 card-shine dark:card-shine  p-2 rounded-full text-accent"
 								whileHover={{
 									scale: 1.1,
 									backgroundColor: "rgba(255, 255, 255, 1)",
@@ -1192,281 +1197,288 @@ export default function ProfilePage() {
 								{/* Experience Edit Modal */}
 								<AnimatePresence>
 									{editingExperience && (
-										<motion.div
-											className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-											initial={{ opacity: 0 }}
-											animate={{ opacity: 1 }}
-											exit={{ opacity: 0 }}
-										>
+										<Modal>
 											<motion.div
-												className="card-shine dark:card-shine rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
-												initial={{ scale: 0.9, y: 20, opacity: 0 }}
-												animate={{ scale: 1, y: 0, opacity: 1 }}
-												exit={{ scale: 0.9, y: 20, opacity: 0 }}
-												transition={{
-													type: "spring",
-													damping: 25,
-													stiffness: 300,
-												}}
+												className="fixed inset-0 bg-black/50 flex items-center justify-center  p-4 "
+												initial={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												exit={{ opacity: 0 }}
 											>
-												<div className="p-6 border-b border-border flex justify-between items-center">
-													<h3 className="text-lg font-semibold text-primary">
-														{profile.experiences.find(
-															(exp) => exp.id === editingExperience.id
-														)
-															? "Editar experiencia"
-															: "Añadir experiencia"}
-													</h3>
-													<motion.button
-														onClick={() => setEditingExperience(null)}
-														className="p-1 text-primary-light rounded-full"
-														whileHover={{
-															scale: 1.1,
-															backgroundColor: "#F9FAFB",
-															rotate: 90,
-														}}
-														whileTap={{ scale: 0.9 }}
-													>
-														<X size={20} />
-													</motion.button>
-												</div>
-
-												<div className="p-6 space-y-4">
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Puesto
-														</label>
-														<motion.input
-															type="text"
-															value={editingExperience.title || ""}
-															onChange={(e) =>
-																setEditingExperience({
-																	...editingExperience,
-																	title: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: Frontend Developer"
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
+												<motion.div
+													className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
+													initial={{ scale: 0.9, y: 20, opacity: 0 }}
+													animate={{ scale: 1, y: 0, opacity: 1 }}
+													exit={{ scale: 0.9, y: 20, opacity: 0 }}
+													transition={{
+														type: "spring",
+														damping: 25,
+														stiffness: 300,
+													}}
+												>
+													<div className="p-6 border-b border-border flex justify-between items-center">
+														<h3 className="text-lg font-semibold text-primary">
+															{profile.experiences.find(
+																(exp) => exp.id === editingExperience.id
+															)
+																? "Editar experiencia"
+																: "Añadir experiencia"}
+														</h3>
+														<motion.button
+															onClick={() => setEditingExperience(null)}
+															className="p-1 text-primary-light rounded-full"
+															whileHover={{
+																scale: 1.1,
+																backgroundColor: "#F9FAFB",
+																rotate: 90,
 															}}
-															transition={{ duration: 0.2 }}
-														/>
+															whileTap={{ scale: 0.9 }}
+														>
+															<X size={20} />
+														</motion.button>
 													</div>
 
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Empresa
-														</label>
-														<motion.input
-															type="text"
-															value={editingExperience.companyName || ""}
-															onChange={(e) =>
-																setEditingExperience({
-																	...editingExperience,
-																	companyName: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: Acme Inc."
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
-															}}
-															transition={{ duration: 0.2 }}
-														/>
-													</div>
-
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Ubicación
-														</label>
-														<motion.input
-															type="text"
-															value={editingExperience.locationName || ""}
-															onChange={(e) =>
-																setEditingExperience({
-																	...editingExperience,
-																	locationName: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: Madrid, España"
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
-															}}
-															transition={{ duration: 0.2 }}
-														/>
-													</div>
-
-													<div className="grid grid-cols-2 gap-4">
+													<div className="p-6 space-y-4">
 														<div className="space-y-2">
 															<label className="text-sm font-medium text-primary-light">
-																Fecha de inicio
+																Puesto
 															</label>
-															<div className="relative">
-																<motion.input
-																	type="date"
-																	value={
-																		editingExperience.startDate
-																			? new Date(editingExperience.startDate)
-																					.toISOString()
-																					.split("T")[0]
-																			: ""
-																	}
-																	onChange={(e) =>
-																		setEditingExperience({
-																			...editingExperience,
-																			startDate: e.target.value
-																				? new Date(e.target.value)
-																				: undefined,
-																		})
-																	}
-																	className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full cursor-pointer"
-																	whileFocus={{
-																		scale: 1.02,
-																		boxShadow:
-																			"0 0 0 3px rgba(99, 102, 241, 0.1)",
-																	}}
-																	whileHover={{ borderColor: "#6366F1" }}
-																/>
-																<motion.div
-																	initial={{ opacity: 0.7 }}
-																	animate={{ opacity: [0.7, 1, 0.7] }}
-																	transition={{
-																		duration: 2,
-																		repeat: Number.POSITIVE_INFINITY,
-																	}}
-																>
-																	<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
-																</motion.div>
+															<motion.input
+																type="text"
+																value={editingExperience.title || ""}
+																onChange={(e) =>
+																	setEditingExperience({
+																		...editingExperience,
+																		title: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																placeholder="Ej: Frontend Developer"
+																whileFocus={{
+																	scale: 1.02,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
+														</div>
+
+														<div className="space-y-2">
+															<label className="text-sm font-medium text-primary-light">
+																Empresa
+															</label>
+															<motion.input
+																type="text"
+																value={editingExperience.companyName || ""}
+																onChange={(e) =>
+																	setEditingExperience({
+																		...editingExperience,
+																		companyName: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																placeholder="Ej: Acme Inc."
+																whileFocus={{
+																	scale: 1.02,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
+														</div>
+
+														<div className="space-y-2">
+															<label className="text-sm font-medium text-primary-light">
+																Ubicación
+															</label>
+															<motion.input
+																type="text"
+																value={editingExperience.locationName || ""}
+																onChange={(e) =>
+																	setEditingExperience({
+																		...editingExperience,
+																		locationName: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																placeholder="Ej: Madrid, España"
+																whileFocus={{
+																	scale: 1.02,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
+														</div>
+
+														<div className="grid grid-cols-2 gap-4">
+															<div className="space-y-2">
+																<label className="text-sm font-medium text-primary-light">
+																	Fecha de inicio
+																</label>
+																<div className="relative">
+																	<motion.input
+																		type="date"
+																		value={
+																			editingExperience.startDate
+																				? new Date(editingExperience.startDate)
+																						.toISOString()
+																						.split("T")[0]
+																				: ""
+																		}
+																		onChange={(e) =>
+																			setEditingExperience({
+																				...editingExperience,
+																				startDate: e.target.value
+																					? new Date(e.target.value)
+																					: undefined,
+																			})
+																		}
+																		className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full cursor-pointer"
+																		whileFocus={{
+																			scale: 1.02,
+																			boxShadow:
+																				"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																		}}
+																		whileHover={{ borderColor: "#6366F1" }}
+																	/>
+																	<motion.div
+																		initial={{ opacity: 0.7 }}
+																		animate={{ opacity: [0.7, 1, 0.7] }}
+																		transition={{
+																			duration: 2,
+																			repeat: Number.POSITIVE_INFINITY,
+																		}}
+																	>
+																		<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
+																	</motion.div>
+																</div>
+															</div>
+
+															<div className="space-y-2">
+																<label className="text-sm font-medium text-primary-light">
+																	Fecha de fin
+																</label>
+																<div className="relative">
+																	<motion.input
+																		type="date"
+																		value={
+																			editingExperience.endDate
+																				? new Date(editingExperience.endDate)
+																						.toISOString()
+																						.split("T")[0]
+																				: ""
+																		}
+																		onChange={(e) =>
+																			setEditingExperience({
+																				...editingExperience,
+																				endDate: e.target.value
+																					? new Date(e.target.value)
+																					: undefined,
+																			})
+																		}
+																		className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full cursor-pointer"
+																		whileFocus={{
+																			scale: 1.02,
+																			boxShadow:
+																				"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																		}}
+																		whileHover={{ borderColor: "#6366F1" }}
+																	/>
+																	<motion.div
+																		initial={{ opacity: 0.7 }}
+																		animate={{ opacity: [0.7, 1, 0.7] }}
+																		transition={{
+																			duration: 2,
+																			repeat: Number.POSITIVE_INFINITY,
+																		}}
+																	>
+																		<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
+																	</motion.div>
+																</div>
 															</div>
 														</div>
 
 														<div className="space-y-2">
 															<label className="text-sm font-medium text-primary-light">
-																Fecha de fin
+																Descripción
 															</label>
-															<div className="relative">
-																<motion.input
-																	type="date"
-																	value={
-																		editingExperience.endDate
-																			? new Date(editingExperience.endDate)
-																					.toISOString()
-																					.split("T")[0]
-																			: ""
-																	}
-																	onChange={(e) =>
-																		setEditingExperience({
-																			...editingExperience,
-																			endDate: e.target.value
-																				? new Date(e.target.value)
-																				: undefined,
-																		})
-																	}
-																	className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full cursor-pointer"
-																	whileFocus={{
-																		scale: 1.02,
-																		boxShadow:
-																			"0 0 0 3px rgba(99, 102, 241, 0.1)",
-																	}}
-																	whileHover={{ borderColor: "#6366F1" }}
-																/>
-																<motion.div
-																	initial={{ opacity: 0.7 }}
-																	animate={{ opacity: [0.7, 1, 0.7] }}
-																	transition={{
-																		duration: 2,
-																		repeat: Number.POSITIVE_INFINITY,
-																	}}
-																>
-																	<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
-																</motion.div>
-															</div>
+															<motion.textarea
+																value={editingExperience.description || ""}
+																onChange={(e) =>
+																	setEditingExperience({
+																		...editingExperience,
+																		description: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full min-h-[100px]"
+																placeholder="Describe tus responsabilidades y logros"
+																whileFocus={{
+																	scale: 1.01,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
+														</div>
+
+														<div className="space-y-2">
+															<label className="text-sm font-medium text-primary-light">
+																Industrias (separadas por coma)
+															</label>
+															<motion.input
+																type="text"
+																value={(
+																	editingExperience.companyIndustries || []
+																).join(", ")}
+																onChange={(e) =>
+																	setEditingExperience({
+																		...editingExperience,
+																		companyIndustries: e.target.value
+																			.split(",")
+																			.map((i) => i.trim())
+																			.filter((i) => i),
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																placeholder="Ej: Tecnología, Software, Marketing"
+																whileFocus={{
+																	scale: 1.02,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
 														</div>
 													</div>
 
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Descripción
-														</label>
-														<motion.textarea
-															value={editingExperience.description || ""}
-															onChange={(e) =>
-																setEditingExperience({
-																	...editingExperience,
-																	description: e.target.value,
-																})
+													<div className="p-6 border-t border-border flex justify-end gap-3">
+														<motion.button
+															onClick={() => setEditingExperience(null)}
+															className="px-4 py-2 border border-border text-primary-light rounded-lg"
+															whileHover={{ backgroundColor: "#F9FAFB", y: -2 }}
+															whileTap={{ scale: 0.95 }}
+														>
+															Cancelar
+														</motion.button>
+														<motion.button
+															onClick={() =>
+																handleSaveExperience(editingExperience)
 															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full min-h-[100px]"
-															placeholder="Describe tus responsabilidades y logros"
-															whileFocus={{
-																scale: 1.01,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
+															className="px-4 py-2 bg-accent text-white rounded-lg shadow-sm"
+															whileHover={{
+																backgroundColor: "#5253cc",
+																y: -2,
+																boxShadow:
+																	"0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -4px rgba(99, 102, 241, 0.3)",
 															}}
-															transition={{ duration: 0.2 }}
-														/>
+															whileTap={{ scale: 0.95 }}
+														>
+															Guardar
+														</motion.button>
 													</div>
-
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Industrias (separadas por coma)
-														</label>
-														<motion.input
-															type="text"
-															value={(
-																editingExperience.companyIndustries || []
-															).join(", ")}
-															onChange={(e) =>
-																setEditingExperience({
-																	...editingExperience,
-																	companyIndustries: e.target.value
-																		.split(",")
-																		.map((i) => i.trim())
-																		.filter((i) => i),
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: Tecnología, Software, Marketing"
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
-															}}
-															transition={{ duration: 0.2 }}
-														/>
-													</div>
-												</div>
-
-												<div className="p-6 border-t border-border flex justify-end gap-3">
-													<motion.button
-														onClick={() => setEditingExperience(null)}
-														className="px-4 py-2 border border-border text-primary-light rounded-lg"
-														whileHover={{ backgroundColor: "#F9FAFB", y: -2 }}
-														whileTap={{ scale: 0.95 }}
-													>
-														Cancelar
-													</motion.button>
-													<motion.button
-														onClick={() =>
-															handleSaveExperience(editingExperience)
-														}
-														className="px-4 py-2 bg-accent text-white rounded-lg shadow-sm"
-														whileHover={{
-															backgroundColor: "#5253cc",
-															y: -2,
-															boxShadow:
-																"0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -4px rgba(99, 102, 241, 0.3)",
-														}}
-														whileTap={{ scale: 0.95 }}
-													>
-														Guardar
-													</motion.button>
-												</div>
+												</motion.div>
 											</motion.div>
-										</motion.div>
+										</Modal>
 									)}
 								</AnimatePresence>
 							</div>
@@ -1580,133 +1592,62 @@ export default function ProfilePage() {
 								{/* Education Edit Modal */}
 								<AnimatePresence>
 									{editingEducation && (
-										<motion.div
-											className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-											initial={{ opacity: 0 }}
-											animate={{ opacity: 1 }}
-											exit={{ opacity: 0 }}
-										>
+										<Modal>
 											<motion.div
-												className="card-shine dark:card-shine rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
-												initial={{ scale: 0.9, y: 20, opacity: 0 }}
-												animate={{ scale: 1, y: 0, opacity: 1 }}
-												exit={{ scale: 0.9, y: 20, opacity: 0 }}
-												transition={{
-													type: "spring",
-													damping: 25,
-													stiffness: 300,
-												}}
+												className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+												initial={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												exit={{ opacity: 0 }}
 											>
-												<div className="p-6 border-b border-border flex justify-between items-center">
-													<h3 className="text-lg font-semibold text-primary">
-														{profile.education.find(
-															(edu) => edu.id === editingEducation.id
-														)
-															? "Editar educación"
-															: "Añadir educación"}
-													</h3>
-													<motion.button
-														onClick={() => setEditingEducation(null)}
-														className="p-1 text-primary-light rounded-full"
-														whileHover={{
-															scale: 1.1,
-															backgroundColor: "#F9FAFB",
-															rotate: 90,
-														}}
-														whileTap={{ scale: 0.9 }}
-													>
-														<X size={20} />
-													</motion.button>
-												</div>
-
-												<div className="p-6 space-y-4">
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Institución
-														</label>
-														<motion.input
-															type="text"
-															value={editingEducation.schoolName || ""}
-															onChange={(e) =>
-																setEditingEducation({
-																	...editingEducation,
-																	schoolName: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: Universidad Complutense de Madrid"
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
+												<motion.div
+													className="card-shine dark:card-shine rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
+													initial={{ scale: 0.9, y: 20, opacity: 0 }}
+													animate={{ scale: 1, y: 0, opacity: 1 }}
+													exit={{ scale: 0.9, y: 20, opacity: 0 }}
+													transition={{
+														type: "spring",
+														damping: 25,
+														stiffness: 300,
+													}}
+												>
+													<div className="p-6 border-b border-border flex justify-between items-center">
+														<h3 className="text-lg font-semibold text-primary">
+															{profile.education.find(
+																(edu) => edu.id === editingEducation.id
+															)
+																? "Editar educación"
+																: "Añadir educación"}
+														</h3>
+														<motion.button
+															onClick={() => setEditingEducation(null)}
+															className="p-1 text-primary-light rounded-full"
+															whileHover={{
+																scale: 1.1,
+																backgroundColor: "#F9FAFB",
+																rotate: 90,
 															}}
-															transition={{ duration: 0.2 }}
-														/>
+															whileTap={{ scale: 0.9 }}
+														>
+															<X size={20} />
+														</motion.button>
 													</div>
 
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Título
-														</label>
-														<motion.input
-															type="text"
-															value={editingEducation.degreeName || ""}
-															onChange={(e) =>
-																setEditingEducation({
-																	...editingEducation,
-																	degreeName: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: Grado en Ingeniería Informática"
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
-															}}
-															transition={{ duration: 0.2 }}
-														/>
-													</div>
-
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Campo de estudio
-														</label>
-														<motion.input
-															type="text"
-															value={editingEducation.fieldOfStudy || ""}
-															onChange={(e) =>
-																setEditingEducation({
-																	...editingEducation,
-																	fieldOfStudy: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: Desarrollo de Software"
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
-															}}
-															transition={{ duration: 0.2 }}
-														/>
-													</div>
-
-													<div className="grid grid-cols-2 gap-4">
+													<div className="p-6 space-y-4">
 														<div className="space-y-2">
 															<label className="text-sm font-medium text-primary-light">
-																Año de inicio
+																Institución
 															</label>
 															<motion.input
-																type="number"
-																value={editingEducation.startYear || ""}
+																type="text"
+																value={editingEducation.schoolName || ""}
 																onChange={(e) =>
 																	setEditingEducation({
 																		...editingEducation,
-																		startYear: e.target.value
-																			? Number.parseInt(e.target.value)
-																			: undefined,
+																		schoolName: e.target.value,
 																	})
 																}
 																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-																placeholder="Ej: 2018"
+																placeholder="Ej: Universidad Complutense de Madrid"
 																whileFocus={{
 																	scale: 1.02,
 																	boxShadow:
@@ -1718,21 +1659,19 @@ export default function ProfilePage() {
 
 														<div className="space-y-2">
 															<label className="text-sm font-medium text-primary-light">
-																Año de fin
+																Título
 															</label>
 															<motion.input
-																type="number"
-																value={editingEducation.endYear || ""}
+																type="text"
+																value={editingEducation.degreeName || ""}
 																onChange={(e) =>
 																	setEditingEducation({
 																		...editingEducation,
-																		endYear: e.target.value
-																			? Number.parseInt(e.target.value)
-																			: undefined,
+																		degreeName: e.target.value,
 																	})
 																}
 																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-																placeholder="Ej: 2022"
+																placeholder="Ej: Grado en Ingeniería Informática"
 																whileFocus={{
 																	scale: 1.02,
 																	boxShadow:
@@ -1741,104 +1680,185 @@ export default function ProfilePage() {
 																transition={{ duration: 0.2 }}
 															/>
 														</div>
+
+														<div className="space-y-2">
+															<label className="text-sm font-medium text-primary-light">
+																Campo de estudio
+															</label>
+															<motion.input
+																type="text"
+																value={editingEducation.fieldOfStudy || ""}
+																onChange={(e) =>
+																	setEditingEducation({
+																		...editingEducation,
+																		fieldOfStudy: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																placeholder="Ej: Desarrollo de Software"
+																whileFocus={{
+																	scale: 1.02,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
+														</div>
+
+														<div className="grid grid-cols-2 gap-4">
+															<div className="space-y-2">
+																<label className="text-sm font-medium text-primary-light">
+																	Año de inicio
+																</label>
+																<motion.input
+																	type="number"
+																	value={editingEducation.startYear || ""}
+																	onChange={(e) =>
+																		setEditingEducation({
+																			...editingEducation,
+																			startYear: e.target.value
+																				? Number.parseInt(e.target.value)
+																				: undefined,
+																		})
+																	}
+																	className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																	placeholder="Ej: 2018"
+																	whileFocus={{
+																		scale: 1.02,
+																		boxShadow:
+																			"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																	}}
+																	transition={{ duration: 0.2 }}
+																/>
+															</div>
+
+															<div className="space-y-2">
+																<label className="text-sm font-medium text-primary-light">
+																	Año de fin
+																</label>
+																<motion.input
+																	type="number"
+																	value={editingEducation.endYear || ""}
+																	onChange={(e) =>
+																		setEditingEducation({
+																			...editingEducation,
+																			endYear: e.target.value
+																				? Number.parseInt(e.target.value)
+																				: undefined,
+																		})
+																	}
+																	className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																	placeholder="Ej: 2022"
+																	whileFocus={{
+																		scale: 1.02,
+																		boxShadow:
+																			"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																	}}
+																	transition={{ duration: 0.2 }}
+																/>
+															</div>
+														</div>
+
+														<div className="space-y-2">
+															<label className="text-sm font-medium text-primary-light">
+																Calificación
+															</label>
+															<motion.input
+																type="text"
+																value={editingEducation.grade || ""}
+																onChange={(e) =>
+																	setEditingEducation({
+																		...editingEducation,
+																		grade: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																placeholder="Ej: Sobresaliente"
+																whileFocus={{
+																	scale: 1.02,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
+														</div>
+
+														<div className="space-y-2">
+															<label className="text-sm font-medium text-primary-light">
+																Actividades y sociedades
+															</label>
+															<motion.input
+																type="text"
+																value={editingEducation.activities || ""}
+																onChange={(e) =>
+																	setEditingEducation({
+																		...editingEducation,
+																		activities: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																placeholder="Ej: Club de programación, Equipo de debate"
+																whileFocus={{
+																	scale: 1.02,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
+														</div>
+
+														<div className="space-y-2">
+															<label className="text-sm font-medium text-primary-light">
+																Descripción
+															</label>
+															<motion.textarea
+																value={editingEducation.description || ""}
+																onChange={(e) =>
+																	setEditingEducation({
+																		...editingEducation,
+																		description: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full min-h-[100px]"
+																placeholder="Describe tu experiencia educativa"
+																whileFocus={{
+																	scale: 1.01,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
+														</div>
 													</div>
 
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Calificación
-														</label>
-														<motion.input
-															type="text"
-															value={editingEducation.grade || ""}
-															onChange={(e) =>
-																setEditingEducation({
-																	...editingEducation,
-																	grade: e.target.value,
-																})
+													<div className="p-6 border-t border-border flex justify-end gap-3">
+														<motion.button
+															onClick={() => setEditingEducation(null)}
+															className="px-4 py-2 border border-border text-primary-light rounded-lg"
+															whileHover={{ backgroundColor: "#F9FAFB", y: -2 }}
+															whileTap={{ scale: 0.95 }}
+														>
+															Cancelar
+														</motion.button>
+														<motion.button
+															onClick={() =>
+																handleSaveEducation(editingEducation)
 															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: Sobresaliente"
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
+															className="px-4 py-2 bg-accent text-white rounded-lg shadow-sm"
+															whileHover={{
+																backgroundColor: "#5253cc",
+																y: -2,
+																boxShadow:
+																	"0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -4px rgba(99, 102, 241, 0.3)",
 															}}
-															transition={{ duration: 0.2 }}
-														/>
+															whileTap={{ scale: 0.95 }}
+														>
+															Guardar
+														</motion.button>
 													</div>
-
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Actividades y sociedades
-														</label>
-														<motion.input
-															type="text"
-															value={editingEducation.activities || ""}
-															onChange={(e) =>
-																setEditingEducation({
-																	...editingEducation,
-																	activities: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: Club de programación, Equipo de debate"
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
-															}}
-															transition={{ duration: 0.2 }}
-														/>
-													</div>
-
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Descripción
-														</label>
-														<motion.textarea
-															value={editingEducation.description || ""}
-															onChange={(e) =>
-																setEditingEducation({
-																	...editingEducation,
-																	description: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full min-h-[100px]"
-															placeholder="Describe tu experiencia educativa"
-															whileFocus={{
-																scale: 1.01,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
-															}}
-															transition={{ duration: 0.2 }}
-														/>
-													</div>
-												</div>
-
-												<div className="p-6 border-t border-border flex justify-end gap-3">
-													<motion.button
-														onClick={() => setEditingEducation(null)}
-														className="px-4 py-2 border border-border text-primary-light rounded-lg"
-														whileHover={{ backgroundColor: "#F9FAFB", y: -2 }}
-														whileTap={{ scale: 0.95 }}
-													>
-														Cancelar
-													</motion.button>
-													<motion.button
-														onClick={() =>
-															handleSaveEducation(editingEducation)
-														}
-														className="px-4 py-2 bg-accent text-white rounded-lg shadow-sm"
-														whileHover={{
-															backgroundColor: "#5253cc",
-															y: -2,
-															boxShadow:
-																"0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -4px rgba(99, 102, 241, 0.3)",
-														}}
-														whileTap={{ scale: 0.95 }}
-													>
-														Guardar
-													</motion.button>
-												</div>
+												</motion.div>
 											</motion.div>
-										</motion.div>
+										</Modal>
 									)}
 								</AnimatePresence>
 							</div>
@@ -2032,118 +2052,123 @@ export default function ProfilePage() {
 								{/* Language Edit Modal */}
 								<AnimatePresence>
 									{editingLanguage && (
-										<motion.div
-											className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-											initial={{ opacity: 0 }}
-											animate={{ opacity: 1 }}
-											exit={{ opacity: 0 }}
-										>
+										<Modal>
 											<motion.div
-												className="card-shine dark:card-shine rounded-xl shadow-xl max-w-lg w-full"
-												initial={{ scale: 0.9, y: 20, opacity: 0 }}
-												animate={{ scale: 1, y: 0, opacity: 1 }}
-												exit={{ scale: 0.9, y: 20, opacity: 0 }}
-												transition={{
-													type: "spring",
-													damping: 25,
-													stiffness: 300,
-												}}
+												className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+												initial={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												exit={{ opacity: 0 }}
 											>
-												<div className="p-6 border-b border-border flex justify-between items-center">
-													<h3 className="text-lg font-semibold text-primary">
-														{profile.languages.find(
-															(lang) => lang.id === editingLanguage.id
-														)
-															? "Editar idioma"
-															: "Añadir idioma"}
-													</h3>
-													<motion.button
-														onClick={() => setEditingLanguage(null)}
-														className="p-1 text-primary-light rounded-full"
-														whileHover={{
-															scale: 1.1,
-															backgroundColor: "#F9FAFB",
-															rotate: 90,
-														}}
-														whileTap={{ scale: 0.9 }}
-													>
-														<X size={20} />
-													</motion.button>
-												</div>
-
-												<div className="p-6 space-y-4">
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Idioma
-														</label>
-														<motion.input
-															type="text"
-															value={editingLanguage.name || ""}
-															onChange={(e) =>
-																setEditingLanguage({
-																	...editingLanguage,
-																	name: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: Inglés"
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
+												<motion.div
+													className="card-shine dark:card-shine rounded-xl shadow-xl max-w-lg w-full"
+													initial={{ scale: 0.9, y: 20, opacity: 0 }}
+													animate={{ scale: 1, y: 0, opacity: 1 }}
+													exit={{ scale: 0.9, y: 20, opacity: 0 }}
+													transition={{
+														type: "spring",
+														damping: 25,
+														stiffness: 300,
+													}}
+												>
+													<div className="p-6 border-b border-border flex justify-between items-center">
+														<h3 className="text-lg font-semibold text-primary">
+															{profile.languages.find(
+																(lang) => lang.id === editingLanguage.id
+															)
+																? "Editar idioma"
+																: "Añadir idioma"}
+														</h3>
+														<motion.button
+															onClick={() => setEditingLanguage(null)}
+															className="p-1 text-primary-light rounded-full"
+															whileHover={{
+																scale: 1.1,
+																backgroundColor: "#F9FAFB",
+																rotate: 90,
 															}}
-															transition={{ duration: 0.2 }}
-														/>
-													</div>
-
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Nivel
-														</label>
-														<motion.select
-															value={editingLanguage.proficiency || ""}
-															onChange={(e) =>
-																setEditingLanguage({
-																	...editingLanguage,
-																	proficiency: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+															whileTap={{ scale: 0.9 }}
 														>
-															<option value="">Seleccionar nivel</option>
-															<option value="Nativo">Nativo</option>
-															<option value="Bilingüe">Bilingüe</option>
-															<option value="Avanzado">Avanzado</option>
-															<option value="Intermedio">Intermedio</option>
-															<option value="Básico">Básico</option>
-														</motion.select>
+															<X size={20} />
+														</motion.button>
 													</div>
-												</div>
 
-												<div className="p-6 border-t border-border flex justify-end gap-3">
-													<motion.button
-														onClick={() => setEditingLanguage(null)}
-														className="px-4 py-2 border border-border text-primary-light rounded-lg"
-														whileHover={{ backgroundColor: "#F9FAFB", y: -2 }}
-														whileTap={{ scale: 0.95 }}
-													>
-														Cancelar
-													</motion.button>
-													<motion.button
-														onClick={() => handleSaveLanguage(editingLanguage)}
-														className="px-4 py-2 bg-accent text-white rounded-lg shadow-sm"
-														whileHover={{
-															backgroundColor: "#5253cc",
-															y: -2,
-															boxShadow:
-																"0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -4px rgba(99, 102, 241, 0.3)",
-														}}
-														whileTap={{ scale: 0.95 }}
-													>
-														Guardar
-													</motion.button>
-												</div>
+													<div className="p-6 space-y-4">
+														<div className="space-y-2">
+															<label className="text-sm font-medium text-primary-light">
+																Idioma
+															</label>
+															<motion.input
+																type="text"
+																value={editingLanguage.name || ""}
+																onChange={(e) =>
+																	setEditingLanguage({
+																		...editingLanguage,
+																		name: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																placeholder="Ej: Inglés"
+																whileFocus={{
+																	scale: 1.02,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
+														</div>
+
+														<div className="space-y-2">
+															<label className="text-sm font-medium text-primary-light">
+																Nivel
+															</label>
+															<motion.select
+																value={editingLanguage.proficiency || ""}
+																onChange={(e) =>
+																	setEditingLanguage({
+																		...editingLanguage,
+																		proficiency: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+															>
+																<option value="">Seleccionar nivel</option>
+																<option value="Nativo">Nativo</option>
+																<option value="Bilingüe">Bilingüe</option>
+																<option value="Avanzado">Avanzado</option>
+																<option value="Intermedio">Intermedio</option>
+																<option value="Básico">Básico</option>
+															</motion.select>
+														</div>
+													</div>
+
+													<div className="p-6 border-t border-border flex justify-end gap-3">
+														<motion.button
+															onClick={() => setEditingLanguage(null)}
+															className="px-4 py-2 border border-border text-primary-light rounded-lg"
+															whileHover={{ backgroundColor: "#F9FAFB", y: -2 }}
+															whileTap={{ scale: 0.95 }}
+														>
+															Cancelar
+														</motion.button>
+														<motion.button
+															onClick={() =>
+																handleSaveLanguage(editingLanguage)
+															}
+															className="px-4 py-2 bg-accent text-white rounded-lg shadow-sm"
+															whileHover={{
+																backgroundColor: "#5253cc",
+																y: -2,
+																boxShadow:
+																	"0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -4px rgba(99, 102, 241, 0.3)",
+															}}
+															whileTap={{ scale: 0.95 }}
+														>
+															Guardar
+														</motion.button>
+													</div>
+												</motion.div>
 											</motion.div>
-										</motion.div>
+										</Modal>
 									)}
 								</AnimatePresence>
 							</div>
@@ -2260,231 +2285,238 @@ export default function ProfilePage() {
 								{/* Certification Edit Modal */}
 								<AnimatePresence>
 									{editingCertification && (
-										<motion.div
-											className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-											initial={{ opacity: 0 }}
-											animate={{ opacity: 1 }}
-											exit={{ opacity: 0 }}
-										>
+										<Modal>
 											<motion.div
-												className="card-shine dark:card-shine rounded-xl shadow-xl max-w-lg w-full"
-												initial={{ scale: 0.9, y: 20, opacity: 0 }}
-												animate={{ scale: 1, y: 0, opacity: 1 }}
-												exit={{ scale: 0.9, y: 20, opacity: 0 }}
-												transition={{
-													type: "spring",
-													damping: 25,
-													stiffness: 300,
-												}}
+												className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+												initial={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												exit={{ opacity: 0 }}
 											>
-												<div className="p-6 border-b border-border flex justify-between items-center">
-													<h3 className="text-lg font-semibold text-primary">
-														{profile.certifications.find(
-															(cert) => cert.id === editingCertification.id
-														)
-															? "Editar certificación"
-															: "Añadir certificación"}
-													</h3>
-													<motion.button
-														onClick={() => setEditingCertification(null)}
-														className="p-1 text-primary-light rounded-full"
-														whileHover={{
-															scale: 1.1,
-															backgroundColor: "#F9FAFB",
-															rotate: 90,
-														}}
-														whileTap={{ scale: 0.9 }}
-													>
-														<X size={20} />
-													</motion.button>
-												</div>
-
-												<div className="p-6 space-y-4">
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Nombre
-														</label>
-														<motion.input
-															type="text"
-															value={editingCertification.name || ""}
-															onChange={(e) =>
-																setEditingCertification({
-																	...editingCertification,
-																	name: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: AWS Certified Developer"
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
+												<motion.div
+													className="card-shine dark:card-shine rounded-xl shadow-xl max-w-lg w-full"
+													initial={{ scale: 0.9, y: 20, opacity: 0 }}
+													animate={{ scale: 1, y: 0, opacity: 1 }}
+													exit={{ scale: 0.9, y: 20, opacity: 0 }}
+													transition={{
+														type: "spring",
+														damping: 25,
+														stiffness: 300,
+													}}
+												>
+													<div className="p-6 border-b border-border flex justify-between items-center">
+														<h3 className="text-lg font-semibold text-primary">
+															{profile.certifications.find(
+																(cert) => cert.id === editingCertification.id
+															)
+																? "Editar certificación"
+																: "Añadir certificación"}
+														</h3>
+														<motion.button
+															onClick={() => setEditingCertification(null)}
+															className="p-1 text-primary-light rounded-full"
+															whileHover={{
+																scale: 1.1,
+																backgroundColor: "#F9FAFB",
+																rotate: 90,
 															}}
-															transition={{ duration: 0.2 }}
-														/>
+															whileTap={{ scale: 0.9 }}
+														>
+															<X size={20} />
+														</motion.button>
 													</div>
 
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Entidad emisora
-														</label>
-														<motion.input
-															type="text"
-															value={editingCertification.authority || ""}
-															onChange={(e) =>
-																setEditingCertification({
-																	...editingCertification,
-																	authority: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: Amazon Web Services"
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
-															}}
-															transition={{ duration: 0.2 }}
-														/>
-													</div>
-
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															URL de la credencial
-														</label>
-														<motion.input
-															type="url"
-															value={editingCertification.url || ""}
-															onChange={(e) =>
-																setEditingCertification({
-																	...editingCertification,
-																	url: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: https://www.credential.net/..."
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
-															}}
-															transition={{ duration: 0.2 }}
-														/>
-													</div>
-
-													<div className="grid grid-cols-2 gap-4">
+													<div className="p-6 space-y-4">
 														<div className="space-y-2">
 															<label className="text-sm font-medium text-primary-light">
-																Fecha de expedición
+																Nombre
 															</label>
-															<div className="relative">
-																<motion.input
-																	type="date"
-																	value={
-																		editingCertification.startDate
-																			? new Date(editingCertification.startDate)
-																					.toISOString()
-																					.split("T")[0]
-																			: ""
-																	}
-																	onChange={(e) =>
-																		setEditingCertification({
-																			...editingCertification,
-																			startDate: e.target.value
-																				? new Date(e.target.value)
-																				: undefined,
-																		})
-																	}
-																	className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full cursor-pointer"
-																	whileFocus={{
-																		scale: 1.02,
-																		boxShadow:
-																			"0 0 0 3px rgba(99, 102, 241, 0.1)",
-																	}}
-																	whileHover={{ borderColor: "#6366F1" }}
-																/>
-																<motion.div
-																	initial={{ opacity: 0.7 }}
-																	animate={{ opacity: [0.7, 1, 0.7] }}
-																	transition={{
-																		duration: 2,
-																		repeat: Number.POSITIVE_INFINITY,
-																	}}
-																>
-																	<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
-																</motion.div>
-															</div>
+															<motion.input
+																type="text"
+																value={editingCertification.name || ""}
+																onChange={(e) =>
+																	setEditingCertification({
+																		...editingCertification,
+																		name: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																placeholder="Ej: AWS Certified Developer"
+																whileFocus={{
+																	scale: 1.02,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
 														</div>
 
 														<div className="space-y-2">
 															<label className="text-sm font-medium text-primary-light">
-																Fecha de vencimiento
+																Entidad emisora
 															</label>
-															<div className="relative">
-																<motion.input
-																	type="date"
-																	value={
-																		editingCertification.endDate
-																			? new Date(editingCertification.endDate)
-																					.toISOString()
-																					.split("T")[0]
-																			: ""
-																	}
-																	onChange={(e) =>
-																		setEditingCertification({
-																			...editingCertification,
-																			endDate: e.target.value
-																				? new Date(e.target.value)
-																				: undefined,
-																		})
-																	}
-																	className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full cursor-pointer"
-																	whileFocus={{
-																		scale: 1.02,
-																		boxShadow:
-																			"0 0 0 3px rgba(99, 102, 241, 0.1)",
-																	}}
-																	whileHover={{ borderColor: "#6366F1" }}
-																/>
-																<motion.div
-																	initial={{ opacity: 0.7 }}
-																	animate={{ opacity: [0.7, 1, 0.7] }}
-																	transition={{
-																		duration: 2,
-																		repeat: Number.POSITIVE_INFINITY,
-																	}}
-																>
-																	<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
-																</motion.div>
+															<motion.input
+																type="text"
+																value={editingCertification.authority || ""}
+																onChange={(e) =>
+																	setEditingCertification({
+																		...editingCertification,
+																		authority: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																placeholder="Ej: Amazon Web Services"
+																whileFocus={{
+																	scale: 1.02,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
+														</div>
+
+														<div className="space-y-2">
+															<label className="text-sm font-medium text-primary-light">
+																URL de la credencial
+															</label>
+															<motion.input
+																type="url"
+																value={editingCertification.url || ""}
+																onChange={(e) =>
+																	setEditingCertification({
+																		...editingCertification,
+																		url: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																placeholder="Ej: https://www.credential.net/..."
+																whileFocus={{
+																	scale: 1.02,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
+														</div>
+
+														<div className="grid grid-cols-2 gap-4">
+															<div className="space-y-2">
+																<label className="text-sm font-medium text-primary-light">
+																	Fecha de expedición
+																</label>
+																<div className="relative">
+																	<motion.input
+																		type="date"
+																		value={
+																			editingCertification.startDate
+																				? new Date(
+																						editingCertification.startDate
+																				  )
+																						.toISOString()
+																						.split("T")[0]
+																				: ""
+																		}
+																		onChange={(e) =>
+																			setEditingCertification({
+																				...editingCertification,
+																				startDate: e.target.value
+																					? new Date(e.target.value)
+																					: undefined,
+																			})
+																		}
+																		className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full cursor-pointer"
+																		whileFocus={{
+																			scale: 1.02,
+																			boxShadow:
+																				"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																		}}
+																		whileHover={{ borderColor: "#6366F1" }}
+																	/>
+																	<motion.div
+																		initial={{ opacity: 0.7 }}
+																		animate={{ opacity: [0.7, 1, 0.7] }}
+																		transition={{
+																			duration: 2,
+																			repeat: Number.POSITIVE_INFINITY,
+																		}}
+																	>
+																		<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
+																	</motion.div>
+																</div>
+															</div>
+
+															<div className="space-y-2">
+																<label className="text-sm font-medium text-primary-light">
+																	Fecha de vencimiento
+																</label>
+																<div className="relative">
+																	<motion.input
+																		type="date"
+																		value={
+																			editingCertification.endDate
+																				? new Date(editingCertification.endDate)
+																						.toISOString()
+																						.split("T")[0]
+																				: ""
+																		}
+																		onChange={(e) =>
+																			setEditingCertification({
+																				...editingCertification,
+																				endDate: e.target.value
+																					? new Date(e.target.value)
+																					: undefined,
+																			})
+																		}
+																		className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full cursor-pointer"
+																		whileFocus={{
+																			scale: 1.02,
+																			boxShadow:
+																				"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																		}}
+																		whileHover={{ borderColor: "#6366F1" }}
+																	/>
+																	<motion.div
+																		initial={{ opacity: 0.7 }}
+																		animate={{ opacity: [0.7, 1, 0.7] }}
+																		transition={{
+																			duration: 2,
+																			repeat: Number.POSITIVE_INFINITY,
+																		}}
+																	>
+																		<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
+																	</motion.div>
+																</div>
 															</div>
 														</div>
 													</div>
-												</div>
 
-												<div className="p-6 border-t border-border flex justify-end gap-3">
-													<motion.button
-														onClick={() => setEditingCertification(null)}
-														className="px-4 py-2 border border-border text-primary-light rounded-lg"
-														whileHover={{ backgroundColor: "#F9FAFB", y: -2 }}
-														whileTap={{ scale: 0.95 }}
-													>
-														Cancelar
-													</motion.button>
-													<motion.button
-														onClick={() =>
-															handleSaveCertification(editingCertification)
-														}
-														className="px-4 py-2 bg-accent text-white rounded-lg shadow-sm"
-														whileHover={{
-															backgroundColor: "#5253cc",
-															y: -2,
-															boxShadow:
-																"0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -4px rgba(99, 102, 241, 0.3)",
-														}}
-														whileTap={{ scale: 0.95 }}
-													>
-														Guardar
-													</motion.button>
-												</div>
+													<div className="p-6 border-t border-border flex justify-end gap-3">
+														<motion.button
+															onClick={() => setEditingCertification(null)}
+															className="px-4 py-2 border border-border text-primary-light rounded-lg"
+															whileHover={{ backgroundColor: "#F9FAFB", y: -2 }}
+															whileTap={{ scale: 0.95 }}
+														>
+															Cancelar
+														</motion.button>
+														<motion.button
+															onClick={() =>
+																handleSaveCertification(editingCertification)
+															}
+															className="px-4 py-2 bg-accent text-white rounded-lg shadow-sm"
+															whileHover={{
+																backgroundColor: "#5253cc",
+																y: -2,
+																boxShadow:
+																	"0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -4px rgba(99, 102, 241, 0.3)",
+															}}
+															whileTap={{ scale: 0.95 }}
+														>
+															Guardar
+														</motion.button>
+													</div>
+												</motion.div>
 											</motion.div>
-										</motion.div>
+										</Modal>
 									)}
 								</AnimatePresence>
 							</div>
@@ -2585,205 +2617,209 @@ export default function ProfilePage() {
 								{/* Project Edit Modal */}
 								<AnimatePresence>
 									{editingProject && (
-										<motion.div
-											className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-											initial={{ opacity: 0 }}
-											animate={{ opacity: 1 }}
-											exit={{ opacity: 0 }}
-										>
+										<Modal>
 											<motion.div
-												className="card-shine dark:card-shine rounded-xl shadow-xl max-w-lg w-full"
-												initial={{ scale: 0.9, y: 20, opacity: 0 }}
-												animate={{ scale: 1, y: 0, opacity: 1 }}
-												exit={{ scale: 0.9, y: 20, opacity: 0 }}
-												transition={{
-													type: "spring",
-													damping: 25,
-													stiffness: 300,
-												}}
+												className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+												initial={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												exit={{ opacity: 0 }}
 											>
-												<div className="p-6 border-b border-border flex justify-between items-center">
-													<h3 className="text-lg font-semibold text-primary">
-														{profile.projects.find(
-															(proj) => proj.id === editingProject.id
-														)
-															? "Editar proyecto"
-															: "Añadir proyecto"}
-													</h3>
-													<motion.button
-														onClick={() => setEditingProject(null)}
-														className="p-1 text-primary-light rounded-full"
-														whileHover={{
-															scale: 1.1,
-															backgroundColor: "#F9FAFB",
-															rotate: 90,
-														}}
-														whileTap={{ scale: 0.9 }}
-													>
-														<X size={20} />
-													</motion.button>
-												</div>
-
-												<div className="p-6 space-y-4">
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Título
-														</label>
-														<motion.input
-															type="text"
-															value={editingProject.title || ""}
-															onChange={(e) =>
-																setEditingProject({
-																	...editingProject,
-																	title: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
-															placeholder="Ej: E-commerce Website"
-															whileFocus={{
-																scale: 1.02,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
+												<motion.div
+													className="card-shine dark:card-shine rounded-xl shadow-xl max-w-lg w-full"
+													initial={{ scale: 0.9, y: 20, opacity: 0 }}
+													animate={{ scale: 1, y: 0, opacity: 1 }}
+													exit={{ scale: 0.9, y: 20, opacity: 0 }}
+													transition={{
+														type: "spring",
+														damping: 25,
+														stiffness: 300,
+													}}
+												>
+													<div className="p-6 border-b border-border flex justify-between items-center">
+														<h3 className="text-lg font-semibold text-primary">
+															{profile.projects.find(
+																(proj) => proj.id === editingProject.id
+															)
+																? "Editar proyecto"
+																: "Añadir proyecto"}
+														</h3>
+														<motion.button
+															onClick={() => setEditingProject(null)}
+															className="p-1 text-primary-light rounded-full"
+															whileHover={{
+																scale: 1.1,
+																backgroundColor: "#F9FAFB",
+																rotate: 90,
 															}}
-															transition={{ duration: 0.2 }}
-														/>
+															whileTap={{ scale: 0.9 }}
+														>
+															<X size={20} />
+														</motion.button>
 													</div>
 
-													<div className="grid grid-cols-2 gap-4">
+													<div className="p-6 space-y-4">
 														<div className="space-y-2">
 															<label className="text-sm font-medium text-primary-light">
-																Fecha de inicio
+																Título
 															</label>
-															<div className="relative">
-																<motion.input
-																	type="date"
-																	value={
-																		editingProject.startDate
-																			? new Date(editingProject.startDate)
-																					.toISOString()
-																					.split("T")[0]
-																			: ""
-																	}
-																	onChange={(e) =>
-																		setEditingProject({
-																			...editingProject,
-																			startDate: e.target.value
-																				? new Date(e.target.value)
-																				: undefined,
-																		})
-																	}
-																	className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full cursor-pointer"
-																	whileFocus={{
-																		scale: 1.02,
-																		boxShadow:
-																			"0 0 0 3px rgba(99, 102, 241, 0.1)",
-																	}}
-																	whileHover={{ borderColor: "#6366F1" }}
-																/>
-																<motion.div
-																	initial={{ opacity: 0.7 }}
-																	animate={{ opacity: [0.7, 1, 0.7] }}
-																	transition={{
-																		duration: 2,
-																		repeat: Number.POSITIVE_INFINITY,
-																	}}
-																>
-																	<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
-																</motion.div>
+															<motion.input
+																type="text"
+																value={editingProject.title || ""}
+																onChange={(e) =>
+																	setEditingProject({
+																		...editingProject,
+																		title: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full"
+																placeholder="Ej: E-commerce Website"
+																whileFocus={{
+																	scale: 1.02,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
+														</div>
+
+														<div className="grid grid-cols-2 gap-4">
+															<div className="space-y-2">
+																<label className="text-sm font-medium text-primary-light">
+																	Fecha de inicio
+																</label>
+																<div className="relative">
+																	<motion.input
+																		type="date"
+																		value={
+																			editingProject.startDate
+																				? new Date(editingProject.startDate)
+																						.toISOString()
+																						.split("T")[0]
+																				: ""
+																		}
+																		onChange={(e) =>
+																			setEditingProject({
+																				...editingProject,
+																				startDate: e.target.value
+																					? new Date(e.target.value)
+																					: undefined,
+																			})
+																		}
+																		className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full cursor-pointer"
+																		whileFocus={{
+																			scale: 1.02,
+																			boxShadow:
+																				"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																		}}
+																		whileHover={{ borderColor: "#6366F1" }}
+																	/>
+																	<motion.div
+																		initial={{ opacity: 0.7 }}
+																		animate={{ opacity: [0.7, 1, 0.7] }}
+																		transition={{
+																			duration: 2,
+																			repeat: Number.POSITIVE_INFINITY,
+																		}}
+																	>
+																		<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
+																	</motion.div>
+																</div>
+															</div>
+
+															<div className="space-y-2">
+																<label className="text-sm font-medium text-primary-light">
+																	Fecha de fin
+																</label>
+																<div className="relative">
+																	<motion.input
+																		type="date"
+																		value={
+																			editingProject.endDate
+																				? new Date(editingProject.endDate)
+																						.toISOString()
+																						.split("T")[0]
+																				: ""
+																		}
+																		onChange={(e) =>
+																			setEditingProject({
+																				...editingProject,
+																				endDate: e.target.value
+																					? new Date(e.target.value)
+																					: undefined,
+																			})
+																		}
+																		className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full cursor-pointer"
+																		whileFocus={{
+																			scale: 1.02,
+																			boxShadow:
+																				"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																		}}
+																		whileHover={{ borderColor: "#6366F1" }}
+																	/>
+																	<motion.div
+																		initial={{ opacity: 0.7 }}
+																		animate={{ opacity: [0.7, 1, 0.7] }}
+																		transition={{
+																			duration: 2,
+																			repeat: Number.POSITIVE_INFINITY,
+																		}}
+																	>
+																		<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
+																	</motion.div>
+																</div>
 															</div>
 														</div>
 
 														<div className="space-y-2">
 															<label className="text-sm font-medium text-primary-light">
-																Fecha de fin
+																Descripción
 															</label>
-															<div className="relative">
-																<motion.input
-																	type="date"
-																	value={
-																		editingProject.endDate
-																			? new Date(editingProject.endDate)
-																					.toISOString()
-																					.split("T")[0]
-																			: ""
-																	}
-																	onChange={(e) =>
-																		setEditingProject({
-																			...editingProject,
-																			endDate: e.target.value
-																				? new Date(e.target.value)
-																				: undefined,
-																		})
-																	}
-																	className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full cursor-pointer"
-																	whileFocus={{
-																		scale: 1.02,
-																		boxShadow:
-																			"0 0 0 3px rgba(99, 102, 241, 0.1)",
-																	}}
-																	whileHover={{ borderColor: "#6366F1" }}
-																/>
-																<motion.div
-																	initial={{ opacity: 0.7 }}
-																	animate={{ opacity: [0.7, 1, 0.7] }}
-																	transition={{
-																		duration: 2,
-																		repeat: Number.POSITIVE_INFINITY,
-																	}}
-																>
-																	<Calendar className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 pointer-events-none" />
-																</motion.div>
-															</div>
+															<motion.textarea
+																value={editingProject.description || ""}
+																onChange={(e) =>
+																	setEditingProject({
+																		...editingProject,
+																		description: e.target.value,
+																	})
+																}
+																className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full min-h-[100px]"
+																placeholder="Describe el proyecto, tecnologías utilizadas y tu rol"
+																whileFocus={{
+																	scale: 1.01,
+																	boxShadow:
+																		"0 0 0 3px rgba(99, 102, 241, 0.1)",
+																}}
+																transition={{ duration: 0.2 }}
+															/>
 														</div>
 													</div>
 
-													<div className="space-y-2">
-														<label className="text-sm font-medium text-primary-light">
-															Descripción
-														</label>
-														<motion.textarea
-															value={editingProject.description || ""}
-															onChange={(e) =>
-																setEditingProject({
-																	...editingProject,
-																	description: e.target.value,
-																})
-															}
-															className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all w-full min-h-[100px]"
-															placeholder="Describe el proyecto, tecnologías utilizadas y tu rol"
-															whileFocus={{
-																scale: 1.01,
-																boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.1)",
+													<div className="p-6 border-t border-border flex justify-end gap-3">
+														<motion.button
+															onClick={() => setEditingProject(null)}
+															className="px-4 py-2 border border-border text-primary-light rounded-lg"
+															whileHover={{ backgroundColor: "#F9FAFB", y: -2 }}
+															whileTap={{ scale: 0.95 }}
+														>
+															Cancelar
+														</motion.button>
+														<motion.button
+															onClick={() => handleSaveProject(editingProject)}
+															className="px-4 py-2 bg-accent text-white rounded-lg shadow-sm"
+															whileHover={{
+																backgroundColor: "#5253cc",
+																y: -2,
+																boxShadow:
+																	"0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -4px rgba(99, 102, 241, 0.3)",
 															}}
-															transition={{ duration: 0.2 }}
-														/>
+															whileTap={{ scale: 0.95 }}
+														>
+															Guardar
+														</motion.button>
 													</div>
-												</div>
-
-												<div className="p-6 border-t border-border flex justify-end gap-3">
-													<motion.button
-														onClick={() => setEditingProject(null)}
-														className="px-4 py-2 border border-border text-primary-light rounded-lg"
-														whileHover={{ backgroundColor: "#F9FAFB", y: -2 }}
-														whileTap={{ scale: 0.95 }}
-													>
-														Cancelar
-													</motion.button>
-													<motion.button
-														onClick={() => handleSaveProject(editingProject)}
-														className="px-4 py-2 bg-accent text-white rounded-lg shadow-sm"
-														whileHover={{
-															backgroundColor: "#5253cc",
-															y: -2,
-															boxShadow:
-																"0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -4px rgba(99, 102, 241, 0.3)",
-														}}
-														whileTap={{ scale: 0.95 }}
-													>
-														Guardar
-													</motion.button>
-												</div>
+												</motion.div>
 											</motion.div>
-										</motion.div>
+										</Modal>
 									)}
 								</AnimatePresence>
 							</div>
