@@ -14,6 +14,5 @@ createRoot(document.getElementById("root")!).render(
 			<Toaster position="bottom-center" />
 			<AppRouter />
 		</GoogleOAuthProvider>
-		;
 	</>
 )
