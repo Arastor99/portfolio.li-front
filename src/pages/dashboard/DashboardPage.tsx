@@ -19,7 +19,7 @@ export default function DashboardPage() {
     }
   }, [portfolioStore]);
   return (
-    <div className="min-h-screen bg-[#F9FAFB] p-4 md:p-8 pt-20">
+    <div className="min-h-screen p-4 md:p-8 pt-20 z-10">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

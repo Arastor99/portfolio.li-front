@@ -7,6 +7,7 @@ import {
 import { publicRoutes, privateRoutes } from "./Routes"
 import Cookies from "js-cookie"
 import PrivateLayout from "@components/layouts/PrivateLayout"
+import BackgroundParticles from "@components/common/wizard2/background-particles"
 
 const Index = () => {
 	const isAuthenticated = () => {
@@ -16,6 +17,9 @@ const Index = () => {
 
 	return (
 		<Router>
+			
+			<div className="bg-mesh relative">
+			<BackgroundParticles />
 			<Routes>
 				{publicRoutes.map(({ path, element }, index) => (
 					<Route
@@ -49,6 +53,7 @@ const Index = () => {
 				{/* Redirect to home if no route matches */}
 				<Route path="*" element={<Navigate to="/home" replace />} />
 			</Routes>
+			</div>
 		</Router>
 	)
 }

@@ -16,6 +16,7 @@ import CreatePortfolio from "@pages/portfolio/CreatePortfolio"
 import UpdatePortfolio from "@pages/portfolio/UpdatePortfolio"
 import { ViewCv } from "src/CvTemplates/ViewCv"
 import LoadingAnimation from "@pages/loading/Loading"
+import WizardPage from "@components/common/wizard2/WizardContainer"
 
 export const publicRoutes = [
 	{
@@ -131,6 +132,13 @@ export const privateRoutes = [
 	{
 		path: "/app/loading",
 		element: <LoadingAnimation />,
+		isPrivate: false,
+		redirectTo: "/auth/login",
+		navbar: false,
+	},
+		{
+		path: "/app/test",
+		element: <WizardPage />,
 		isPrivate: false,
 		redirectTo: "/auth/login",
 		navbar: false,

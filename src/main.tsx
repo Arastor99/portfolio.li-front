@@ -3,6 +3,7 @@ import { Toaster } from "react-hot-toast"
 import { GoogleOAuthProvider } from "@react-oauth/google"
 
 import "./index.css"
+import "./global.css"
 import AppRouter from "./router/Index"
 import "./i18n"
 import { GOOGLE_CLIENT_ID } from "@common/constants"
