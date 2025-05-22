@@ -2,8 +2,6 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Profile } from "@common/types/profile"
 import { getTemplate } from "@common/utils/templates"
-import { useProfileStore } from "@store/profileStore"
-import { usePortfolioStore } from "@store/portfolioStore"
 
 interface Props {
 	templateNameProps?: string
@@ -11,39 +9,25 @@ interface Props {
 	forceMobile?: boolean
 }
 
-const Preview: React.FC<Props> = ({forceMobile}) => {
+const Preview: React.FC<Props> = ({ templateNameProps, profileData, forceMobile }) => {
 	const [profile, setProfile] = useState<Profile | null>(null)
 	const [templateName, setTemplateName] = useState<string>("")
 	const navigate = useNavigate()
-		const { profileStore } = useProfileStore()
-		const { portfolioStore } = usePortfolioStore()
+	console.log("templateNameProps", templateNameProps)
+	console.log("profileData", profileData)
 	useEffect(() => {
-		if (profileStore && portfolioStore) {
-			setProfile(profileStore)
-			setTemplateName(portfolioStore.template.name)
-		
-		}else{
-		const storedProfile = localStorage.getItem("profileData")
-		const storedTemplate = localStorage.getItem("templateName")
-
-		if (storedProfile) {
-			const profile = JSON.parse(storedProfile)
-			setProfile(profile)
-			console.log(storedTemplate)
-			setTemplateName(JSON.parse(storedTemplate || ""))
-			localStorage.removeItem("templateName")
-			localStorage.removeItem("profileData")
+		if (profileData && templateNameProps) {
+			setProfile(profileData)
+			setTemplateName(templateNameProps)
 		} else {
-			// redirige a otra ruta si no hay datos
-			navigate("/home", { replace: true }) // o "/"
+			navigate("/home", { replace: true }) // redirigir si faltan datos
 		}
-	}
-	}, [profileStore, portfolioStore, navigate])
+	}, [profileData, templateNameProps, navigate])
 
 	if (!profile) {
 		return (
 			<div className="flex items-center justify-center h-screen">
-				<p className="text-gray-500">Loading...</p>
+				<p className="text-gray-500">Cargando vista previa...</p>
 			</div>
 		)
 	}

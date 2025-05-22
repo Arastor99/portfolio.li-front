@@ -2,8 +2,6 @@ import Login from "@pages/auth/Login"
 import Register from "@pages/auth/Register"
 import ForgotPassword from "@pages/auth/ForgotPassword"
 
-import Home from "@pages/home/Home"
-
 import Preview from "@pages/preview/Preview"
 
 import AccountPage from "@pages/account/AccountPage"
@@ -18,10 +16,12 @@ import { ViewCv } from "src/CvTemplates/ViewCv"
 import LoadingAnimation from "@pages/loading/Loading"
 import WizardPage from "@components/common/wizard2/WizardContainer"
 
+import Home from "@pages/home/Home"
+
 export const publicRoutes = [
 	{
 		path: "/home",
-		element: <Home />,
+		element: <Home/>,
 		isPrivate: false,
 		redirectTo: null,
 	},
