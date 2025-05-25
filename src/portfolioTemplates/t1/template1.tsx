@@ -170,54 +170,7 @@ export default function Portfolio({ profile, forceMobile }: { profile: Profile, 
     </div>
   </div>
 
-      {/* Side Navigation */}
-      <nav className="fixed left-6 top-1/2 transform -translate-y-1/2 z-50 hidden lg:block">
-        <div className="flex flex-col items-center space-y-6">
-          {navItems.map((item) => (
-            <motion.button
-              key={item.id}
-              onClick={() => scrollToSection(item.id)}
-              className={cn(
-                "relative group flex items-center",
-                activeSection === item.id ? "text-white" : "text-white/40"
-              )}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span
-                className={cn(
-                  "absolute right-full mr-4 opacity-0 group-hover:opacity-100 transition-opacity text-sm whitespace-nowrap",
-                  activeSection === item.id
-                    ? "text-emerald-400"
-                    : "text-white/60"
-                )}
-              >
-                {item.label}
-              </span>
-              <div
-                className={cn(
-                  "flex items-center justify-center w-10 h-10 rounded-full border transition-all",
-                  activeSection === item.id
-                    ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
-                    : "border-white/10 text-white/40 group-hover:border-white/30 group-hover:text-white/60"
-                )}
-              >
-                {item.icon}
-              </div>
-              <span
-                className={cn(
-                  "absolute left-full ml-4 h-[2px] transition-all",
-                  activeSection === item.id
-                    ? "w-10 bg-emerald-500"
-                    : "w-5 bg-white/20 group-hover:bg-white/40"
-                )}
-              />
-            </motion.button>
-          ))}
-        </div>
-      </nav>
+    
 
       {/* Mobile Header */}
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden backdrop-blur-lg bg-[#030014]/70 border-b border-white/10 rounded-t-lg px-4">
@@ -238,7 +191,7 @@ export default function Portfolio({ profile, forceMobile }: { profile: Profile, 
               />
             </div>
             <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-              Miguel Durán
+              {profile.firstName} {profile.lastName}
             </span>
           </motion.div>
 
@@ -308,7 +261,7 @@ export default function Portfolio({ profile, forceMobile }: { profile: Profile, 
         )}
       </AnimatePresence>
 
-      <main className="relative z-10">
+      <main className="relative z-10 px-4">
         {/* Hero Section */}
         <Hero
           handleMouseEnter={handleMouseEnter}

@@ -4,7 +4,8 @@ import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Eye, Download, ChevronDown, ChevronUp, Sparkles, Zap, Save } from "lucide-react"
+import { ChevronDown, ChevronUp, Sparkles, Zap, Eye } from "lucide-react"
+import Preview from "@pages/preview/Preview"
 
 interface EditorStepProps {
   formData: any
@@ -17,6 +18,8 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
   const [activeTab, setActiveTab] = useState("basic")
   const [isSaving, setIsSaving] = useState(false)
   const tabsRef = useRef<HTMLDivElement>(null)
+  const editorRef = useRef<HTMLDivElement>(null)
+  const previewRef = useRef<HTMLDivElement>(null)
   const [indicatorStyle, setIndicatorStyle] = useState({
     left: 0,
     width: 0,
@@ -137,15 +140,16 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
   }
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 h-full">
+    <div className="flex flex-col md:flex-row gap-2 h-full max-h-full overflow-hidden">
       {/* Editor Panel */}
       <motion.div
+        ref={editorRef}
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
-        className={`${previewVisible ? "md:w-1/2" : "w-full"} card-shine p-4 overflow-y-auto`}
+        className={`${previewVisible ? "md:w-1/3" : "w-full"} card-shine p-2 overflow-hidden h-full flex flex-col`}
       >
-        <div className="tabs">
+        <div className="tabs flex-1 flex flex-col overflow-hidden">
           <div className="tabs-list" ref={tabsRef}>
             <div
               className={`tab-trigger ${activeTab === "basic" ? "active" : ""}`}
@@ -218,12 +222,19 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
           </div>
 
           <AnimatePresence mode="wait">
-            <motion.div key={activeTab} initial="hidden" animate="visible" exit="hidden" variants={tabVariants}>
+            <motion.div
+              key={activeTab}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={tabVariants}
+              className="flex-1 overflow-auto pb-4"
+            >
               <div className={`tab-content ${activeTab === "basic" ? "active" : ""}`}>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="label">Nombre</label>
+                      <label className="label text-xs">Nombre</label>
                       <CustomInput
                         value={profileData.firstName || ""}
                         onChange={(e) => handleBasicInfoChange("firstName", e.target.value)}
@@ -231,7 +242,7 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
                       />
                     </div>
                     <div>
-                      <label className="label">Apellidos</label>
+                      <label className="label text-xs">Apellidos</label>
                       <CustomInput
                         value={profileData.lastName || ""}
                         onChange={(e) => handleBasicInfoChange("lastName", e.target.value)}
@@ -241,7 +252,7 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
                   </div>
 
                   <div>
-                    <label className="label">Título Profesional</label>
+                    <label className="label text-xs">Título Profesional</label>
                     <CustomInput
                       value={profileData.headline || ""}
                       onChange={(e) => handleBasicInfoChange("headline", e.target.value)}
@@ -250,12 +261,12 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
                   </div>
 
                   <div>
-                    <label className="label">Resumen</label>
+                    <label className="label text-xs">Resumen</label>
                     <CustomTextarea
                       value={profileData.summary || ""}
                       onChange={(e) => handleBasicInfoChange("summary", e.target.value)}
                       placeholder="Breve descripción sobre ti y tu experiencia profesional"
-                      rows={5}
+                      rows={3}
                     />
                   </div>
                 </div>
@@ -268,10 +279,10 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="mb-6 p-4 border border-border dark:border-border-dark rounded-lg bg-primary/5 dark:bg-primary/10"
+                    className="mb-3 p-2 border border-border dark:border-border-dark rounded-lg bg-primary/5 dark:bg-primary/10"
                   >
-                    <div className="mb-3">
-                      <label className="label">Puesto</label>
+                    <div className="mb-2">
+                      <label className="label text-xs">Puesto</label>
                       <CustomInput
                         value={exp.title || ""}
                         onChange={(e) => {
@@ -283,8 +294,8 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
                       />
                     </div>
 
-                    <div className="mb-3">
-                      <label className="label">Empresa</label>
+                    <div className="mb-2">
+                      <label className="label text-xs">Empresa</label>
                       <CustomInput
                         value={exp.companyName || ""}
                         onChange={(e) => {
@@ -310,9 +321,9 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
                     })
                     setProfileData({ ...profileData, experience: newExperience })
                   }}
-                  className="btn-primary w-full"
+                  className="btn-primary w-full btn-sm"
                 >
-                  <Zap className="mr-2 h-4 w-4" />
+                  <Zap className="mr-1 h-3 w-3" />
                   Añadir Experiencia
                 </CustomButton>
               </div>
@@ -325,10 +336,10 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="mb-6 p-4 border border-border dark:border-border-dark rounded-lg bg-secondary/5 dark:bg-secondary/10"
+                    className="mb-3 p-2 border border-border dark:border-border-dark rounded-lg bg-secondary/5 dark:bg-secondary/10"
                   >
-                    <div className="mb-3">
-                      <label className="label">Centro Educativo</label>
+                    <div className="mb-2">
+                      <label className="label text-xs">Centro Educativo</label>
                       <CustomInput
                         value={edu.schoolName || ""}
                         onChange={(e) => {
@@ -340,8 +351,8 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
                       />
                     </div>
 
-                    <div className="mb-3">
-                      <label className="label">Título</label>
+                    <div className="mb-2">
+                      <label className="label text-xs">Título</label>
                       <CustomInput
                         value={edu.degreeName || ""}
                         onChange={(e) => {
@@ -365,15 +376,15 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
                     })
                     setProfileData({ ...profileData, education: newEducation })
                   }}
-                  className="btn-primary w-full"
+                  className="btn-primary w-full btn-sm"
                 >
-                  <Zap className="mr-2 h-4 w-4" />
+                  <Zap className="mr-1 h-3 w-3" />
                   Añadir Educación
                 </CustomButton>
               </div>
 
               <div className={`tab-content ${activeTab === "skills" ? "active" : ""}`}>
-                <div className="space-y-4">
+                <div className="space-y-2">
                   {(profileData.skills || []).map((skill: any, index: number) => (
                     <motion.div
                       key={index}
@@ -397,7 +408,7 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
                           newSkills.splice(index, 1)
                           setProfileData({ ...profileData, skills: newSkills })
                         }}
-                        className="text-secondary hover:text-secondary-dark dark:text-secondary dark:hover:text-secondary-light h-10 w-10 flex items-center justify-center rounded-full"
+                        className="text-secondary hover:text-secondary-dark dark:text-secondary dark:hover:text-secondary-light h-8 w-8 flex items-center justify-center rounded-full"
                       >
                         ×
                       </button>
@@ -410,9 +421,9 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
                       newSkills.push({ name: "" })
                       setProfileData({ ...profileData, skills: newSkills })
                     }}
-                    className="btn-primary w-full"
+                    className="btn-primary w-full btn-sm"
                   >
-                    <Zap className="mr-2 h-4 w-4" />
+                    <Zap className="mr-1 h-3 w-3" />
                     Añadir Habilidad
                   </CustomButton>
                 </div>
@@ -425,206 +436,50 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
       {/* Preview Panel */}
       {previewVisible && (
         <motion.div
+          ref={previewRef}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="md:w-1/2 preview-container overflow-y-auto"
+          transition={{ duration: 0.5 }}
+          className="flex-1 card-shine p-2 overflow-hidden h-full flex flex-col"
         >
-          <div className="preview-header">
-            <h3 className="font-semibold text-primary dark:text-primary flex items-center">
-              <Sparkles className="w-5 h-5 mr-2 text-primary-light dark:text-primary-light" />
-              Vista Previa
-            </h3>
-            <div className="flex gap-2">
-              <CustomButton className="btn-outline text-sm">
-                <Eye size={16} className="mr-1" />
-                Ver como PDF
-              </CustomButton>
-              <CustomButton className="btn-primary text-sm">
-                <Download size={16} className="mr-1" />
-                Descargar
-              </CustomButton>
+          {/* Título de Preview */}
+          <div className="flex items-center justify-center mb-2">
+            <div className="bg-gradient-to-r from-primary-light/20 via-primary/30 to-primary-light/20 px-4 py-1 rounded-full flex items-center">
+              <Eye className="h-4 w-4 mr-2 text-primary" />
+              <span className="text-sm font-medium text-primary">Vista Previa</span>
             </div>
           </div>
 
-          <div className="preview-content">
-            {/* Preview content based on template and data */}
-            <div className="preview-section text-center">
-              <motion.h1
-                className="text-2xl font-bold gradient-text"
-                initial={{ scale: 0.9 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.4 }}
-              >
-                {profileData.firstName} {profileData.lastName}
-              </motion.h1>
-              <motion.p
-                className="text-primary/80 dark:text-primary/80"
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                {profileData.headline}
-              </motion.p>
+          <div className="flex-1 overflow-hidden rounded-lg">
+            <div
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg mx-auto h-full"
+              style={{
+                aspectRatio: "16/9",
+                width: "100%",
+                transform: "scale(0.98)",
+                transformOrigin: "center center",
+                overflow: "hidden",
+              }}
+            >
+              <div className="w-full h-full overflow-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                <Preview profileData={formData.profileData} templateNameProps={formData.templateName} />
+              </div>
             </div>
-
-            {profileData.summary && (
-              <motion.div
-                className="preview-section"
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.6 }}
-              >
-                <h2 className="text-lg font-semibold mb-2 text-primary dark:text-primary flex items-center">
-                  <Sparkles className="w-4 h-4 mr-1 text-primary-light dark:text-primary-light" />
-                  Resumen
-                </h2>
-                <p className="text-foreground dark:text-foreground-dark">{profileData.summary}</p>
-              </motion.div>
-            )}
-
-            {profileData.experience && profileData.experience.length > 0 && (
-              <motion.div
-                className="preview-section"
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.7 }}
-              >
-                <h2 className="text-lg font-semibold mb-2 text-primary dark:text-primary flex items-center">
-                  <Sparkles className="w-4 h-4 mr-1 text-primary-light dark:text-primary-light" />
-                  Experiencia
-                </h2>
-                {profileData.experience.map((exp: any, index: number) => (
-                  <motion.div
-                    key={index}
-                    className="mb-3"
-                    initial={{ x: -10, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.7 + index * 0.1 }}
-                  >
-                    <h3 className="font-medium text-primary dark:text-primary">{exp.title}</h3>
-                    <p className="text-primary/80 dark:text-primary/80">{exp.companyName}</p>
-                    {exp.timePeriod && (
-                      <p className="text-sm text-primary/70 dark:text-primary/70">
-                        {exp.timePeriod.startDate?.month && exp.timePeriod.startDate?.year
-                          ? `${exp.timePeriod.startDate.month}/${exp.timePeriod.startDate.year}`
-                          : ""}
-                        {exp.timePeriod.endDate?.month && exp.timePeriod.endDate?.year
-                          ? ` - ${exp.timePeriod.endDate.month}/${exp.timePeriod.endDate.year}`
-                          : exp.timePeriod.startDate
-                            ? " - Presente"
-                            : ""}
-                      </p>
-                    )}
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
-
-            {/* Education section */}
-            {profileData.education && profileData.education.length > 0 && (
-              <motion.div
-                className="preview-section"
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.8 }}
-              >
-                <h2 className="text-lg font-semibold mb-2 text-secondary dark:text-secondary flex items-center">
-                  <Sparkles className="w-4 h-4 mr-1 text-secondary-light dark:text-secondary-light" />
-                  Educación
-                </h2>
-                {profileData.education.map((edu: any, index: number) => (
-                  <motion.div
-                    key={index}
-                    className="mb-3"
-                    initial={{ x: -10, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.8 + index * 0.1 }}
-                  >
-                    <h3 className="font-medium text-secondary dark:text-secondary">{edu.degreeName}</h3>
-                    <p className="text-secondary/80 dark:text-secondary/80">{edu.schoolName}</p>
-                    {edu.timePeriod && (
-                      <p className="text-sm text-secondary/70 dark:text-secondary/70">
-                        {edu.timePeriod.startDate?.year ? `${edu.timePeriod.startDate.year}` : ""}
-                        {edu.timePeriod.endDate?.year
-                          ? ` - ${edu.timePeriod.endDate.year}`
-                          : edu.timePeriod.startDate
-                            ? " - Presente"
-                            : ""}
-                      </p>
-                    )}
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
-
-            {/* Skills section */}
-            {profileData.skills && profileData.skills.length > 0 && (
-              <motion.div
-                className="preview-section"
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.9 }}
-              >
-                <h2 className="text-lg font-semibold mb-2 text-secondary dark:text-secondary flex items-center">
-                  <Sparkles className="w-4 h-4 mr-1 text-secondary-light dark:text-secondary-light" />
-                  Habilidades
-                </h2>
-                <div className="flex flex-wrap">
-                  {profileData.skills.map((skill: any, index: number) => (
-                    <motion.span
-                      key={index}
-                      className="skill-tag"
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 0.9 + index * 0.05 }}
-                    >
-                      {skill.name}
-                    </motion.span>
-                  ))}
-                </div>
-              </motion.div>
-            )}
           </div>
-
-          <motion.div
-            className="p-4 flex justify-end border-t border-border dark:border-border-dark"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-          >
-            <CustomButton onClick={handleSave} className="btn-primary" disabled={isSaving}>
-              {isSaving ? (
-                <>
-                  <motion.div
-                    className="h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                  />
-                  Guardando...
-                </>
-              ) : (
-                <>
-                  <Save className="mr-2 h-4 w-4" />
-                  Guardar Documento
-                </>
-              )}
-            </CustomButton>
-          </motion.div>
         </motion.div>
       )}
 
       {/* Mobile toggle for preview */}
-      <div className="md:hidden mt-4">
-        <CustomButton onClick={togglePreview} className="btn-outline w-full flex items-center justify-center">
+      <div className="md:hidden mt-2 mb-2">
+        <CustomButton onClick={togglePreview} className="btn-outline w-full flex items-center justify-center btn-sm">
           {previewVisible ? (
             <>
-              <ChevronUp size={16} className="mr-2 text-primary dark:text-primary" />
+              <ChevronUp size={14} className="mr-1 text-primary dark:text-primary" />
               Ocultar Vista Previa
             </>
           ) : (
             <>
-              <ChevronDown size={16} className="mr-2 text-primary dark:text-primary" />
+              <ChevronDown size={14} className="mr-1 text-primary dark:text-primary" />
               Mostrar Vista Previa
             </>
           )}
