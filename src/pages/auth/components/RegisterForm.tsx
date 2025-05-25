@@ -28,14 +28,9 @@ export default function RegisterForm({ registerTrigger }: Props) {
 				success: "Registered successfully!",
 				error: "Registration failed. Please check your details.",
 			})
-			.then(async () => {
-				if (registerTrigger) {
-					await registerTrigger()
-				}
-				// La sincronizacion de las cookies requiere un window.location.href
-				window.location.href = "/app/dashboard"
-			})
-		setIsLoading(false)
+			.then(() => registerTrigger && registerTrigger())
+			.then(() => (window.location.href = "/app/dashboard"))
+			.finally(() => setIsLoading(false))
 	}
 
 	return (
