@@ -142,6 +142,9 @@ export default function WizardContainer({ profileData }: Props) {
 				return !!formData.documentType
 			case 2:
 				return !!formData.templateName
+			case 3:
+				// TODO: CHECQUEAR MAS COSAS MINIMAS DEL PROFILE ANTES DE PROCEEDER
+				return !!formData.profileData
 			default:
 				return true
 		}
@@ -295,7 +298,7 @@ export default function WizardContainer({ profileData }: Props) {
 
 					<button
 						onClick={goToNextStep}
-						disabled={!canProceed() || currentStep === steps.length - 1}
+						disabled={!canProceed()}
 						className={`btn btn-primary flex items-center gap-2 ${
 							currentStep === 3 ? "btn-sm" : ""
 						}`}

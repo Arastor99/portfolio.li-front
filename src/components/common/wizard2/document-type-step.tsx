@@ -6,7 +6,7 @@ interface FormData {
 	importMethod: string
 	documentType: string
 	templateName: string
-	profileData: Profile
+	profileData: Profile | undefined
 }
 
 interface DocumentTypeStepProps {
