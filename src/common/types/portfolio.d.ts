@@ -20,6 +20,6 @@ export interface Colors {
 	secondaryBorder: colorHex
 }
 export interface PortfolioProps {
-	profile: Profile
+	profile?: Profile
 	colors?: Colors
 }

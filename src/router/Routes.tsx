@@ -17,11 +17,12 @@ import LoadingAnimation from "@pages/loading/Loading"
 import WizardPage from "@components/common/wizard2/WizardContainer"
 
 import Home from "@pages/home/Home"
+import Template3 from "@templatesPortfolio/t3/Template3"
 
 export const publicRoutes = [
 	{
 		path: "/home",
-		element: <Home/>,
+		element: <Home />,
 		isPrivate: false,
 		redirectTo: null,
 	},
@@ -46,6 +47,12 @@ export const publicRoutes = [
 	{
 		path: "/home/preview",
 		element: <Preview />,
+		isPrivate: false,
+		redirectTo: null,
+	},
+	{
+		path: "/home/test/preview",
+		element: <Template3 />,
 		isPrivate: false,
 		redirectTo: null,
 	},
@@ -136,7 +143,7 @@ export const privateRoutes = [
 		redirectTo: "/auth/login",
 		navbar: false,
 	},
-		{
+	{
 		path: "/app/test",
 		element: <WizardPage />,
 		isPrivate: false,

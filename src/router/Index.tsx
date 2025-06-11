@@ -17,9 +17,8 @@ const Index = () => {
 
 	return (
 		<Router>
-			
-			<div className="bg-mesh relative">
-			<BackgroundParticles />
+			{/* <div className="bg-mesh relative"> */}
+			{/* <BackgroundParticles /> */}
 			<Routes>
 				{publicRoutes.map(({ path, element }, index) => (
 					<Route
@@ -53,7 +52,7 @@ const Index = () => {
 				{/* Redirect to home if no route matches */}
 				<Route path="*" element={<Navigate to="/home" replace />} />
 			</Routes>
-			</div>
+			{/* </div> */}
 		</Router>
 	)
 }

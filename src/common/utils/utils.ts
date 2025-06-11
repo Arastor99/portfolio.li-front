@@ -25,7 +25,7 @@ export function hexToRgba(hex: string, alpha: number): string {
 }
 
 export function validateLinkedinUrl(url: string): boolean {
-	const expRegex = "^https?:\/\/([a-z]{2,3}\.)?linkedin\.com\/in\/[a-zA-Z0-9-_%]+\/?$"
+	const expRegex = "^https?://([a-z]{2,3}.)?linkedin.com/in/[a-zA-Z0-9-_%]+/?$"
 	return !!url.match(expRegex)
 }
 
@@ -33,4 +33,11 @@ export function extractPublicIdFromUrl(url: string): string | null {
 	const regex = /linkedin\.com\/in\/([^/?]+)/
 	const match = url.match(regex)
 	return match ? match[1] : null
+}
+
+export function formatDate(date: Date): string {
+	return new Date(date).toLocaleDateString("es-ES", {
+		year: "numeric",
+		month: "short",
+	})
 }
