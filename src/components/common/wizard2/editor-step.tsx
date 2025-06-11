@@ -1,7 +1,7 @@
 import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
-import { ChevronDown, ChevronUp, Sparkles, Zap, Eye } from "lucide-react"
+import { ChevronDown, ChevronUp, Sparkles, Zap, Eye } from 'lucide-react'
 import { motion, AnimatePresence } from "framer-motion"
 
 import { Profile } from "@common/types/profile"
@@ -18,6 +18,77 @@ interface FormData {
 interface EditorStepProps {
 	formData: FormData
 	setFormData: (data: FormData) => void
+}
+
+// Custom Input Component - moved outside main component
+const CustomInput = ({
+	value,
+	onChange,
+	placeholder,
+	className = "",
+}: {
+	value: string
+	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+	placeholder?: string
+	className?: string
+}) => {
+	return (
+		<input
+			type="text"
+			value={value}
+			onChange={onChange}
+			placeholder={placeholder}
+			className={`input ${className}`}
+		/>
+	)
+}
+
+// Custom Textarea Component - moved outside main component
+const CustomTextarea = ({
+	value,
+	onChange,
+	placeholder,
+	rows = 3,
+	className = "",
+}: {
+	value: string
+	onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+	placeholder?: string
+	rows?: number
+	className?: string
+}) => {
+	return (
+		<textarea
+			value={value}
+			onChange={onChange}
+			placeholder={placeholder}
+			rows={rows}
+			className={`textarea ${className}`}
+		/>
+	)
+}
+
+// Custom Button Component - moved outside main component
+const CustomButton = ({
+	onClick,
+	disabled = false,
+	className = "",
+	children,
+}: {
+	onClick?: () => void
+	disabled?: boolean
+	className?: string
+	children: React.ReactNode
+}) => {
+	return (
+		<button
+			onClick={onClick}
+			disabled={disabled}
+			className={`btn ${className}`}
+		>
+			{children}
+		</button>
+	)
 }
 
 export default function EditorStep({ formData, setFormData }: EditorStepProps) {
@@ -90,77 +161,6 @@ export default function EditorStep({ formData, setFormData }: EditorStepProps) {
 			y: 0,
 			transition: { type: "spring", stiffness: 300, damping: 30 },
 		},
-	}
-
-	// Custom Input Component
-	const CustomInput = ({
-		value,
-		onChange,
-		placeholder,
-		className = "",
-	}: {
-		value: string
-		onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-		placeholder?: string
-		className?: string
-	}) => {
-		return (
-			<input
-				type="text"
-				value={value}
-				onChange={onChange}
-				placeholder={placeholder}
-				className={`input ${className}`}
-			/>
-		)
-	}
-
-	// Custom Textarea Component
-	const CustomTextarea = ({
-		value,
-		onChange,
-		placeholder,
-		rows = 3,
-		className = "",
-	}: {
-		value: string
-		onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-		placeholder?: string
-		rows?: number
-		className?: string
-	}) => {
-		return (
-			<textarea
-				value={value}
-				onChange={onChange}
-				placeholder={placeholder}
-				rows={rows}
-				className={`textarea ${className}`}
-			/>
-		)
-	}
-
-	// Custom Button Component
-	const CustomButton = ({
-		onClick,
-		disabled = false,
-		className = "",
-		children,
-	}: {
-		onClick?: () => void
-		disabled?: boolean
-		className?: string
-		children: React.ReactNode
-	}) => {
-		return (
-			<button
-				onClick={onClick}
-				disabled={disabled}
-				className={`btn ${className}`}
-			>
-				{children}
-			</button>
-		)
 	}
 
 	return (

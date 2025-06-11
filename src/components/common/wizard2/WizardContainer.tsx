@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence, useMotionValue } from "framer-motion"
-import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react"
+import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react'
 import toast from "react-hot-toast"
 
 import type { Profile } from "@common/types/profile"
@@ -304,7 +304,11 @@ export default function WizardContainer({ profileData, mode }: Props) {
 						</AnimatePresence>
 					</motion.div>
 
-					<div className="flex items-center justify-between mb-3 mt-2">
+					{/* Remove the mt-2 class that might be conflicting with our negative margin */}
+					<div 
+						className={`flex items-center justify-between mb-3 ${currentStep === 3 ? 'mx-4' : ''}`}
+						style={currentStep === 3 ? { marginTop: '-2rem' } : {}}
+					>
 						<button
 							onClick={goToPreviousStep}
 							disabled={currentStep === 0}
@@ -317,7 +321,7 @@ export default function WizardContainer({ profileData, mode }: Props) {
 						</button>
 
 						{currentStep === 3 && (
-							<div className="flex-1 px-2">
+							<div className="flex-1 px-2" style={{ marginTop: '2rem' }}>
 								<div className="flex justify-center">
 									<StepIndicator
 										steps={steps}
