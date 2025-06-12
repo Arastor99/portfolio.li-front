@@ -1,60 +1,64 @@
 import {
-	BrowserRouter as Router,
-	Routes,
-	Route,
-	Navigate,
-} from "react-router-dom"
-import { publicRoutes, privateRoutes } from "./Routes"
-import Cookies from "js-cookie"
-import PrivateLayout from "@components/layouts/PrivateLayout"
-import BackgroundParticles from "@components/common/wizard2/background-particles"
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { publicRoutes, privateRoutes } from "./Routes";
+import Cookies from "js-cookie";
+import PrivateLayout from "@components/layouts/PrivateLayout";
+import BackgroundParticles from "@components/common/wizard2/background-particles";
+import PublicPortfolio from "@pages/portfolio/PublicPortfolio";
 
 const Index = () => {
-	const isAuthenticated = () => {
-		const token = Cookies.get("accessToken")
-		return !!token // Check if the token exists
-	}
+  const isAuthenticated = () => {
+    const token = Cookies.get("accessToken");
+    return !!token; // Check if the token exists
+  };
 
-	return (
-		<Router>
-			{/* <div className="bg-mesh relative"> */}
-			{/* <BackgroundParticles /> */}
-			<Routes>
-				{publicRoutes.map(({ path, element }, index) => (
-					<Route
-						key={index}
-						path={path}
-						element={
-							!isAuthenticated() ? (
-								element
-							) : (
-								<Navigate to="/app/dashboard" replace />
-							)
-						}
-					/>
-				))}
+  return (
+    <Router>
+      {/* <div className="bg-mesh relative"> */}
+      {/* <BackgroundParticles /> */}
+      <Routes>
+        {publicRoutes.map(({ path, element }, index) => (
+          <Route
+            key={index}
+            path={path}
+            element={
+              !isAuthenticated() ? (
+                element
+              ) : (
+                <Navigate to="/app/dashboard" replace />
+              )
+            }
+          />
+        ))}
 
-				<Route
-					path="/app"
-					element={
-						isAuthenticated() ? (
-							<PrivateLayout />
-						) : (
-							<Navigate to="/auth/login" replace />
-						)
-					}
-				>
-					{privateRoutes.map(({ path, element }, index) => (
-						<Route key={index} path={path} element={element} />
-					))}
-				</Route>
+        {/* Ruta pública dinámica accesible siempre */}
+        <Route path="/:portfolioUrl" element={<PublicPortfolio />} />
 
-				{/* Redirect to home if no route matches */}
-				<Route path="*" element={<Navigate to="/home" replace />} />
-			</Routes>
-			{/* </div> */}
-		</Router>
-	)
-}
+        <Route
+          path="/app"
+          element={
+            isAuthenticated() ? (
+              <PrivateLayout />
+            ) : (
+              <Navigate to="/auth/login" replace />
+            )
+          }
+        >
+          {privateRoutes.map(({ path, element }, index) => (
+            <Route key={index} path={path} element={element} />
+          ))}
+        </Route>
 
-export default Index
+        {/* Redirect to home if no route matches */}
+        <Route path="*" element={<Navigate to="/home" replace />} />
+      </Routes>
+      {/* </div> */}
+    </Router>
+  );
+};
+
+export default Index;

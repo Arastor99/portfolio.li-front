@@ -7,6 +7,7 @@ import type { Profile } from "@common/types/profile"
 
 import {
 	extractPublicIdFromUrl,
+	generateRandomString,
 	validateLinkedinUrl,
 } from "@common/utils/utils"
 import { attachProfile, getProfile } from "@lib/services/profile.service"
@@ -19,23 +20,28 @@ import StepIndicator from "@components/common/wizard2/step-indicator"
 import BackgroundParticles from "@components/common/wizard2/background-particles"
 import Modal from "../modal/Modal"
 import ModalRegister from "../modal/ModalRegister"
-import { createPortfolio } from "@lib/services/portfolio.service"
+import { createPortfolio, updatePortfolio } from "@lib/services/portfolio.service"
+import { usePortfolioStore } from "@store/portfolioStore"
+import { useNavigate } from "react-router-dom"
+import { hasLoadedNamespace } from "i18next"
 
 interface Props {
-	profileData?: Profile
+	profileData?: Profile | null
 	mode: "register" | "createOrUpdate"
+	type?: "portfolio" | "cv" | ""
 }
 
-export default function WizardContainer({ profileData, mode }: Props) {
+export default function WizardContainer({ profileData, mode, type = "" }: Props) {
+	const navigate = useNavigate()
 	const [currentStep, setCurrentStep] = useState(0)
 	const [linkedinUrl, setLinkedinUrl] = useState("")
 	const [direction, setDirection] = useState(0)
-
+	const { portfolioStore, updatePortfolioStore } = usePortfolioStore()
 	const [modalRegister, setModalRegister] = useState(false)
 
 	const [formData, setFormData] = useState({
 		importMethod: "",
-		documentType: "",
+		documentType: type,
 		templateName: "",
 		profileData,
 	})
@@ -44,6 +50,10 @@ export default function WizardContainer({ profileData, mode }: Props) {
 	const mouseY = useMotionValue(0)
 
 	useEffect(() => {
+		console.log(profileData)
+		if(mode == "createOrUpdate" && portfolioStore){
+			setCurrentStep(2)
+		}
 		const handleMouseMove = (e: MouseEvent) => {
 			mouseX.set(e.clientX)
 			mouseY.set(e.clientY)
@@ -90,11 +100,41 @@ export default function WizardContainer({ profileData, mode }: Props) {
 	const handle4step = async () => {
 		if (mode === "register") {
 			setModalRegister(true)
-		} else {
-			toast.error("FEATURE NOT IMPLEMENTET YET")
+		} else if (mode === "createOrUpdate" && !portfolioStore) {
+			handleCreate()
+		} else if (mode === "createOrUpdate" && portfolioStore) {
+			handleUpdate()
 		}
 	}
-
+	const handleUpdate = async () => {
+		console.log(profileData, "---->" + formData.documentType, "2------>" + formData.templateName)
+        if (!profileData || !formData.documentType || !formData.templateName) {
+            toast.error("Por favor completa todos los pasos 2")
+            return
+        }
+        await updatePortfolio({ templateName: formData.templateName })
+        updatePortfolioStore({
+            ...(portfolioStore?.template && {
+                template: {
+                    ...portfolioStore.template,
+                    name: formData.templateName,
+                },
+            }),
+        })
+        navigate("/app/dashboard")
+    }
+		const handleCreate = async () => {
+			console.log(formData.profileData, "---->" + formData.documentType, "2------>" + formData.templateName)
+		if (!formData.profileData || !formData.documentType || !formData.templateName) {
+			toast.error("Por favor completa todos los pasos")
+			return
+		}
+		await attachProfile(formData.profileData.publicId).then(async () => {
+			await createPortfolio({
+				templateName: formData.templateName,
+			})
+		})
+	}
 	const goToNextStep = async () => {
 		if (currentStep < steps.length) {
 			switch (currentStep) {
@@ -304,7 +344,6 @@ export default function WizardContainer({ profileData, mode }: Props) {
 						</AnimatePresence>
 					</motion.div>
 
-					{/* Remove the mt-2 class that might be conflicting with our negative margin */}
 					<div 
 						className={`flex items-center justify-between mb-3 ${currentStep === 3 ? 'mx-4' : ''}`}
 						style={currentStep === 3 ? { marginTop: '-2rem' } : {}}

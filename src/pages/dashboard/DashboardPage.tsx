@@ -179,7 +179,7 @@ export default function DashboardPage() {
 										</div>
 										<div className="w-full h-full origin-top transform rounded-xl">
 											<iframe
-												src="http://localhost:5173/app/preview"
+												src={`http://localhost:5173/${portfolioStore.url}`}
 												className="w-full h-full rounded-xl border overflow-hidden"
 												loading="lazy"
 												style={{ overflow: "hidden" }}

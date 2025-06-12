@@ -4,7 +4,6 @@ import { Portfolio } from "@common/types/portfolio"
 
 export const createPortfolio = async (data: {
 	templateName: string
-	url: string
 }) => {
 	return (await http.post("/portfolio", data)).data as unknown as Promise<Portfolio>
 }
@@ -21,4 +20,9 @@ export const updatePortfolio = async (data: {
 //Obtiene un portafolio por el id de access_token
 export const getPortfolio = async () => {
 	return (await http.get(`/portfolio`)).data as unknown as Promise<Portfolio>
+}
+
+//obtiene un portafolio por la url sin estar loggueado
+export const getPortfolioByUrl = async (url: string) => {
+	return (await http.get(`/portfolio/${url}`)).data as unknown as Promise<Portfolio>
 }
