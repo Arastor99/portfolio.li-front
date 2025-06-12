@@ -19,7 +19,9 @@ import WizardPage from "@components/common/wizard2/WizardContainer"
 import Home from "@pages/home/Home"
 import Template3 from "@templatesPortfolio/t3/Template3"
 
+
 export const publicRoutes = [
+
 	{
 		path: "/home",
 		element: <Home />,
@@ -56,6 +58,7 @@ export const publicRoutes = [
 		isPrivate: false,
 		redirectTo: null,
 	},
+
 ]
 
 export const privateRoutes = [

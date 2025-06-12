@@ -132,9 +132,6 @@ export default function WizardContainer({ profileData, mode, type = "" }: Props)
 		await attachProfile(formData.profileData.publicId).then(async () => {
 			await createPortfolio({
 				templateName: formData.templateName,
-				url: `${formData.profileData?.publicId}-${formData.templateName}-${generateRandomString(
-					4
-				)}`,
 			})
 		})
 	}
