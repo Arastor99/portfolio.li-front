@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 import { Card } from "@components/ui/card"
 import { useState } from "react"
 import { Button } from "@components/ui/button"
+import { formatDate } from "@common/utils/utils"
 import { Calendar } from "lucide-react"
 
 // interface Props {
@@ -85,121 +86,68 @@ export default function Projects({ profile }: ProjectsProps) {
 							viewport={{ once: true }}
 							transition={{ duration: 0.6, delay: index * 0.1 }}
 						>
-							<Card
-								className="h-full overflow-hidden transition-all duration-300 hover:shadow-md "
-								onMouseEnter={() => project.id && setActiveProject(project.id)}
-								onMouseLeave={() => setActiveProject(null)}
-							>
-								<div className="relative h-48 w-full overflow-hidden">
-									<img
-										src="/placeholder.svg?height=300&width=500"
-										alt={project.title}
-										className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
-									/>
-									<div
-										className={`absolute inset-0 bg-gradient-to-t from-black/70 to-transparent transition-opacity duration-300 ${
-											activeProject === project.id ? "opacity-100" : "opacity-0"
-										}`}
-									/>
-									<div
-										className={`absolute bottom-0 left-0 right-0 p-4 text-white transition-transform duration-300 ${
-											activeProject === project.id
-												? "translate-y-0"
-												: "translate-y-10 opacity-0"
-										}`}
-									>
-										<Button
-											variant="outline"
-											className="text-white border-white hover:bg-white/20 hover:text-white"
+							{" "}
+							{
+								<Card
+									className="h-full p-0 border-gray-300 rounded-xs gap-0 :overflow-hidden transition-all duration-300 hover:shadow-md mx-auto"
+									onMouseEnter={() =>
+										project.id && setActiveProject(project.id)
+									}
+									onMouseLeave={() => setActiveProject(null)}
+								>
+									<div className="relative h-48 w-full overflow-hidden">
+										<img
+											src="/public/project-placeholder.jpg"
+											alt={project.title}
+											className="object-cover p-0  transition-transform duration-500 ease-in-out group-hover:scale-105"
+										/>
+										<div
+											className={`absolute inset-0 bg-gradient-to-t from-black/70 to-transparent transition-opacity duration-300 ${
+												activeProject === project.id
+													? "opacity-100"
+													: "opacity-0"
+											}`}
+										/>
+										<div
+											className={`absolute bottom-0 left-0 right-0 p-4 text-white transition-transform duration-300 ${
+												activeProject === project.id
+													? "translate-y-0"
+													: "translate-y-10 opacity-0"
+											}`}
 										>
-											Ver detalles
-										</Button>
+											<Button
+												variant="outline"
+												className="text-white border-white hover:bg-white/20 hover:text-white"
+											>
+												Ver detalles
+											</Button>
+										</div>
 									</div>
-								</div>
-							</Card>
+									<div className=" flex flex-col w-full px-3 h-48 bg-gray-50">
+										<h1 className="text-xl font-bold mt-6 text-gray-900">
+											{project.title}
+										</h1>
+
+										{project.startDate && project.endDate && (
+											<div className="flex flex-col  p-1 justify-center items-start gap-2 text-sm text-gray-500 mt-1">
+												<div className="inline-flex gap-2 items-center">
+													<Calendar className="h-4 w-4" />
+													<span>
+														{formatDate(project.startDate)} -{" "}
+														{formatDate(project.endDate)}
+													</span>
+												</div>
+
+												<p className="text-xl font-normal mt-2 text-gray-900">
+													{project.description}
+												</p>
+											</div>
+										)}
+									</div>
+								</Card>
+							}
 						</motion.div>
 					))}
-
-					{/* Additional project examples */}
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true }}
-						transition={{ duration: 0.6, delay: 0.1 }}
-					>
-						<Card
-							className="h-full overflow-hidden transition-all duration-300 hover:shadow-md"
-							onMouseEnter={() => setActiveProject("proj2")}
-							onMouseLeave={() => setActiveProject(null)}
-						>
-							<div className="relative h-48 w-full overflow-hidden">
-								<img
-									src="/placeholder.svg?height=300&width=500"
-									alt="E-commerce Platform"
-									className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
-								/>
-								<div
-									className={`absolute inset-0 bg-gradient-to-t from-black/70 to-transparent transition-opacity duration-300 ${
-										activeProject === "proj2" ? "opacity-100" : "opacity-0"
-									}`}
-								/>
-								<div
-									className={`absolute bottom-0 left-0 right-0 p-4 text-white transition-transform duration-300 ${
-										activeProject === "proj2"
-											? "translate-y-0"
-											: "translate-y-10 opacity-0"
-									}`}
-								>
-									<Button
-										variant="outline"
-										className="text-white border-white hover:bg-white/20 hover:text-white"
-									>
-										Ver detalles
-									</Button>
-								</div>
-							</div>
-						</Card>
-					</motion.div>
-
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true }}
-						transition={{ duration: 0.6, delay: 0.2 }}
-					>
-						<Card
-							className="h-full overflow-hidden transition-all duration-300 hover:shadow-md"
-							onMouseEnter={() => setActiveProject("proj3")}
-							onMouseLeave={() => setActiveProject(null)}
-						>
-							<div className="relative h-48 w-full overflow-hidden">
-								<img
-									src="/placeholder.svg?height=300&width=500"
-									alt="Dashboard Analytics"
-									className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
-								/>
-								<div
-									className={`absolute inset-0 bg-gradient-to-t from-black/70 to-transparent transition-opacity duration-300 ${
-										activeProject === "proj3" ? "opacity-100" : "opacity-0"
-									}`}
-								/>
-								<div
-									className={`absolute bottom-0 left-0 right-0 p-4 text-white transition-transform duration-300 ${
-										activeProject === "proj3"
-											? "translate-y-0"
-											: "translate-y-10 opacity-0"
-									}`}
-								>
-									<Button
-										variant="outline"
-										className="text-white border-white hover:bg-white/20 hover:text-white"
-									>
-										Ver detalles
-									</Button>
-								</div>
-							</div>
-						</Card>
-					</motion.div>
 				</div>
 			</div>
 		</section>

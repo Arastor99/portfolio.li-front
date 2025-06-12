@@ -5,6 +5,8 @@ import Hero from "./sections/Hero"
 import Experience from "./sections/Experience"
 import Education from "./sections/Education"
 import Projects from "./sections/Projects"
+import Contact from "./sections/Contact"
+import Footer from "./sections/Footer"
 
 const Template3 = ({
 	profile = defaultProfile,
@@ -17,6 +19,8 @@ const Template3 = ({
 			<Experience profile={profile} />
 			<Education profile={profile} />
 			<Projects profile={profile} />
+			<Contact profile={profile} />
+			<Footer profile={profile} />
 		</>
 	)
 }
