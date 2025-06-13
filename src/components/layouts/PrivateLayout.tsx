@@ -6,10 +6,10 @@ import useBoostrap from "@common/hooks/useBoostrap"
 const PrivateLayout = () => {
 	useBoostrap()
 	return (
-		<div className="flex flex-col min-h-screen overflow-hidden">
-			<Navbar />
-			<Outlet />
-		</div>
+		<div className="flex flex-col min-h-screen overflow-hidden pt-16">
+	<Navbar />
+	<Outlet />
+</div>
 	)
 }
 

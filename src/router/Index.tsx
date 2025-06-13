@@ -7,7 +7,6 @@ import {
 import { publicRoutes, privateRoutes } from "./Routes";
 import Cookies from "js-cookie";
 import PrivateLayout from "@components/layouts/PrivateLayout";
-import BackgroundParticles from "@components/common/wizard2/background-particles";
 import PublicPortfolio from "@pages/portfolio/PublicPortfolio";
 
 const Index = () => {

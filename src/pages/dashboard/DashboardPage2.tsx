@@ -21,7 +21,7 @@ import { usePortfolioStore } from "@store/portfolioStore"
 import { PDFViewer } from "@react-pdf/renderer"
 import ModernCV from "src/CvTemplates/t1/cv2"
 
-export default function DashboardPage() {
+export default function DashboardPage2() {
   const [hasPortfolio, setHasPortfolio] = useState(false)
   const [hasCV, setHasCV] = useState(true)
   const [loading, setLoading] = useState(true)

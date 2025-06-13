@@ -4,7 +4,7 @@ import ForgotPassword from "@pages/auth/ForgotPassword"
 
 import Preview from "@pages/preview/Preview"
 
-import AccountPage from "@pages/account/AccountPage"
+import {AccountPage} from "@pages/account/AccountPage"
 import ProfilePage from "@pages/profile/ProfilePage"
 import TemplatesPage from "@pages/templates/TemplatesPage"
 import PortfolioPage from "@pages/portfolio/PortfolioPage"
@@ -14,7 +14,7 @@ import CreatePortfolio from "@pages/portfolio/CreatePortfolio"
 import UpdatePortfolio from "@pages/portfolio/UpdatePortfolio"
 import { ViewCv } from "src/CvTemplates/ViewCv"
 import LoadingAnimation from "@pages/loading/Loading"
-import WizardPage from "@components/common/wizard2/WizardContainer"
+import WizardPage from "@components/common/wizard/WizardContainer"
 
 import Home from "@pages/home/Home"
 import Template3 from "@templatesPortfolio/t3/Template3"

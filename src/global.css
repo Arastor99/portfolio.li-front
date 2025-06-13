@@ -260,6 +260,17 @@ body {
 	backdrop-filter: blur(4px);
 }
 
+.card-shine-white {
+	position: relative;
+	overflow: hidden;
+	/* z-index: 0; */
+	border-radius: var(--color-radius);
+	background: rgba(245, 245, 245, 0.87);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	box-shadow: var(--color-shadow);
+	backdrop-filter: blur(2px);
+}
+
 .dark .card-shine {
 	background: rgba(30, 30, 30, 0.8);
 	border: 1px solid rgba(80, 80, 80, 0.2);

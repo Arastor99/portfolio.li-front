@@ -8,6 +8,7 @@ import { usePortfolioStore } from "@store/portfolioStore"
 
 import { PDFViewer } from "@react-pdf/renderer"
 import ModernCV from "src/CvTemplates/t1/cv2"
+import BackgroundParticles from "@components/common/wizard/background-particles"
 
 export default function DashboardPage() {
 	const [hasPortfolio, setHasPortfolio] = useState(false)
@@ -26,7 +27,8 @@ export default function DashboardPage() {
 	}, [portfolioStore])
 
 	return (
-		<div className="min-h-screen p-4 md:p-8 pt-20 z-10">
+		<div className="min-h-screen p-4 md:p-8 pt-20 z-10 bg-mesh">
+			<BackgroundParticles />
 			<motion.div
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
