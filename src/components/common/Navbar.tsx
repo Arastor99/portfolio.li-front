@@ -1,22 +1,41 @@
 "use client"
 
+import ImgProxy from "@components/ui/ImgProxy"
+import { useProfileStore } from "@store/profileStore"
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"
+
 export default function ModernNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [activeItem, setActiveItem] = useState("dashboard")
   const [scrolled, setScrolled] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
-
-
+  const [languageOpen, setLanguageOpen] = useState(false)
+  const [currentLanguage, setCurrentLanguage] = useState("es")
+  const {profileStore} = useProfileStore()
   const navigate = useNavigate()
+  const location = useLocation()
+
   const menuItems = [
-    { name: "Dashboard", href: "/app/dashboard" },
-    { name: "Profile", href: "/app/profile" },
-    { name: "Templates", href: "/app/templates" },
-    { name: "Portfolio", href: "/app/portfolio" },
-    { name: "Cuenta", href: "/app/account" },
+    { name: "Dashboard", href: "/app/dashboard", key: "dashboard" },
+    { name: "Profile", href: "/app/profile", key: "profile" },
+    { name: "Templates", href: "/app/templates", key: "templates" },
+    { name: "Portfolio", href: "/app/portfolio", key: "portfolio" },
+    { name: "Cuenta", href: "/app/account", key: "account" },
   ]
+
+  const languages = [
+    { code: "es", name: "Español", flag: "🇪🇸" },
+    { code: "en", name: "English", flag: "🇺🇸" },
+  ]
+
+  // Obtener el elemento activo basado en la ruta actual
+  const getActiveItem = () => {
+    const currentPath = location.pathname
+    const activeMenuItem = menuItems.find((item) => item.href === currentPath)
+    return activeMenuItem?.key || ""
+  }
+
+  const activeItem = getActiveItem()
 
   // Detectar scroll para cambiar el estilo del navbar
   useEffect(() => {
@@ -34,12 +53,17 @@ export default function ModernNavbar() {
     }
   }, [])
 
-  // Cerrar el menú de perfil al hacer clic fuera
+  // Cerrar menús al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement
+
       if (profileOpen && !target.closest('[data-profile-menu="true"]')) {
         setProfileOpen(false)
+      }
+
+      if (languageOpen && !target.closest('[data-language-menu="true"]')) {
+        setLanguageOpen(false)
       }
     }
 
@@ -47,7 +71,16 @@ export default function ModernNavbar() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [profileOpen])
+  }, [profileOpen, languageOpen])
+
+  const handleLanguageChange = (langCode: string) => {
+    setCurrentLanguage(langCode)
+    setLanguageOpen(false)
+    // Aquí puedes agregar la lógica para cambiar el idioma de la aplicación
+    console.log(`Idioma cambiado a: ${langCode}`)
+  }
+
+  const currentLang = languages.find((lang) => lang.code === currentLanguage)
 
   return (
     <header
@@ -74,30 +107,84 @@ export default function ModernNavbar() {
           {/* Navegación de escritorio */}
           <nav className="hidden md:flex space-x-1">
             {menuItems.map((item) => {
-              const isActive = activeItem === item.href.split("/").pop()
+              const isActive = activeItem === item.key
               return (
-                <a
+                <button
                   key={item.name}
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    navigate(item.href)
-                  }}
+                  onClick={() => navigate(item.href)}
                   className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                     isActive ? "text-blue-600" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100/80"
                   }`}
                 >
                   {item.name}
                   {isActive && (
-                    <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full"></span>
+                    <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full animate-[slideIn_0.3s_ease-out]"></span>
                   )}
-                </a>
+                </button>
               )
             })}
           </nav>
 
           {/* Botones de acción */}
           <div className="hidden md:flex items-center space-x-3">
+            {/* Selector de idioma */}
+            <div className="relative" data-language-menu="true">
+              <button
+                onClick={() => setLanguageOpen(!languageOpen)}
+                className="flex items-center space-x-2 p-2 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-100/80 transition-colors"
+              >
+                <span className="text-lg">{currentLang?.flag}</span>
+                <span className="text-sm font-medium hidden lg:block">{currentLang?.code.toUpperCase()}</span>
+                <svg
+                  className={`h-4 w-4 transition-transform duration-200 ${languageOpen ? "rotate-180" : ""}`}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+
+              {/* Menú desplegable de idioma */}
+              {languageOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 animate-[fadeIn_0.2s_ease-out]">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => handleLanguageChange(lang.code)}
+                      className={`flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100 transition-colors ${
+                        currentLanguage === lang.code ? "bg-blue-50 text-blue-600" : "text-gray-700"
+                      }`}
+                    >
+                      <span className="mr-3 text-lg">{lang.flag}</span>
+                      <span>{lang.name}</span>
+                      {currentLanguage === lang.code && (
+                        <svg
+                          className="ml-auto h-4 w-4 text-blue-600"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Separador vertical */}
+            <div className="h-6 w-px bg-gray-200"></div>
+
             {/* Botón de búsqueda */}
             <button className="p-2 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-100/80 transition-colors">
               <svg
@@ -148,11 +235,11 @@ export default function ModernNavbar() {
                 className="flex items-center space-x-2 p-1 rounded-xl hover:bg-gray-100/80 transition-colors"
               >
                 <div className="relative">
-                  <img
-                    className="h-8 w-8 rounded-xl object-cover border border-gray-200"
-                    src="http://localhost:3001/api/proxy-image?url=https%3A%2F%2Fmedia.licdn.com%2Fdms%2Fimage%2Fv2%2FD4D03AQHigBNGVqRnOA%2Fprofile-displayphoto-shrink_800_800%2Fprofile-displayphoto-shrink_800_800%2F0%2F1723639491740%3Fe%3D1755129600%26v%3Dbeta%26t%3DD5fwTUCVjtarQI_zQSrtPln6qR-f_XiDXmuxW0Gak_Y"
-                    alt="Avatar del usuario"
-                  />
+                  <ImgProxy
+										src={profileStore?.profilePictureUrl}
+										alt="Profile picture"
+										css="h-8 w-8 rounded-xl object-cover border border-gray-200"
+									/>
                 </div>
                 <div className="hidden lg:block text-left">
                   <p className="text-sm font-medium text-gray-700">Alex</p>
@@ -290,35 +377,69 @@ export default function ModernNavbar() {
       >
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
           {menuItems.map((item) => {
-            const isActive = activeItem === item.href.split("/").pop()
+            const isActive = activeItem === item.key
             return (
-              <a
+              <button
                 key={item.name}
-                href={item.href}
-                onClick={(e) => {
-                  e.preventDefault()
+                onClick={() => {
                   navigate(item.href)
                   setMobileMenuOpen(false)
                 }}
-                className={`block px-3 py-2 rounded-xl text-base font-medium ${
+                className={`block w-full text-left px-3 py-2 rounded-xl text-base font-medium transition-colors ${
                   isActive
                     ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600"
                     : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 {item.name}
-              </a>
+              </button>
             )
           })}
         </div>
+
+        {/* Selector de idioma móvil */}
+        <div className="px-2 py-2 border-t border-gray-200">
+          <div className="px-3 py-2 text-sm font-medium text-gray-500">Idioma</div>
+          <div className="space-y-1">
+            {languages.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => handleLanguageChange(lang.code)}
+                className={`flex items-center w-full px-3 py-2 rounded-xl text-base font-medium transition-colors ${
+                  currentLanguage === lang.code
+                    ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <span className="mr-3 text-lg">{lang.flag}</span>
+                <span>{lang.name}</span>
+                {currentLanguage === lang.code && (
+                  <svg
+                    className="ml-auto h-4 w-4 text-blue-600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="pt-4 pb-3 border-t border-gray-200">
           <div className="flex items-center px-4 py-2">
             <div className="flex-shrink-0">
-              <img
-                className="h-10 w-10 rounded-xl object-cover border border-gray-200"
-                src="/placeholder.svg?height=40&width=40"
-                alt="Avatar del usuario"
-              />
+              <ImgProxy
+										src={profileStore?.profilePictureUrl}
+										alt="Profile picture"
+										css="absolute inset-0 w-full h-full object-cover z-10"
+									/>
             </div>
             <div className="ml-3">
               <div className="text-base font-medium text-gray-800">Alex Johnson</div>
@@ -378,6 +499,8 @@ export default function ModernNavbar() {
           </div>
         </div>
       </div>
+
+      
     </header>
   )
 }
