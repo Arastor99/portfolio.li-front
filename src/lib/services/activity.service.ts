@@ -6,7 +6,7 @@ export const getActivities = async ({
 	offset = 0,
 	limit = 10,
 }): Promise<Activity[]> => {
-	const response = await http.get<Activity[]>("/activities", {
+	const response = await http.get<Activity[]>("/activity", {
 		params: {
 			offset,
 			limit,
